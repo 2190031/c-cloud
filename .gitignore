@@ -1,0 +1,19 @@
+# Virtual environment
+venv/
+
+# Compiled files
+*.pyc
+*.exe
+
+# Logs and temporary files
+*.log
+tmp/
+
+# IDE files
+.idea/
+.vscode/
+
+# Configuration files
+.env
+config.py
+settings.py
