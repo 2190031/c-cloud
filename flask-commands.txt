@@ -1,0 +1,50 @@
+pip install -U Flask (--user)
+pip install flask, flask_slqalchemy, mysqlclient
+python -m venv venv -> crea entorno virual
+venv\Scripts\activate -> activa el entorno virtual. Deberia aparecier (venv). 
+	Ej: (venv) PS C:\xampp\htdocs\flask_test>
+
+python app.py -> Ejecuta 
+flask run
+flask run --host=0.0.0.0
+flask run --port=5001 -> ejecuta en el puerto 5001
+
+Get-ExecutionPolicy no debe ser "Restricted", si esta, abrir PowerShell como adminsitrador y ejecutar Set-ExecutionPolicy RemoteSigned
+
+instalar extension de jinja2 para facilitar lectura
+
+crear (no se crea automaticamente) app.py fuera de la carpeta venv, en la carpeta del proyecto (C:/xammp/htdocs/c-cloud/app.py, no C:/xammp/htdocs/c-cloud/venv/app.py)
+Contenido de app.py:
+	from flask import Flask, render_template
+
+	app = Flask(__name__)
+
+	@app.route('/')
+	def index():
+    	return render_template('index.html')
+
+	if __name__ == '__main__':
+	app.run(debug=True)
+
+Base de datos
+	from flask import flask
+	from flask_sqlalchemy import SQLAlchemy (puede agregarse "as apodo" para darle un alias, para no tener que escribir SQLAlchemy)
+
+	app = Flask(__name__)
+	app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@localhost/db_name'
+	db = SQLAlchemy(app)
+
+Modelo (crear tabla)
+	class nombre_tabla(db.Model):
+	__tablename__ = 'nombre_tabla'
+	nombre_campo = db.Column(db.datatype[Integer/String(size)/DateTime], primary_key=True, nullable=False/True, default=datetime[datetime must be imported: from datetime import datetime].utcnow, ...)
+	def __repr__(self):
+		return "<task %r> % self.id
+
+Ejecutar migracion:
+En la consola
+((venv) .../c-cloud>) python                            Ejecuta codigo python (el cursor de la consola cambia a >>>)
+				(>>>) from app import app, db
+				(>>>) with app.app_context():			
+				(>>>) 		db.create_all()				DEBE tener una unica tabulacion
+				(>>>) ^z or exit()						Salir de consola de python, volver al cmd normal
