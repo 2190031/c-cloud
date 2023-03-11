@@ -6,32 +6,24 @@
         <div class="w-5/6 d-inline">
           <div class="border p-5 rounded form-container">
             <div class="col-sm-8 py-5 mx-auto">
-              <form>
-                <h1 class="h3 mb-3 fw-light h1-lg">Please sign in</h1>
-
+              <form action="" method="POST">
+                <h1 class="h3 mb-3 fw-light h1-lg">Iniciar sesión</h1>
                 <div class="form-floating my-4">
-                  <input type="email" class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off">
-                  <label for="floatingInput" class="fw-light">Email address</label>
+                  <input type="email" name='email' class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                  <label for="floatingInput" class="fw-light">Correo electrónico</label>
                 </div>
                 <div class="form-floating my-4">
-                  <input type="password" class="form-control transp-input text-light" id="floatingPassword" placeholder="Password">
-                  <label for="floatingPassword" class="fw-light">Password</label>
+                  <input type="password" name='password' class="form-control transp-input text-light" id="floatingPassword" placeholder="Contraseña" autocomplete="off" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\-#@%^*\s])[A-Za-z\d_\-#@%^*\s]{8,}" required title="Debe contener al menos una mayúscula, minúsculas, al menos un número y un caracter especial (_ - # @ ^ ó un espacio)">
+                  <label for="floatingPassword" class="fw-light">Contraseña</label>
                 </div>
-                <div class="form-floating my-4">
-                  <input type="email" class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off">
-                  <label for="floatingInput" class="fw-light">Email address</label>
-                </div>
-                <div class="form-floating my-4">
-                  <input type="password" class="form-control transp-input text-light" id="floatingPassword" placeholder="Password">
-                  <label for="floatingPassword" class="fw-light">Password</label>
-                </div>
-            
+                <small>¿No tienes cuenta? <a href="/sign_up">Regístrate</a></small>
+                <br>
                 <div class="checkbox mb-3">
                   <label class="fw-light">
                     <input type="checkbox" value="remember-me" class="form-check-input"> Remember me
                   </label>
                 </div>
-                <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Log in</button>
+                <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Iniciar sesión</button>
               </form>
             </div>
           </div>

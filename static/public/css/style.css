@@ -1,10 +1,22 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
 body {
-    background-color: #0f172a;
+    background-color: #090706;
     color: skyblue;
     background-image: url("https://preview.redd.it/qdv3gfr5cx8z.png?auto=webp&s=c4b8beb6cc42d2eb46c9a09f5f233b6d1f82b979");
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
+    background-position: left;
     backdrop-filter: blur(2px);
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 nav ul {
     border-radius: 50px;
@@ -34,7 +46,8 @@ a {
 }
 
 .form-signin {
-    max-width: 450px;
+    transition: all 0.5s ease-in-out;
+    max-width: 50%;
 }
 
 .form-signin label {
@@ -43,7 +56,7 @@ a {
 }
 
 .form-container {
-    max-width: 500px;
+    max-width: 50%;
 }
 
 .transp-input {
@@ -68,4 +81,35 @@ a {
 
 footer {
     background: linear-gradient(#090706 1%, #0f172a 99%);
+}
+
+@media screen and (max-width: 990px) {
+    body {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        transition: all 0.5s ease-in-out;
+    }
+    .form-container {
+        transition: all 0.5s ease-in-out;
+        max-width: 100% !important;
+    }
+    nav {
+        width: 100%;
+        transition: all 0.5s ease-in-out;
+        font-size: 14px;
+    }
+    footer h5{
+        font-size: 16px;
+    }
+    footer a {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    #nav {
+        display: none;
+    }
 }

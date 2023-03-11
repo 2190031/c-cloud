@@ -18,6 +18,7 @@ class user(db.Model):
 	username = db.Column(db.String(45), nullable=False)
 	name = db.Column(db.String(45), nullable=False)
 	surname = db.Column(db.String(45), nullable=False)
+	password = db.Column(db.String(45), nullable=False)
 	usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
 	creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
 
@@ -35,7 +36,6 @@ class file(db.Model):
 
 	def __repr__(self):
 		return "<task %r> % self.idfile"    
-
 
 class historial(db.Model):
 	__tablename__ = 'historial'
