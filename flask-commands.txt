@@ -48,5 +48,6 @@ En la consola
 				(>>>) from app import app, db
 				(>>>) with app.app_context():			
 				(...) 		db.create_all()				DEBE tener una unica tabulacion, (...) indica que esta dentro del bloque del with, debe hacerse un enter adicional hasta que aparezca (>>>) de nuevo
+				(...) [enter]
 				(>>>) ^z or exit()						Salir de consola de python, volver al cmd normal
 

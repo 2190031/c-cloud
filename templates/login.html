@@ -1,0 +1,42 @@
+{% extends 'form.html' %}
+{% block title %}Log in{% endblock %}
+{% block body %}
+<div class="container" id="body">
+    <div class="flex items-center my-5">
+        <div class="w-5/6 d-inline">
+          <div class="border p-5 rounded form-container">
+            <div class="col-sm-8 py-5 mx-auto">
+              <form>
+                <h1 class="h3 mb-3 fw-light h1-lg">Please sign in</h1>
+
+                <div class="form-floating my-4">
+                  <input type="email" class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off">
+                  <label for="floatingInput" class="fw-light">Email address</label>
+                </div>
+                <div class="form-floating my-4">
+                  <input type="password" class="form-control transp-input text-light" id="floatingPassword" placeholder="Password">
+                  <label for="floatingPassword" class="fw-light">Password</label>
+                </div>
+                <div class="form-floating my-4">
+                  <input type="email" class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off">
+                  <label for="floatingInput" class="fw-light">Email address</label>
+                </div>
+                <div class="form-floating my-4">
+                  <input type="password" class="form-control transp-input text-light" id="floatingPassword" placeholder="Password">
+                  <label for="floatingPassword" class="fw-light">Password</label>
+                </div>
+            
+                <div class="checkbox mb-3">
+                  <label class="fw-light">
+                    <input type="checkbox" value="remember-me" class="form-check-input"> Remember me
+                  </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Log in</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
