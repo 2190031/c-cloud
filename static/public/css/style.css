@@ -1,4 +1,71 @@
 body {
-    background-color: #202020;
+    background-color: #0f172a;
+    color: skyblue;
+    background-image: url("https://preview.redd.it/qdv3gfr5cx8z.png?auto=webp&s=c4b8beb6cc42d2eb46c9a09f5f233b6d1f82b979");
+    background-repeat: no-repeat;
+    background-size: contain;
+    backdrop-filter: blur(2px);
+}
+nav ul {
+    border-radius: 50px;
+    border: white solid 0.5px;
+    background-color: #101216;
+    align-items: center;
+}
+a {
+    text-decoration: none;
+}
+
+.link-button {
+    background: #116cff28;
+    border: none;
+    border-radius: 21px;
     color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 40px;
+    margin-right: 0;
+    padding: 0 27px;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.form-signin {
+    max-width: 450px;
+}
+
+.form-signin label {
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.form-container {
+    max-width: 500px;
+}
+
+.transp-input {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.go-top {
+    background-color: #16264b;
+    border-radius: 500px;
+    border: white solid 0.3px;
+    color: white;
+    width: 50px;
+    height: 50px;
+    margin: 20px;
+}
+.go-top img {
+    filter: invert(100%);
+    width: 30px;
+    height: 30px;
+    
+}
+
+footer {
+    background: linear-gradient(#090706 1%, #0f172a 99%);
 }

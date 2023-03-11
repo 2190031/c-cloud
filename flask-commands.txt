@@ -1,4 +1,5 @@
-pip install -U Flask (--user)
+pip install -r requirements.txt -> instala las librerias dentro del archivo requirements.txt automaticamente [NO PROBADO]
+pip install -U Flask --user
 pip install flask, flask_slqalchemy, mysqlclient
 python -m venv venv -> crea entorno virual
 venv\Scripts\activate -> activa el entorno virtual. Deberia aparecier (venv). 
@@ -46,5 +47,7 @@ En la consola
 ((venv) .../c-cloud>) python                            Ejecuta codigo python (el cursor de la consola cambia a >>>)
 				(>>>) from app import app, db
 				(>>>) with app.app_context():			
-				(>>>) 		db.create_all()				DEBE tener una unica tabulacion
+				(...) 		db.create_all()				DEBE tener una unica tabulacion, (...) indica que esta dentro del bloque del with, debe hacerse un enter adicional hasta que aparezca (>>>) de nuevo
+				(...) [enter]
 				(>>>) ^z or exit()						Salir de consola de python, volver al cmd normal
+
