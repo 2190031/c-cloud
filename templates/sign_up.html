@@ -1,5 +1,5 @@
 {% extends 'form.html' %}
-{% block title %}Log in{% endblock %}
+{% block title %}Registro{% endblock %}
 {% block body %}
 <div class="container" id="body">
     <div class="flex items-center my-5">
@@ -7,7 +7,7 @@
           <div class="border p-5 rounded form-container">
             <div class="col-sm-8 py-5 mx-auto">
               <form action="" method="POST">
-                <h1 class="h3 mb-3 fw-light h1-lg text-center">Please Log in</h1>
+                <h1 class="h3 mb-3 fw-light h1-lg text-center">Registrarse</h1>
 
                 <div class="form-floating my-4">
                   <input type="text" name='name' class="form-control transp-input text-light" id="floatingInput" placeholder="Nombre" autocomplete="off" pattern="[a-zA-Z]" required>
@@ -29,13 +29,9 @@
                   <input type="password" name='password' class="form-control transp-input text-light" id="floatingPassword" placeholder="Contraseña" autocomplete="off" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\-#@%^*\s])[A-Za-z\d_\-#@%^*\s]{8,}" required title="Debe contener al menos una mayúscula, minúsculas, al menos un número y un caracter especial (_ - # @ ^ ó un espacio)">
                   <label for="floatingPassword" class="fw-light">Contraseña</label>
                 </div>
-            
-                <div class="checkbox mb-3">
-                  <label class="fw-light">
-                    <input type="checkbox" value="remember-me" class="form-check-input"> Remember me
-                  </label>
-                </div>
-                <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Log in</button>
+                <small>¿Ya tienes cuenta? <a href="/login" class="info-link muted">Inicia sesión</a></small>
+                <br>
+                <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Registrarse</button>
               </form>
             </div>
           </div>

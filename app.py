@@ -10,8 +10,16 @@ def index():
     return render_template('index.html') 
 
 @app.route('/sign_up')
-def form():
+def signup():
     return render_template('sign_up.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/notfound')
+def notfound():
+    return render_template('notfound.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
