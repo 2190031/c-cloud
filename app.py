@@ -11,11 +11,13 @@ def index():
 
 @app.route('/sign_up')
 def signup():
-    return render_template('sign_up.html')
+    title = 'Registrarse'
+    return render_template('sign_up.html', title=title)
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    title = 'Iniciar sesión'
+    return render_template('login.html', title=title)
 
 @app.route('/notfound')
 def notfound():

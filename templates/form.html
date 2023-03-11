@@ -8,34 +8,37 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{{ title }}{% endblock %}</title>
 </head>
 <body>
     <div class="container">
-        <nav class="nav justify-content-end my-2" id="nav">
+        <nav class="nav justify-content-end my-2 shadow" id="nav">
             <ul class="nav">
                 <!-- if active -> bg-primary bg-gradient link-button -->
                 <li class="nav-item rounded-lg">
-                  <a class="nav-link text-light" href="/">Inicio</a>
+                  <a class="nav-link text-light" href="/" id="index">Inicio</a>
                 </li>
                 <li class="nav-item rounded-lg">
-                  <a class="nav-link text-light" href="/notfound">empty</a>
+                  <a class="nav-link text-light" href="/notfound" id="">empty</a>
                 </li>
                 <li class="nav-item rounded-lg">
-                  <a class="nav-link text-light" href="/notfound">empty</a>
+                  <a class="nav-link text-light" href="/notfound" id="">empty</a>
                 </li>
                 <li class="nav-item rounded-lg">
-                  <a class="nav-link text-light" href="/notfound">empty</a>
+                  <a class="nav-link text-light" href="/notfound" id="">empty</a>
                 </li>
                 <li class="nav-item rounded-lg">
-                  <a class="nav-link text-light" href="/login">Iniciar sesión</a>
+                  <a class="nav-link text-light" href="/login" id="login">Iniciar sesión</a>
                 </li>
                 <li class="nav-item rounded-lg">
-                  <a class="nav-link text-light" href="/sign_up">Registrarse</a>
+                  <a class="nav-link text-light" href="/sign_up" id="signup">Registrarse</a>
                 </li>
+                <input type="hidden" id="title" value="{{ title }}">
               </ul>
         </nav>
     </div>
+
+    
 
     {% block body %}
     {% endblock %}
@@ -108,9 +111,26 @@
       nav.classList.add("justify-content-end");
     }
   }
+
+  function activateNavLink() {
+    let title = document.getElementById("title");
+    console.log(title.value);
+    var active;
+    
+    if (title.value == "index") {
+
+    } else if (title.value == 'Iniciar sesión') {
+      active = document.getElementById('login');
+      active.classList.add('active','bg-primary','bg-gradient','border-0','rounded-pill');
+    } else if (title.value == 'Registrarse') {
+      active = document.getElementById('signup');
+      active.classList.add('active','bg-primary','bg-gradient','border-0','rounded-pill');
+    }
+  }
   
   // Call the function once on page load
   adjustNavClass();
+  activateNavLink();
   
   // Call the function every time the window size changes
   window.addEventListener("resize", adjustNavClass);
