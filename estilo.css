@@ -1,0 +1,233 @@
+ :root{
+    --rojo: #E50914;
+    --fondo: #141414;
+ }
+
+ *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+ }
+ body{
+    background: var(--fondo);
+    font-family: 'Open Sans', sans-serif;
+ }
+ .contenedor{
+    width: 90%;
+    margin: auto;
+ }
+ header{
+    padding: 30px 0;
+ }
+
+ header .contenedor{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+
+ header .logotipo{
+    font-family: 'Bebas Neue', cursive;
+    font-weight: normal;
+    color: var(--rojo);
+    font-size: 40px;
+ }
+
+header nav a{
+    color: #AAA;
+    text-decoration: none;
+    margin-right: 20px;
+}
+header nav a:hover,
+header nav a.activo{
+    color: #FFF;
+}
+.lenguaje-programacion{
+	font-size: 16px;
+	min-height: 40.62em;
+	color: #fff;
+	background: linear-gradient(rgba(0, 0, 0, .50) 0%, rgba(0,0,0,.50) 100%), url(../c-cloud/img/Servidor.jpg);
+	background-position: center center;
+	background-size: cover;
+	margin-bottom: 3.12em;
+	display: flex;
+	align-items: end;
+}
+.lenguaje-programacion .contenedor{
+    margin: 0 auto;
+    margin-bottom: 6.25em;
+}
+.lenguaje-programacion .Titulo{
+font-weight: 600;
+font-size: 3.12em;
+margin-bottom: 20px;
+}
+.lenguaje-programacion .descripcion{
+font-weight: normal;
+font-size: 1em;
+line-height: 1.75em;
+max-width: 50%;
+margin-bottom: 1.25em;
+}
+.lenguaje-programacion .boton{
+   background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 0.31em;
+    padding: 0.93em 1.87em;
+    color: #FFF;
+    margin-right: 1.25em;
+    cursor: pointer;
+    transition: .3s ease all;
+    font-size: 1.12em;
+}
+
+.lenguaje-programacion .boton:hover{
+background: #fff;
+color: #000;
+}
+.lenguaje-programacion .boton{
+    margin-right: 1.25em;
+}
+.Lenguaje-p .contenedor-principal{
+display: flex;
+align-items: center;
+position: relative;
+}
+
+.Lenguaje-p .contenedor-principal .flecha-derecha,
+.Lenguaje-p .contenedor-principal .flecha-izquirda{
+position: absolute;
+border: none;
+background: rgba(0, 0, 0.3);
+font-size: 40px;
+height: 50%;
+top: calc(50% - 25%);
+line-height: 40px;
+width: 50px;
+color: #fff;
+cursor: pointer;
+z-index: 500;
+transition: .2s ease all;
+}
+contenedor-titulo-controles h3{
+    color: #fff;
+    font-size: 30px;
+
+}
+contenedor-titulo-controles .indicadores button{
+    background: #fff;
+    height: 3px;
+    width: 10px;
+    cursor: pointer;
+    border: none;
+    margin-right: 2px;
+
+
+}
+
+.Lenguaje-p {
+	margin-bottom: 70px;
+    color: #FFF;
+    text-align: center;
+}
+
+.Lenguaje-p .contenedor-principal {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+.contenedor-titulo-controles {
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+}
+
+.contenedor-titulo-controles h3 {
+	color: #fff;
+	font-size: 30px;
+}
+
+.contenedor-titulo-controles .indicadores button {
+	background: #fff;
+	height: 3px;
+	width: 10px;
+	cursor: pointer;
+	border: none;
+	margin-right: 2px;
+}
+
+.contenedor-titulo-controles .indicadores button:hover,
+.contenedor-titulo-controles .indicadores button.activo {
+	background: red;
+}
+
+.Lenguaje-p .contenedor-principal .flecha-izquierda,
+.Lenguaje-p.contenedor-principal .flecha-derecha {
+	position: absolute;
+	border: none;
+	background: rgba(0,0,0,0.3);
+	font-size: 40px;
+	height: 50%;
+	top: calc(50% - 25%);
+	line-height: 40px;
+	width: 50px;
+	color: #fff;
+	cursor: pointer;
+	z-index: 500;
+	transition: .2s ease all;
+}
+
+.Lenguaje-p .contenedor-principal .flecha-izquierda:hover,
+.peliculas-recomendadas .contenedor-principal .flecha-derecha:hover {
+	background: rgba(0,0,0, .9);
+}
+
+.Lenguaje-p .contenedor-principal .flecha-izquierda {
+	left: 0;
+}
+
+.Lenguaje-p .contenedor-principal .flecha-derecha {
+	right: 0;
+}
+
+.Lenguaje-p.contenedor-carousel {
+	width: 100%;
+	padding: 20px 0;
+	overflow-x: scroll;
+	scroll-behavior: smooth;
+}
+
+.Lenguaje-p .contenedor-carousel .carousel {
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+.Lenguaje-p .contenedor-carousel .carousel .lenguaje {
+	min-width: 20%;
+	transition: .3s ease all;
+	box-shadow: 5px 5px 10px rgba(0,0,0, .3);
+}
+
+.Lenguaje-p.contenedor-carousel .carousel .lenguaje.hover {
+	transform: scale(1.2);
+	transform-origin: center;
+}
+
+.Lenguaje-p .contenedor-carousel .carousel .lenguaje img {
+	width: 100%;
+	vertical-align: top;
+}
+
+
+@media screen and(max-wedth: 800px){
+    header .logotipo{
+        margin-bottom: 10px;
+    }
+    header .contenedor{
+        flex-direction: column;
+        text-align: center;
+    }
+    .lenguaje-programacion{
+        font-size: 14px;
+    }
+}
