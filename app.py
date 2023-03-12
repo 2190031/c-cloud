@@ -3,7 +3,7 @@ from db_models import db, role, user, file, historial, version, error, licence, 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:c55h32o5n4Mg@localhost/c_cloud'
-# db.init_app(app)
+db.init_app(app)
 
 @app.route('/')
 def index():
