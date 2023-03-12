@@ -7,7 +7,8 @@ db.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html') 
+    title = 'Inicio - C-Cloud'
+    return render_template('index.html', title=title) 
 
 @app.route('/sign_up')
 def signup():

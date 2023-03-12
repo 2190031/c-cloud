@@ -73,7 +73,7 @@ class error(db.Model):
 		return "<task %r> % self.iderror"
 	
 class licence(db.Model):
-	__tablename__ = 'license'
+	__tablename__ = 'licence'
 	idlicence = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	plan = db.Column(db.String(100), nullable=False)
 	price = db.Column(db.Float, nullable=False)
