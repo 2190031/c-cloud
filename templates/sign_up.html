@@ -6,27 +6,27 @@
         <div class="w-5/6 d-inline">
           <div class="border border-opacity-10 border-1 p-5 rounded form-container">
             <div class="col-sm-8 py-5 mx-auto">
-              <form action="" method="POST">
+              <form action="/signup" method="POST">
                 <h1 class="h3 mb-3 fw-light h1-lg text-center">Registrarse</h1>
 
                 <div class="form-floating my-4">
-                  <input type="text" name='name' class="form-control transp-input text-light" id="floatingInput" placeholder="Nombre" autocomplete="off" pattern="[a-zA-Z]" required>
+                  <input type="text" name='name' class="form-control transp-input text-light" id="floatingInput" placeholder="Nombre" autocomplete="off"  required>
                   <label for="floatingInput" class="fw-light">Nombre</label>
                 </div>
                 <div class="form-floating my-4">
-                  <input type="text" name='surname' class="form-control transp-input text-light" id="floatingPassword" placeholder="Apellido" autocomplete="off" pattern="[a-zA-Z]" required>
+                  <input type="text" name='surname' class="form-control transp-input text-light" id="floatingPassword" placeholder="Apellido" autocomplete="off"  required>
                   <label for="floatingPassword" class="fw-light">Apellido</label>
                 </div>
                 <div class="form-floating my-4">
-                  <input type="text" name='username' class="form-control transp-input text-light" id="floatingPassword" placeholder="Usuario" autocomplete="off" pattern="[a-zA-Z0-9]\w{3,16}" required>
+                  <input type="text" name='username' class="form-control transp-input text-light" id="floatingPassword" placeholder="Usuario" autocomplete="off"  required>
                   <label for="floatingPassword" class="fw-light">Nombre de usuario</label>
                 </div>
                 <div class="form-floating my-4">
-                  <input type="email" name='email' class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                  <input type="email" name='email' class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off"  required>
                   <label for="floatingInput" class="fw-light">Correo electrónico</label>
                 </div>
                 <div class="form-floating my-4">
-                  <input type="password" name='password' class="form-control transp-input text-light" id="floatingPassword" placeholder="Contraseña" autocomplete="off" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\-#@%^*\s])[A-Za-z\d_\-#@%^*\s]{8,}" required title="Debe contener al menos una mayúscula, minúsculas, al menos un número y un caracter especial (_ - # @ ^ ó un espacio)">
+                  <input type="password" name='password' class="form-control transp-input text-light" id="floatingPassword" placeholder="Contraseña" autocomplete="off"  required title="Debe contener al menos una mayúscula, minúsculas, al menos un número y un caracter especial (_ - # @ ^ ó un espacio)">
                   <label for="floatingPassword" class="fw-light">Contraseña</label>
                 </div>
                 <small>¿Ya tienes cuenta? <a href="/login" class="info-link muted">Inicia sesión</a></small>
