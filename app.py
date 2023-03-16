@@ -1,16 +1,16 @@
 from flask import Flask, render_template, request, redirect
-from db_models import db, role, user, file, historial, version, error, licence, comment, preference, paytransaction, migration, session
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from db_models import db, defaultroles, user,  error, session, file, historial, version,licence, comment, preference, paytransaction
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:c55h32o5n4Mg@localhost/c_cloud'
 app.config['SECRET_KEY'] = ""
 db.init_app(app)
 
-
-
+with app.app_context():
+    db.create_all()
+    db.session.commit()
+    defaultroles()
+    
 @app.route('/')
 def index():
     title = 'Inicio - C-Cloud'
