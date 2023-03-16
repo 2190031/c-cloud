@@ -6,19 +6,33 @@ db = SQLAlchemy()
 class role(db.Model):
 	__tablename__ = 'role'
 	idrole = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	role = db.Column(db.String(30), nullable=False)
+	role = db.Column(db.String(30), nullable=False, unique=True)
 
-	def __init__(self, role):
+	__table_args__ = (db.UniqueConstraint('role', name='_role_uc'),)
+
+	def __init__(self, idrole, role):
+		self.idrole = idrole
 		self.role = role
 	
 	def __repr__(self):
 		return "<task %r>" % self.idrole
+    
+def defaultroles():
+	try:
+		userrole = role(idrole=1, role='user')
+		db.session.add(userrole)
+		db.session.commit()
+		print('role user inserted')
+	except:
+		print('Error')
 
-userrole = role(role='user')
-adminrole = role(role='admin')
-db.session.add(userrole)
-db.session.add(adminrole)
-db.session.commit()
+	try:
+		adminrole = role(idrole=2, role='admin')
+		db.session.add(adminrole)
+		db.session.commit()
+		print('role admin inserted')
+	except:
+		print('Error')
 
 class user(db.Model):
 	__tablename__ = 'user'
