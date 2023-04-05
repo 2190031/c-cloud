@@ -1,9 +1,8 @@
 var editor = ace.edit("editor");
-editor.setTheme("ace/theme/monokai");
 
-
-var languages =
-    [{ "type": "text/plain" },  // 0 txt
+// Lista de lenguajes
+const languages = [
+    { "type": "text/plain" },  // 0 txt
     { "type": "text/html" },  // 1 html
     { "type": "text/javascript" },  // 2 js
     { "type": "text/css" },  // 3 css
@@ -23,20 +22,68 @@ var languages =
     { "type": "application/typescript" },  // 17 typescript
     { "type": "text/x-go" },  // 18 go
     { "type": "text/x-rustsrc" }, // 19 rust
-    { "type": "application/vnd.dart" }]; // 20 dart
+    { "type": "application/vnd.dart" } // 20 dart
+];
 
-// if mode = python (-> convert to array position [4]) then extension = languages[4]
+// Lista con las posibilidades de temas
+const themes = [
+    "ambiance",
+    "chaos",
+    "chrome",
+    "clouds",
+    "clouds_midnight",
+    "cobalt",
+    "crimson_editor",
+    "dawn",
+    "dracula",
+    "dreamweaver",
+    "eclipse",
+    "github",
+    "gob",
+    "gruvbox",
+    "idle_fingers",
+    "iplastic",
+    "katzenmilch",
+    "kr_theme",
+    "kuroir",
+    "merbivore",
+    "merbivore_soft",
+    "mono_industrial",
+    "monokai",
+    "nord_dark",
+    "pastel_on_dark",
+    "solarized_dark",
+    "solarized_light",
+    "sqlserver",
+    "terminal",
+    "textmate",
+    "tomorrow",
+    "tomorrow_night",
+    "tomorrow_night_blue",
+    "tomorrow_night_bright",
+    "tomorrow_night_eighties",
+    "twilight",
+    "vibrant_ink",
+    "xcode"
+];
 
+// Al cargar la pagina toma y coloca el tema y lenguaje de sus selects 
 document.addEventListener("DOMContentLoaded", function () {
     let ModeSelValue = document.getElementById('select-mode');
     let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
+    let ThemeSelValue = document.getElementById('select-theme');
+    let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
     console.log(mode);
     if (mode != "") {
         editor.session.setMode("ace/mode/" + mode);
     }
+    if (theme != "") {
+        editor.setTheme("ace/theme/" + theme);
+    }
 });
 
-document.addEventListener('change', function () {
+// Cambia el modo de lenguaje de la pagina al cambiar el select
+document.getElementById('select-mode').addEventListener('change', function () {
     let ModeSelValue = document.getElementById('select-mode');
     let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
     if (mode != "") {
@@ -44,6 +91,16 @@ document.addEventListener('change', function () {
     }
 });
 
+// Cambia el tema de la pagina al cambiar el select
+document.getElementById('select-theme').addEventListener('change', function () {
+    let ThemeSelValue = document.getElementById('select-theme');
+    let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
+    if (theme != "") {
+        editor.setTheme("ace/theme/" + theme);
+    }
+});
+
+// Descarga el documento con su titulo y en su lenguaje correspondiente
 function download() {
     var contenido = ace.edit("editor").getValue();
     let ModeSelValue = document.getElementById('select-mode');
