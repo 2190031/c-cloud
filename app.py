@@ -67,6 +67,10 @@ def login():
     else:
         return render_template('login.html', title=title)
     
+@app.route('/editor')
+def editor():
+    return render_template('editor.html')
+
 @app.route('/notfound')
 def notfound():
     return render_template('notfound.html')
