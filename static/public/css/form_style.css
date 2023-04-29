@@ -18,12 +18,14 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
 nav ul {
     border-radius: 50px;
     border: rgba(255, 255, 255, 0.2) solid 0.2px;
     background-color: #101216;
     align-items: center;
 }
+
 a {
     text-decoration: none;
 }
@@ -81,7 +83,7 @@ a {
 }
 
 footer {
-    background: linear-gradient(#090706 1%, #0f172a 99%);
+    background: linear-gradient(rgba(0,0,0,0) 1%, #0f172a 99%);
 }
 
 @media screen and (max-width: 990px) {
