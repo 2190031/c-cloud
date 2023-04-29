@@ -1,5 +1,7 @@
 from datetime import datetime as dt
 from flask_sqlalchemy import SQLAlchemy
+import hashlib
+import os
 
 db = SQLAlchemy()
 
@@ -40,17 +42,19 @@ class user(db.Model):
 	name = db.Column(db.String(45), nullable=False)
 	surname = db.Column(db.String(45), nullable=False)
 	username = db.Column(db.String(45), nullable=False)
-	email = db.Column(db.String(100), nullable=False)
+	email = db.Column(db.String(100), nullable=False, unique=True)
 	password = db.Column(db.String(45), nullable=False)
+	salt = db.Column(db.String(16), nullable=False, unique=True)
 	usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
 	creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
 
-	def __init__(self, name, surname, username, email, password, usertype=1):
+	def __init__(self, name, surname, username, email, password, salt, usertype=1):
 		self.name = name
 		self.surname = surname
 		self.username = username
 		self.email = email
 		self.password = password
+		self.salt = salt
 		self.usertype = usertype
 
 	def __repr__(self):
@@ -222,3 +226,5 @@ class session(db.Model):
 
 	def __repr__(self):
 		return "<task %r>" % self.idsession
+
+

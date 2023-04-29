@@ -215,3 +215,5 @@ function download() {
     // Liberar el objeto URL
     URL.revokeObjectURL(url);
 }
+
+// document.getElementById('downloadBtn').addEventListener('click', download ());

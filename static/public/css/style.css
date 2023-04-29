@@ -1,0 +1,141 @@
+body {
+    /* background-color: rgb(0, 0, 4); */
+    background-image: url("https://res.cloudinary.com/dldoqfame/image/upload/v1682771418/c_cloud/earth-3840x2160-clouds-4k-23359_akgddx.jpg");
+    background-position: bottom;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat:no-repeat;
+}
+*::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 1);
+    width: 16px;
+}
+
+/* background of the scrollbar except button or resizer */
+*::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+/* scrollbar itself */
+*::-webkit-scrollbar-thumb {
+    background-color: #4f4f53;
+    border-radius: 16px;
+    border: 4px solid rgba(0, 0, 0, 1);
+}
+
+/* set button(top and bottom of the scrollbar) */
+*::-webkit-scrollbar-button {
+    display: none;
+}
+
+.banner#header {
+    background-image: url("https://wallup.net/wp-content/uploads/2016/01/11974-planet-Earth-space.jpg");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 500px;
+    max-height: 700px;
+    overflow: hidden;
+}
+
+.banner#banner {
+    background-image: url("https://res.cloudinary.com/dldoqfame/image/upload/v1682771417/c_cloud/footer-bg_okdpv9.jpg");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-attachment:local;
+    background-size: cover;
+    min-height: 600px;
+    max-height: 700px;
+    transform: translateY(-130px);
+    z-index: 0;
+    overflow: hidden;
+}
+
+.bann-logo {
+    margin: 100px;
+    position: static;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+}
+
+#bann-btn {
+    border-radius: 20px;
+    padding-left: 2pc;
+    padding-right: 2pc; 
+    margin-top: 10px;
+}
+
+#nav {
+    right: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* background-image: linear-gradient(to right, rgba(0,0,0,0) , rgba(58, 58, 83, 0.5)); */
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    color: whitesmoke !important;
+    overflow: hidden;
+}
+
+.btn {
+    color: white;
+    margin-left: 5px;
+    overflow: hidden;
+}
+
+.logo {
+    width: 300px;
+    margin: 10px;
+    position: static;
+    align-content: center;
+    overflow: hidden;
+}
+
+.body {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    transform: translateY(-5%);
+    background-image: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgb(0, 0, 4) 2%, rgba(0,0,2,1) 98%, rgba(0,0,0,0) 100%);
+}
+
+.body .container {
+    padding: 10%;
+    color: white;
+    text-align: justify;
+    overflow: hidden;
+}
+
+footer * {
+    color: whitesmoke;
+    overflow: hidden;
+}
+
+.align-right {
+    position: relative;
+    right: 0;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+#footer {
+    z-index: 0;
+    top: 0;
+    left: 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    /* background-image: url("https://res.cloudinary.com/dldoqfame/image/upload/v1682771418/c_cloud/earth-3840x2160-clouds-4k-23359_akgddx.jpg"); */
+    background-position: bottom;
+    background-size: cover;
+    /* transform: translateY(-10%); */
+    min-height: 400px;
+}
+
+.body#b-2 {
+    transform: translateY(-170px);
+    overflow: hidden;
+}
