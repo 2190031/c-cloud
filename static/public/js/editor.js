@@ -101,6 +101,8 @@ document.getElementById('select-theme').addEventListener('change', function () {
 });
 
 // Descarga el documento con su titulo y en su lenguaje correspondiente
+// document.getElementById('download-btn').addEventListener('click', download());
+
 function download() {
     var contenido = ace.edit("editor").getValue();
     let ModeSelValue = document.getElementById('select-mode');
@@ -108,113 +110,115 @@ function download() {
     let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
     console.log()
     let filename = document.getElementById('filename').value;
+    console.log(filename)
+    if (filename == "" || filename == null || !filename) {
+        console.log("Error")
+    } else {
+        switch (mode) {
+            case 'txt':
+                var fileType = languages[0];
+                var fileExtension = 'txt';
+                break;
+            case 'html':
+                var fileType = languages[1];
+                var fileExtension = 'html';
+                break;
+            case 'js':
+                var fileType = languages[2];
+                var fileExtension = 'js';
+                break;
+            case 'css':
+                var fileType = languages[3];
+                var fileExtension = 'css';
+                break;
+            case 'python':
+                var fileType = languages[4];
+                var fileExtension = 'py';
+                break;
+            case 'php':
+                var fileType = languages[5];
+                var fileExtension = 'php';
+                break;
+            case 'c_cpp':
+                var fileType = languages[6];
+                var fileExtension = 'c';
+                break;
+            case 'java':
+                var fileType = languages[8];
+                var fileExtension = 'java';
+                break;
+            case 'sql':
+                var fileType = languages[9];
+                var fileExtension = 'sql';
+                break;
+            case 'json':
+                var fileType = languages[10];
+                var fileExtension = 'json';
+                break;
+            case 'xml':
+                var fileType = languages[11];
+                var fileExtension = 'xml';
+                break;
+            case 'csv':
+                var fileType = languages[12];
+                var fileExtension = 'csv';
+                break;
+            case 'yaml':
+                var fileType = languages[13];
+                var fileExtension = 'yaml';
+                break;
+            case 'markdown':
+                var fileType = languages[14];
+                var fileExtension = 'md';
+                break;
+            case 'ruby':
+                var fileType = languages[15];
+                var fileExtension = 'rb';
+                break;
+            case 'swift':
+                var fileType = languages[16];
+                var fileExtension = 'swift';
+                break;
+            case 'typescript':
+                var fileType = languages[17];
+                var fileExtension = 'ts';
+                break;
+            case 'golang':
+                var fileType = languages[18];
+                var fileExtension = 'go';
+                break;
+            case 'rust':
+                var fileType = languages[19];
+                var fileExtension = 'rs';
+                break;
+            case 'dart':
+                var fileType = languages[20];
+                var fileExtension = 'dart';
+                break;
+            default:
+                var fileType = languages[0];
+                var fileExtension = 'txt';
+                break;
+        }
 
-    switch (mode) {
-        case 'txt':
-            var fileType = languages[0];
-            var fileExtension = 'txt';
-            break;
-        case 'html':
-            var fileType = languages[1];
-            var fileExtension = 'html';
-            break;
-        case 'js':
-            var fileType = languages[2];
-            var fileExtension = 'js';
-            break;
-        case 'css':
-            var fileType = languages[3];
-            var fileExtension = 'css';
-            break;
-        case 'python':
-            var fileType = languages[4];
-            var fileExtension = 'py';
-            break;
-        case 'php':
-            var fileType = languages[5];
-            var fileExtension = 'php';
-            break;
-        case 'c_cpp':
-            var fileType = languages[6];
-            var fileExtension = 'c';
-            break;
-        case 'java':
-            var fileType = languages[8];
-            var fileExtension = 'java';
-            break;
-        case 'sql':
-            var fileType = languages[9];
-            var fileExtension = 'sql';
-            break;
-        case 'json':
-            var fileType = languages[10];
-            var fileExtension = 'json';
-            break;
-        case 'xml':
-            var fileType = languages[11];
-            var fileExtension = 'xml';
-            break;
-        case 'csv':
-            var fileType = languages[12];
-            var fileExtension = 'csv';
-            break;
-        case 'yaml':
-            var fileType = languages[13];
-            var fileExtension = 'yaml';
-            break;
-        case 'markdown':
-            var fileType = languages[14];
-            var fileExtension = 'md';
-            break;
-        case 'ruby':
-            var fileType = languages[15];
-            var fileExtension = 'rb';
-            break;
-        case 'swift':
-            var fileType = languages[16];
-            var fileExtension = 'swift';
-            break;
-        case 'typescript':
-            var fileType = languages[17];
-            var fileExtension = 'ts';
-            break;
-        case 'golang':
-            var fileType = languages[18];
-            var fileExtension = 'go';
-            break;
-        case 'rust':
-            var fileType = languages[19];
-            var fileExtension = 'rs';
-            break;
-        case 'dart':
-            var fileType = languages[20];
-            var fileExtension = 'dart';
-            break;
-        default:
-            var fileType = languages[0];
-            var fileExtension = 'txt';
-            break;
+        var contenido = ace.edit("editor").getValue();
+
+        // Crear un objeto Blob con el contenido
+        var blob = new Blob([contenido], fileType);
+
+        // Crear un objeto URL del blob
+        var url = URL.createObjectURL(blob);
+
+        // Crear un elemento <a> para descargar el archivo
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = filename + "." + fileExtension;
+
+        // Agregar el elemento <a> al DOM y hacer clic en él
+        document.body.appendChild(a);
+        a.click();
+
+        // Liberar el objeto URL
+        URL.revokeObjectURL(url);
     }
-
-    var contenido = ace.edit("editor").getValue();
-
-    // Crear un objeto Blob con el contenido
-    var blob = new Blob([contenido], fileType);
-
-    // Crear un objeto URL del blob
-    var url = URL.createObjectURL(blob);
-
-    // Crear un elemento <a> para descargar el archivo
-    var a = document.createElement("a");
-    a.href = url;
-    a.download = filename + "." + fileExtension;
-
-    // Agregar el elemento <a> al DOM y hacer clic en él
-    document.body.appendChild(a);
-    a.click();
-
-    // Liberar el objeto URL
-    URL.revokeObjectURL(url);
 }
-
-// document.getElementById('downloadBtn').addEventListener('click', download ());
