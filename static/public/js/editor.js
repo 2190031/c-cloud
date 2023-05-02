@@ -104,8 +104,9 @@ document.getElementById('select-theme').addEventListener('change', function () {
 function download() {
     var contenido = ace.edit("editor").getValue();
     let ModeSelValue = document.getElementById('select-mode');
+    console.log(ModeSelValue)
     let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
-
+    console.log()
     let filename = document.getElementById('filename').value;
 
     switch (mode) {
