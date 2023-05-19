@@ -10,174 +10,325 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/src-min-noconflict/ace.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/css/ace.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
     <title>Editor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='public/css/editor_style.css') }}">
 </head>
 
-<body>
-    <div class="menu-bar">
-        <nav class="navbar navbar-expand-lg bg-dark text-light align-items-center" data-bs-theme="dark">
-            <div class="container-fluid row-cols-lg-auto g-3 align-items-center">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                    aria-label="Toggle navigation">
+<body id="body">
+    <nav class="navbar-expand-lg bg-dark text-white fixed-top" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="ms-2">
+                        <img src="{{ url_for('static', filename='public/img/icon.png') }}" height="50" alt="...">
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="container-fluid">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="d-block">
+                                        <div class="col-8 col-sm-6">
+                                            <div class="row-cols-3">
+                                                <div class="input-group-sm mt-2">
+                                                    <input type="text"
+                                                    class="form-control-sm bg-dark text-white border text-truncate has-validation"
+                                                    id="filename" aria-label="Nombre de archivo"
+                                                    placeholder="Nombre del archivo" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="collapse navbar-collapse" id="navbar">
+                                            <div class="col-4 col-sm-6">
+                                                <div class="collapse navbar-collapse" id="navbarScroll">
+                                                    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                                                        <ul class="navbar-nav me-autor mb-2 mb-lg-0">
+                                                            <li class="nav-item dropdown m-1" onmouseover=" " onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" data-bs-auto-close="false"
+                                                                    aria-expanded="false">
+                                                                    Archivo
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
+                                                                    onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            id="save-btn">Guardar</a></li>
+                                                                    <li>
+                                                                        <div class="btn-group dropend">
+                                                                            <a class="dropdown-item dropdown-toggle"
+                                                                                data-bs-toggle="dropdown"
+                                                                                data-bs-auto-close="outside"
+                                                                                aria-expanded="false" href="#">
+                                                                                Guardar como
+                                                                            </a>
+                                                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                                                                <li><a class="dropdown-item" href="#">Abrir</a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item" href="#">Abrir</a></li>
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            id="download-btn">Descargar</a></li>
+                                                                    <li><a class="dropdown-item" href="/notfound"
+                                                                            target="_blank">Nueva ventana</a></li>
+                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#langs">Lenguaje</a></li>
+                                                                    <li><a class="dropdown-item" href="/notfound">Salir</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Edición
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
+                                                                    onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#">Deshacer</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Rehacer</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Copiar</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Cortar</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Pegar</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Buscar</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Buscar y
+                                                                            reemplazar</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Comentar línea</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Preferencias
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark">
+                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#themes">Apariencia</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Vista
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark" id="dropdown-menu"
+                                                                onmouseover="" onmouseout="">
+                                                                <li><a class="dropdown-item" href="#">Comandos</a></li>
+                                                                <li><a class="dropdown-item" href="#">Distribución</a></li>
+                                                                <li><a class="dropdown-item" href="#">Distribución</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Distribución</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Distribución</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Ejecutar
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark">
+                                                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Another action</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item" href="#">Something else
+                                                                            here</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Herramientas
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
+                                                                    onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#themes">Temas</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Something else
+                                                                            here</a></li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                                <button class="btn btn-dark btn-sm dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Ayuda
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
+                                                                    onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                            data-bs-target="#themes">Temas</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Something else
+                                                                            here</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-shrink-0">
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                            <strong>{{ user.username }}</strong>
+                        </a>
+                        <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
+                            <li>
+                                <a class="dropdown-item text-white" href="/{{ user.username }}/dashboard">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-house" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z" />
+                                    </svg>
+                                    Inicio
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item text-white" href="/{{ username }}/settings">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-gear" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+                                        <path
+                                            d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+                                    </svg>
+                                    Settings
+                                </a></li>
+                            <li><a class="dropdown-item text-white" href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-person" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                                    </svg>
+                                    Profile
+                                </a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-white" href="/{{ username }}/logout">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                            d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                        <path fill-rule="evenodd"
+                                            d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                    </svg>
+                                    Sign out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav fw-light lh-1">
-                        <div class="nav-link">
-                           <li class="input-group input-group-sm mb-3 nav-item">
-                            <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
-                                    <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-                                </svg>
-                            </span>
-                            <input type="text" class="form-control" id="filename" aria-label="Nombre de archivo" aria-describedby="">
-                        </li> 
-                        </div>
-                        
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                File
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" id="download-btn" onclick="download()">Descargar</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Theme
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#themes">Temas</a></li>
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#langs">Lenguaje</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <div class="modal fade" id="themes" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <select class="form-select align-text-bottom" id="select-theme">
-                                            <option value="ambiance">Ambiance</option>
-                                            <option value="chaos">Chaos</option>
-                                            <option value="chrome">Chrome</option>
-                                            <option value="clouds">Clouds</option>
-                                            <option value="cobalt">Cobalt</option>
-                                            <option value="crimson_editor">Crimson Editor</option>
-                                            <option value="dawn">Dawn</option>
-                                            <option value="dracula">Dracula</option>
-                                            <option value="dreamweaver">Dreamweaver</option>
-                                            <option value="eclipse">Eclipse</option>
-                                            <option value="github">GitHub</option>
-                                            <option value="gob">Gob</option>
-                                            <option value="gruvbox">Gruvbox</option>
-                                            <option value="idle_fingers">Idle Fingers</option>
-                                            <option value="iplastic">IPlastic</option>
-                                            <option value="katzenmilch">KatzenMilch</option>
-                                            <option value="kr_theme">KR Theme</option>
-                                            <option value="kuroir">Kuroir</option>
-                                            <option value="merbivore">Merbivore</option>
-                                            <option value="merbivore_soft">Merbivore Soft</option>
-                                            <option value="mono_industrial">Mono Industrial</option>
-                                            <option value="monokai">Monokai</option>
-                                            <option value="pastel_on_dark">Pastel on Dark</option>
-                                            <option value="solarized_dark">Solarized Dark</option>
-                                            <option value="solarized_light">Solarized Light</option>
-                                            <option value="sqlserver">SQL Server</option>
-                                            <option value="terminal">Terminal</option>
-                                            <option value="textmate">Textmate</option>
-                                            <option value="tomorrow">Tomorrow</option>
-                                            <option value="tomorrow_night">Tomorrow Night</option>
-                                            <option value="tomorrow_night_blue">Tomorrow Night Blue</option>
-                                            <option value="tomorrow_night_bright">Tomorrow Night Bright</option>
-                                            <option value="tomorrow_night_eighties">Tomorrow Night Eighties</option>
-                                            <option value="twilight">Twilight</option>
-                                            <option value="vibrant_ink">Vibrant Ink</option>
-                                            <option value="xcode">XCode</option>
-                                        </select>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            </div>
+        </div>
+    </nav>
 
-                        <div class="modal fade" id="langs" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <select class="form-select" id="select-mode">
-                                            <option value="txt">Texto</option>
-                                            <option value="html">HTML</option>
-                                            <option value="js">Cavascript</option>
-                                            <option value="css">CSS</option>
-                                            <option value="py">Python</option>
-                                            <option value="php">PHP</option>
-                                            <option value="c_cpp">C</option>
-                                            <option value="c_cpp">C++</option>
-                                            <option value="java">Java</option>
-                                            <option value="sql">SQL</option>
-                                            <option value="xml">XML</option>
-                                            <option value="csv">CSV</option>
-                                            <option value="yaml">Yaml</option>
-                                            <option value="markdown">Markdown</option>
-                                            <option value="ruby">Ruby</option>
-                                            <option value="swift">Swift</option>
-                                            <option value="typescript">Typescript</option>
-                                            <option value="golang">Go</option>
-                                            <option value="rust">Rust</option>
-                                            <option value="dart">Dart</option>
-                                        </select>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
-                        </li>
-                    </ul>
+    <div class="modal fade" id="themes" tabindex="-1" aria-labelledby="themes" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Temas</h1>
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <div class="d-flex" role="search">
-                    <button class="btn btn-outline-light" id="download-btn" onclick="download()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16" class="align-middle">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>
-                        <div class="vr"></div>
-                        Descargar
-                    </button>
+                <div class="modal-body">
+                    <select class="form-select align-text-bottom" id="select-theme">
+                        <option value="ambiance">Ambiance</option>
+                        <option value="chaos">Chaos</option>
+                        <option value="chrome">Chrome</option>
+                        <option value="clouds">Clouds</option>
+                        <option value="cobalt">Cobalt</option>
+                        <option value="crimson_editor">Crimson Editor</option>
+                        <option value="dawn">Dawn</option>
+                        <option value="dracula">Dracula</option>
+                        <option value="dreamweaver">Dreamweaver</option>
+                        <option value="eclipse">Eclipse</option>
+                        <option value="github">GitHub</option>
+                        <option value="gob">Gob</option>
+                        <option value="gruvbox">Gruvbox</option>
+                        <option value="idle_fingers">Idle Fingers</option>
+                        <option value="iplastic">IPlastic</option>
+                        <option value="katzenmilch">KatzenMilch</option>
+                        <option value="kr_theme">KR Theme</option>
+                        <option value="kuroir">Kuroir</option>
+                        <option value="merbivore">Merbivore</option>
+                        <option value="merbivore_soft">Merbivore Soft</option>
+                        <option value="mono_industrial">Mono Industrial</option>
+                        <option value="monokai">Monokai</option>
+                        <option value="pastel_on_dark">Pastel on Dark</option>
+                        <option value="solarized_dark">Solarized Dark</option>
+                        <option value="solarized_light">Solarized Light</option>
+                        <option value="sqlserver">SQL Server</option>
+                        <option value="terminal">Terminal</option>
+                        <option value="textmate">Textmate</option>
+                        <option value="tomorrow">Tomorrow</option>
+                        <option value="tomorrow_night">Tomorrow Night</option>
+                        <option value="tomorrow_night_blue">Tomorrow Night Blue</option>
+                        <option value="tomorrow_night_bright">Tomorrow Night Bright</option>
+                        <option value="tomorrow_night_eighties">Tomorrow Night Eighties</option>
+                        <option value="twilight">Twilight</option>
+                        <option value="vibrant_ink">Vibrant Ink</option>
+                        <option value="xcode">XCode</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save-theme"
+                        onclick="saveTheme()">Guardar</button>
                 </div>
             </div>
-        </nav>
+        </div>
     </div>
 
+    <div class="modal fade" id="langs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Lenguaje</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select" id="select-mode">
+                        <option value="text">Texto</option>
+                        <option value="html">HTML</option>
+                        <option value="javascript">Javascript</option>
+                        <option value="css">CSS</option>
+                        <option value="python">Python</option>
+                        <option value="php">PHP</option>
+                        <option value="c_cpp">C</option>
+                        <option value="c_cpp">C++</option>
+                        <option value="java">Java</option>
+                        <option value="sql">SQL</option>
+                        <option value="xml">XML</option>
+                        <option value="csv">CSV</option>
+                        <option value="yaml">Yaml</option>
+                        <option value="markdown">Markdown</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="swift">Swift</option>
+                        <option value="typescript">Typescript</option>
+                        <option value="golang">Go</option>
+                        <option value="rust">Rust</option>
+                        <option value="dart">Dart</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save-lang"
+                        onclick="saveLang()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="editor" class="ace_editor ace_hidpi ace-twilight ace_dark"></div>
 
@@ -200,5 +351,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
         integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
         crossorigin="anonymous"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
+
+</html>

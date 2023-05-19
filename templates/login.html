@@ -31,4 +31,25 @@
     </div>
 </div>
 
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.min.js"></script>
+<script>
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('redirect', function(data) {
+    window.location.href = data.url;
+  });
+
+  socket.on('error', function(data) {
+    alert(data.message);
+  });
+
+  document.getElementById('login-btn').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+
+    socket.emit('login', {email: email, password: password});
+  });
+</script> -->
 {% endblock %}

@@ -1,7 +1,5 @@
 from datetime import datetime as dt
 from flask_sqlalchemy import SQLAlchemy
-import hashlib
-import os
 
 db = SQLAlchemy()
 
@@ -36,8 +34,7 @@ def defaultroles():
 	except:
 		print('Error')
 
-
-class User(db.Model):
+class user(db.Model):
     __tablename__ = 'user'
     iduser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
     name = db.Column(db.String(45), nullable=False)
@@ -56,10 +53,10 @@ class User(db.Model):
         self.usertype = usertype
 
     def __repr__(self):
-        return "<User %r>" % self.iduser
+        return "<task %r>" % self.iduser
 
-class DetailsUser(db.Model):
-    __tablename__ = 'DetailsUser'
+class detailsuser(db.Model):
+    __tablename__ = 'detailsuser'
     idDetailsUser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
     salt = db.Column(db.String(16), nullable=False, unique=True)
     creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
@@ -72,7 +69,7 @@ class DetailsUser(db.Model):
         self.iduser = iduser
 
     def __repr__(self):
-        return "<DetailsUser %r>" % self.idDetailsUser
+        return "<task %r>" % self.idDetailsUser
 
 	
 class file(db.Model):
@@ -94,8 +91,8 @@ class file(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idfile   
 	
-class Detailsfile(db.Model):
-    __tablename__ = 'Detailsfile'
+class detailsfile(db.Model):
+    __tablename__ = 'detailsfile'
     idDetailsfile = db.Column(db.Integer, primary_key=True, autoincrement=True)
     iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
     idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), primary_key=True)
@@ -107,7 +104,7 @@ class Detailsfile(db.Model):
         self.datecreated = datecreated
 
     def __repr__(self):
-        return "<Detailsfile %r>" % self.idDetailsfile
+        return "<task %r>" % self.idDetailsfile
 
 
 class historial(db.Model):
@@ -129,7 +126,7 @@ class historial(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idchange
 
-class Change(db.Model):
+class change(db.Model):
     __tablename__ = 'change'
     idcambio = db.Column(db.Integer, primary_key=True, autoincrement=True)
     beforechange = db.Column(db.Integer, nullable=False)
@@ -145,7 +142,7 @@ class Change(db.Model):
         self.changecolumn = changecolumn
 
     def __repr__(self):
-        return "<Change %r>" % self.idcambio
+        return "<task %r>" % self.idcambio
 
 
 class version(db.Model):
@@ -194,8 +191,8 @@ class licence(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idlicence
 
-class Detailslicence(db.Model):
-    __tablename__ = 'Detailslicence'
+class detailsLicence(db.Model):
+    __tablename__ = 'detailslicence'
     idDetailslicence = db.Column(db.Integer, primary_key=True, autoincrement=True)
     taxes = db.Column(db.Float, nullable=False)
     totalprice = db.Column(db.Float, nullable=False)
@@ -207,7 +204,7 @@ class Detailslicence(db.Model):
         self.idlicence = idlicence
 
     def __repr__(self):
-        return "<Detailslicence %r>" % self.idDetailslicence
+        return "<task %r>" % self.idDetailslicence
 
 	
 class comment(db.Model):
@@ -246,8 +243,8 @@ class preference(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idpreference
 
-class Colour(db.Model):
-    __tablename__ = 'colour'
+class preferences(db.Model):
+    __tablename__ = 'preferences'
     idcolour = db.Column(db.Integer, primary_key=True, autoincrement=True)
     idpreference = db.Column(db.Integer, db.ForeignKey('preference.idpreference'), nullable=False)
     iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
@@ -263,7 +260,7 @@ class Colour(db.Model):
         self.idpreference = idpreference
 
     def __repr__(self):
-        return "<Colour %r>" % self.idcolour
+        return "<task %r>" % self.idcolour
 
 class paytransaction(db.Model):
 	__tablename__ = 'paytransaction'
@@ -282,8 +279,8 @@ class paytransaction(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idpaytransaction
 	
-class session(db.Model):
-	__tablename__ = 'session'
+class sessions(db.Model):
+	__tablename__ = 'sessions'
 	idsession = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
 	datelogged = db.Column(db.DateTime, default=dt.utcnow)

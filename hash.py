@@ -3,17 +3,18 @@ import os
 from db_models import user
 
 def hash_password(password):
-    # salt = os.urandom(16).decode('latin-1')
-    salt = str(bytes([i for i in os.urandom(16) if i <= 127]))
+    try:
+        salt = str(bytes([i for i in os.urandom(16) if i <= 127]))
 
-    encoded_password = password
+        encoded_password = password
 
-    salted_password = salt.split("'")[1] + encoded_password
-    
-    hash_object = hashlib.sha256(salted_password.encode('latin-1'))
-    hashed_password = hash_object.hexdigest()
-    return (hashed_password, salt.split("'")[1])
-
+        salted_password = salt.split("'")[1] + encoded_password
+        
+        hash_object = hashlib.sha256(salted_password.encode('latin-1'))
+        hashed_password = hash_object.hexdigest()
+        return (hashed_password, salt.split("'")[1])
+    except:
+        print('error')
 
 def check_credentials(email, password):
     # retrieve the user with the given email
