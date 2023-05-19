@@ -1,14 +1,13 @@
 pip install -r requirements.txt -> instala las librerias dentro del archivo requirements.txt automaticamente [NO PROBADO]
 pip install -U Flask --user
-pip install flask, flask_slqalchemy, mysqlclient
+pip install flask, flask_sqlalchemy, mysqlclient
 python -m venv venv -> crea entorno virual
 venv\Scripts\activate -> activa el entorno virtual. Deberia aparecier (venv). 
 	Ej: (venv) PS C:\xampp\htdocs\flask_test>
 
 python app.py -> Ejecuta 
 flask run
-flask run --host=0.0.0.0
-flask run --port=5001 -> ejecuta en el puerto 5001
+flask run --host=0.0.0.0 -> ejecuta en el puerto 5001
 
 Get-ExecutionPolicy no debe ser "Restricted", si esta, abrir PowerShell como adminsitrador y ejecutar Set-ExecutionPolicy RemoteSigned
 

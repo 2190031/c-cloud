@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     /* background-color: rgb(0, 0, 4); */
     background-image: url("https://res.cloudinary.com/dldoqfame/image/upload/v1682771418/c_cloud/earth-3840x2160-clouds-4k-23359_akgddx.jpg");

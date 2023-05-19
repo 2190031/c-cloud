@@ -35,28 +35,42 @@ def defaultroles():
 		print('Error')
 
 class user(db.Model):
-	__tablename__ = 'user'
-	iduser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
-	name = db.Column(db.String(45), nullable=False)
-	surname = db.Column(db.String(45), nullable=False)
-	username = db.Column(db.String(45), nullable=False)
-	email = db.Column(db.String(100), nullable=False, unique=True)
-	password = db.Column(db.String(255), nullable=False)
-	salt = db.Column(db.String(20), nullable=False, unique=True)
-	usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
-	creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
+    __tablename__ = 'user'
+    iduser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
+    name = db.Column(db.String(45), nullable=False)
+    surname = db.Column(db.String(45), nullable=False)
+    username = db.Column(db.String(45), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(45), nullable=False)
+    usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
+    
+    def __init__(self, name, surname, username, email, password, salt, usertype=1):
+        self.name = name
+        self.surname = surname
+        self.username = username
+        self.email = email
+        self.password = password
+        self.usertype = usertype
 
-	def __init__(self, name, surname, username, email, password, salt, usertype=1):
-		self.name = name
-		self.surname = surname
-		self.username = username
-		self.email = email
-		self.password = password
-		self.salt = salt
-		self.usertype = usertype
+    def __repr__(self):
+        return "<task %r>" % self.iduser
 
-	def __repr__(self):
-		return "<task %r>" % self.iduser
+class detailsuser(db.Model):
+    __tablename__ = 'detailsuser'
+    idDetailsUser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
+    salt = db.Column(db.String(16), nullable=False, unique=True)
+    creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
+    iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
+    usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
+
+    def __init__(self, salt, iduser, usertype=1):
+        self.salt = salt
+        self.usertype = usertype
+        self.iduser = iduser
+
+    def __repr__(self):
+        return "<task %r>" % self.idDetailsUser
+
 	
 class file(db.Model):
 	__tablename__ = 'file'
@@ -65,7 +79,7 @@ class file(db.Model):
 	category = db.Column(db.String(20), nullable=False)
 	extension = db.Column(db.String(45), nullable=False)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	datecreated = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
+	
 
 	def __init__(self, name, category, extension, iduser, datecreated):
 		self.name = name
@@ -76,6 +90,22 @@ class file(db.Model):
 
 	def __repr__(self):
 		return "<task %r>" % self.idfile   
+	
+class detailsfile(db.Model):
+    __tablename__ = 'detailsfile'
+    idDetailsfile = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
+    idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), primary_key=True)
+    datecreated = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
+
+    def __init__(self, idfile, iduser, datecreated):
+        self.iduser = iduser
+        self.idfile = idfile
+        self.datecreated = datecreated
+
+    def __repr__(self):
+        return "<task %r>" % self.idDetailsfile
+
 
 class historial(db.Model):
 	__tablename__ = 'historial'
@@ -84,25 +114,36 @@ class historial(db.Model):
 	datemodified = db.Column(db.String(30), nullable=False)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
 	idmodificationtype = db.Column(db.Integer, nullable=False)
-	beforechange = db.Column(db.Integer, nullable=False)
-	afterchange = db.Column(db.Integer, nullable=False)
-	changeline = db.Column(db.Integer, nullable=False)
-	changecolumn = db.Column(db.Integer, nullable=False)
 
-	def __init__(self, idfile, datemodified, iduser, idmodificationtype, beforechange, afterchange, changeline, changecolumn):
+
+	def __init__(self, idfile, datemodified, iduser, idmodificationtype):
 		self.idfile = idfile
 		self.datemodified = datemodified
 		self.iduser = iduser
 		self.idmodificationtype = idmodificationtype
-		self.beforechange = beforechange
-		self.afterchange = afterchange
-		self.beforechange = beforechange
-		self.afterchange = afterchange
-		self.changeline = changeline
-		self.changecolumn = changecolumn
+
 
 	def __repr__(self):
 		return "<task %r>" % self.idchange
+
+class change(db.Model):
+    __tablename__ = 'change'
+    idcambio = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    beforechange = db.Column(db.Integer, nullable=False)
+    afterchange = db.Column(db.Integer, nullable=False)
+    changeline = db.Column(db.Integer, nullable=False)
+    changecolumn = db.Column(db.Integer, nullable=False)
+    idchange = db.Column(db.Integer, db.ForeignKey('historial.idchange'), primary_key=True)
+
+    def __init__(self, beforechange, afterchange, changeline, changecolumn):
+        self.beforechange = beforechange
+        self.afterchange = afterchange
+        self.changeline = changeline
+        self.changecolumn = changecolumn
+
+    def __repr__(self):
+        return "<task %r>" % self.idcambio
+
 
 class version(db.Model):
 	__tablename__ = 'version'
@@ -139,20 +180,32 @@ class licence(db.Model):
 	idlicence = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	plan = db.Column(db.String(100), nullable=False)
 	price = db.Column(db.Float, nullable=False)
-	taxes = db.Column(db.Float, nullable=False)
-	totalprice = db.Column(db.Float, nullable=False)
 	packages = db.Column(db.String(45), nullable=False)
 
 
-	def __init__(self, plan, price, taxes, totalprice, packages):
+	def __init__(self, plan, price, packages):
 		self.plan = plan
 		self.price = price
-		self.taxes = taxes
-		self.totalprice = totalprice
 		self.packages = packages
 
 	def __repr__(self):
 		return "<task %r>" % self.idlicence
+
+class detailsLicence(db.Model):
+    __tablename__ = 'detailslicence'
+    idDetailslicence = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    taxes = db.Column(db.Float, nullable=False)
+    totalprice = db.Column(db.Float, nullable=False)
+    idlicence = db.Column(db.Integer, db.ForeignKey('licence.idlicence'), nullable=False)
+
+    def __init__(self, idlicence, taxes, totalprice):
+        self.taxes = taxes
+        self.totalprice = totalprice
+        self.idlicence = idlicence
+
+    def __repr__(self):
+        return "<task %r>" % self.idDetailslicence
+
 	
 class comment(db.Model):
 	__tablename__ = 'comment'
@@ -175,19 +228,13 @@ class preference(db.Model):
 	__tablename__ = 'preference'
 	idpreference = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	bkgcolour = db.Column(db.String(45), nullable=False)
-	font = db.Column(db.String(45), nullable=False)
-	fontcolour = db.Column(db.String(45), nullable=False)
 	fontsize = db.Column(db.Float, nullable=False)
 	profile = db.Column(db.String(45), nullable=False)
 	autosave = db.Column(db.Boolean, nullable=False)
 	lang = db.Column(db.String(3), nullable=False)
 
-	def __init__(self, iduser, bkgcolour, font, fontcolour, fontsize, profile, autosave, lang):
+	def __init__(self, iduser,  fontsize, profile, autosave, lang):
 		self.iduser = iduser
-		self.bkgcolour = bkgcolour
-		self.font = font
-		self.fontcolour = fontcolour
 		self.fontsize = fontsize
 		self.profile = profile
 		self.autosave = autosave
@@ -195,7 +242,26 @@ class preference(db.Model):
 
 	def __repr__(self):
 		return "<task %r>" % self.idpreference
-	
+
+class preferences(db.Model):
+    __tablename__ = 'preferences'
+    idcolour = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    idpreference = db.Column(db.Integer, db.ForeignKey('preference.idpreference'), nullable=False)
+    iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
+    bkgcolour = db.Column(db.String(45), nullable=False)
+    font = db.Column(db.String(45), nullable=False)
+    fontcolour = db.Column(db.String(45), nullable=False)
+
+    def __init__(self, iduser, bkgcolour, font, fontcolour, idpreference):
+        self.iduser = iduser
+        self.bkgcolour = bkgcolour
+        self.font = font
+        self.fontcolour = fontcolour
+        self.idpreference = idpreference
+
+    def __repr__(self):
+        return "<task %r>" % self.idcolour
+
 class paytransaction(db.Model):
 	__tablename__ = 'paytransaction'
 	idpaytransaction = db.Column(db.Integer, primary_key=True, autoincrement=True)
