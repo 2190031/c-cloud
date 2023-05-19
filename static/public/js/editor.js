@@ -1,3 +1,27 @@
+// function showDropdown(id) {
+//     var dropdownMenu = document.getElementById(id);
+//     dropdownMenu.classList.add("show");
+//   }
+  
+//   function hideDropdown(id) {
+//     var dropdownMenu = document.getElementById("dropdown-menu");
+//     dropdownMenu.classList.remove("show");
+//   }
+  
+// function getIdOnHover() {
+    
+//     const dropdownMenus = document.querySelectorAll(".dropdown-menu");
+//     for (var i = 0; i < dropdownMenus.length; i++) {
+//         var dropdownId = dropdownMenus[i].id;
+//         dropdownMenus[i].addEventListener("mouseover", showDropdown(dropdownId))
+//     }
+//     // dropdownMenus.forEach((menu) => {
+//     //   menu.addEventListener("mouseover", (event) => {
+//     //     const hoveredId = event.target.id;
+//     //     console.log(`Hovered element ID: ${hoveredId}`);
+//     //   });
+//     // });
+//   }
 var editor = ace.edit("editor");
 
 // Lista de lenguajes
@@ -69,51 +93,73 @@ const themes = [
 
 // Al cargar la pagina toma y coloca el tema y lenguaje de sus selects 
 document.addEventListener("DOMContentLoaded", function () {
-    let ModeSelValue = document.getElementById('select-mode');
-    let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
-    let ThemeSelValue = document.getElementById('select-theme');
-    let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
-    console.log(mode);
-    if (mode != "") {
-        editor.session.setMode("ace/mode/" + mode);
-    }
-    if (theme != "") {
-        editor.setTheme("ace/theme/" + theme);
+    try {
+        let ModeSelValue = document.getElementById('select-mode');
+        let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
+        let ThemeSelValue = document.getElementById('select-theme');
+        let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
+        
+        if (mode != "") {
+            editor.session.setMode("ace/mode/" + mode);
+        }
+        if (theme != "") {
+            editor.setTheme("ace/theme/" + theme);
+        }
+    } catch (e) {
+        console.log(e.message)
     }
 });
 
 // Cambia el modo de lenguaje de la pagina al cambiar el select
 document.getElementById('select-mode').addEventListener('change', function () {
-    let ModeSelValue = document.getElementById('select-mode');
-    let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
-    if (mode != "") {
-        editor.session.setMode("ace/mode/" + mode);
+    try {
+        let ModeSelValue = document.getElementById('select-mode');
+        let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
+        if (mode != "") {
+            editor.session.setMode("ace/mode/" + mode);
+        }
+    } catch (e) {
+        console.log(e.message)
     }
 });
+
+function saveTheme() {
+    const themeSelect = document.querySelector('#select-theme');
+    var theme = themeSelect.value;
+    console.log(theme);
+}
 
 // Cambia el tema de la pagina al cambiar el select
 document.getElementById('select-theme').addEventListener('change', function () {
-    let ThemeSelValue = document.getElementById('select-theme');
-    let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
-    if (theme != "") {
-        editor.setTheme("ace/theme/" + theme);
+    try {
+        let ThemeSelValue = document.getElementById('select-theme');
+        let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
+        if (theme != "") {
+            editor.setTheme("ace/theme/" + theme);
+        }
+    } catch (e) {
+        console.log(e.message);
     }
 });
 
-// Descarga el documento con su titulo y en su lenguaje correspondiente
-// document.getElementById('download-btn').addEventListener('click', download());
+// document.getElementById('select-theme').addEventListener('input', function () {
+//   let ThemeSelValue = document.getElementById('select-theme');
+//   let theme = ThemeSelValue.value;
+//   if (theme != "") {
+//     editor.setTheme("ace/theme/" + theme);
+//   }
+// });
 
-function download() {
-    var contenido = ace.edit("editor").getValue();
+// Descarga el documento con su titulo y en su lenguaje correspondiente
+
+function getFileType(mode) {
+    
+    // let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
     let ModeSelValue = document.getElementById('select-mode');
-    console.log(ModeSelValue)
-    let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
-    console.log()
-    let filename = document.getElementById('filename').value;
-    console.log(filename)
-    if (filename == "" || filename == null || !filename) {
-        console.log("Error")
-    } else {
+    mode = mode || ModeSelValue.options[ModeSelValue.selectedIndex].value;
+    console.log(mode);
+
+    try {
         switch (mode) {
             case 'txt':
                 var fileType = languages[0];
@@ -199,26 +245,132 @@ function download() {
                 var fileType = languages[0];
                 var fileExtension = 'txt';
                 break;
-        }
-
-        var contenido = ace.edit("editor").getValue();
-
-        // Crear un objeto Blob con el contenido
-        var blob = new Blob([contenido], fileType);
-
-        // Crear un objeto URL del blob
-        var url = URL.createObjectURL(blob);
-
-        // Crear un elemento <a> para descargar el archivo
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = filename + "." + fileExtension;
-
-        // Agregar el elemento <a> al DOM y hacer clic en él
-        document.body.appendChild(a);
-        a.click();
-
-        // Liberar el objeto URL
-        URL.revokeObjectURL(url);
+            }
+        return [fileType, fileExtension];
+    } catch (e) {
+        console.log(e.message)
     }
 }
+
+function createFile() {
+    var content = ace.edit("editor").getValue();
+    let filename = document.getElementById('filename').value;
+    [fileType, extension] = getFileType()
+
+    if (!filename) {
+        swal("Debe darle nombre al archivo", {
+            buttons: false,
+            timer: 3000,
+            icon: 'warning'
+        });
+    } else {
+        try {
+            console.log('Guardando...')
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/create_file', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log('Guardado correctamente')
+                console.log(xhr.responseText);
+                swal("Guardado correctamente", {
+                    buttons: false,
+                    timer: 3000,
+                    icon: 'success'
+                });
+              }
+            };
+            var data = JSON.stringify({
+              filename: filename,
+              extension: extension,
+              content: content
+            });
+            xhr.send(data);
+        } catch (e) {
+            console.log(e.message)
+            swal("Debe darle nombre al archivo", {
+                buttons: false,
+                timer: 3000,
+                icon: 'error'
+            });
+        }
+    }
+
+  }
+
+function download() {
+    var contenido = ace.edit("editor").getValue();
+    let filename = document.getElementById('filename').value;
+    console.log(filename)
+    if (filename == "" || filename == null || !filename) {
+        console.log("Error");
+        swal("Debe darle nombre al archivo", {
+            buttons: false,
+            timer: 3000,
+            icon: 'warning'
+        });
+    } else {
+        try {
+            [fileType, fileExtension] = getFileType()
+            // var contenido = ace.edit("editor").getValue();
+    
+            // Crear un objeto Blob con el contenido
+            var blob = new Blob([contenido], fileType);
+    
+            // Crear un objeto URL del blob
+            var url = URL.createObjectURL(blob);
+    
+            // Crear un elemento <a> para descargar el archivo
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = filename + "." + fileExtension;
+    
+            // Agregar el elemento <a> al DOM y hacer clic en él
+            document.body.appendChild(a);
+            a.click();
+    
+            // Liberar el objeto URL
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.log(e.message)
+        }
+
+    }
+}
+
+document.getElementById('download-btn').addEventListener('click', download);
+document.getElementById('save-btn').addEventListener('click', createFile);
+
+// function openFile() {
+//     let fileName = document.querySelector('#filename');
+//     let fileExtension = getFileType();
+//     var content = ace.edit("editor").getValue();
+//     const dateSaved = new Date();
+
+//     // file = {
+//     //     "n": fileName,
+//     //     "e": fileExtension,
+//     //     "c": content,
+//     //     "d": dateSaved
+//     // }
+//     getFileType()
+
+//     fetch('/save', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/x-www-form-urlencoded'
+//         },
+//         body: `filename=${fileName}&extension=${fileExtension}content=${content}`
+//         // body: `file=${file}`
+//     }).then({
+//         if () {
+
+//         }
+//     }).then(response => {
+//         if (response.ok) {
+//           console.log('Guardado correctamente');
+//         }
+//       }).catch(error => {
+//         console.error(error + "\n" + error.message);
+//       });
+// }

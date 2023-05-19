@@ -1,7 +1,5 @@
 from datetime import datetime as dt
 from flask_sqlalchemy import SQLAlchemy
-import hashlib
-import os
 
 db = SQLAlchemy()
 
@@ -44,7 +42,7 @@ class user(db.Model):
 	username = db.Column(db.String(45), nullable=False)
 	email = db.Column(db.String(100), nullable=False, unique=True)
 	password = db.Column(db.String(255), nullable=False)
-	salt = db.Column(db.String(16), nullable=False, unique=True)
+	salt = db.Column(db.String(20), nullable=False, unique=True)
 	usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
 	creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
 
@@ -215,8 +213,8 @@ class paytransaction(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idpaytransaction
 	
-class session(db.Model):
-	__tablename__ = 'session'
+class sessions(db.Model):
+	__tablename__ = 'sessions'
 	idsession = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
 	datelogged = db.Column(db.DateTime, default=dt.utcnow)
