@@ -120,17 +120,12 @@ class historial(db.Model):
 	idmodificationtype = db.Column(db.Integer, nullable=False)
 
 
-	def __init__(self, idfile, datemodified, iduser, idmodificationtype, beforechange, afterchange, changeline, changecolumn):
+	def __init__(self, idfile, datemodified, iduser, idmodificationtype):
 		self.idfile = idfile
 		self.datemodified = datemodified
 		self.iduser = iduser
 		self.idmodificationtype = idmodificationtype
-		self.beforechange = beforechange
-		self.afterchange = afterchange
-		self.beforechange = beforechange
-		self.afterchange = afterchange
-		self.changeline = changeline
-		self.changecolumn = changecolumn
+
 
 	def __repr__(self):
 		return "<task %r>" % self.idchange
