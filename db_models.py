@@ -53,7 +53,6 @@ class User(db.Model):
         self.username = username
         self.email = email
         self.password = password
-        self.salt = salt
         self.usertype = usertype
 
     def __repr__(self):
