@@ -4,7 +4,7 @@ from hash import check_credentials, hash_password
 import traceback
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:c55h32o5n4Mg@localhost/c_cloud'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Mauricio2021@localhost/c_cloud'
 app.config['SECRET_KEY'] = ""
 db.init_app(app)
 
