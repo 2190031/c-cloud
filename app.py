@@ -44,13 +44,15 @@ def signup():
                        surname     =surname, 
                        username    =username, 
                        email       =email, 
-                       password    =hashed_password.encode('utf-8'),
-                       salt        =salt.encode('utf-8'), 
+                       password    =hashed_password,
+                       salt        =salt, 
                        usertype    =usertype)
         
         try:
+            print(hashed_password)
             db.session.add(newuser)
             db.session.commit()
+            traceback.print_exc()
             return redirect('/login')
         except:
             traceback.print_exc()

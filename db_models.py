@@ -36,6 +36,7 @@ def defaultroles():
 	except:
 		print('Error')
 
+
 class User(db.Model):
     __tablename__ = 'user'
     iduser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
@@ -73,7 +74,6 @@ class DetailsUser(db.Model):
 
     def __repr__(self):
         return "<DetailsUser %r>" % self.idDetailsUser
-
 
 	
 class file(db.Model):
