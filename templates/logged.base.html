@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/css/ace.min.css" rel="stylesheet">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
-    <title>Editor</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='public/css/dashboard_style.css') }}">
 </head>
 <body id="body" class="text-light">
@@ -35,7 +35,7 @@
             style="width: 280px; height: 93vh;" id="sidebar">
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/{{ username }}/editor" class="nav-link active" aria-current="page">
+                    <a href="/editor" class="nav-link active" aria-current="page">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
                             <path
@@ -70,7 +70,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/{{ username }}/settings" class="nav-link text-white">
+                    <a href="/settings" class="nav-link text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-gear" viewBox="0 0 16 16">
                             <path
@@ -82,7 +82,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/{{ username }}/profile" class="nav-link text-white">
+                    <a href="/profile" class="nav-link text-white">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-person" viewBox="0 0 16 16">
                             <path
@@ -101,7 +101,7 @@
                 </a>
                 <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
                     <li><a class="dropdown-item text-white" href="/editor">New project...</a></li>
-                    <li><a class="dropdown-item text-white" href="/{{ username }}/settings">
+                    <li><a class="dropdown-item text-white" href="/settings">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-gear" viewBox="0 0 16 16">
                                 <path
@@ -122,7 +122,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item text-white" href="/{{ username }}/logout">
+                    <li><a class="dropdown-item text-white" href="/logout">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
