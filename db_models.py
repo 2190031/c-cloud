@@ -41,8 +41,10 @@ class user(db.Model):
     surname = db.Column(db.String(45), nullable=False)
     username = db.Column(db.String(45), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(45), nullable=False)
+    password = db.Column(db.String(100), nullable=False)    
+    salt = db.Column(db.String(20), nullable=False, unique=True)
     usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
+    creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
     
     def __init__(self, name, surname, username, email, password, salt, usertype=1):
         self.name = name
@@ -50,28 +52,12 @@ class user(db.Model):
         self.username = username
         self.email = email
         self.password = password
-        self.usertype = usertype
-
-    def __repr__(self):
-        return "<task %r>" % self.iduser
-
-class detailsuser(db.Model):
-    __tablename__ = 'detailsuser'
-    idDetailsUser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
-    salt = db.Column(db.String(16), nullable=False, unique=True)
-    creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
-    iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-    usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
-
-    def __init__(self, salt, iduser, usertype=1):
         self.salt = salt
         self.usertype = usertype
-        self.iduser = iduser
 
     def __repr__(self):
-        return "<task %r>" % self.idDetailsUser
-
-	
+        return "<task %r>" % self.iduser	
+    
 class file(db.Model):
 	__tablename__ = 'file'
 	idfile = db.Column(db.Integer, primary_key=True, autoincrement=True)

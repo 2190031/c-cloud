@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 from db_models import db, defaultroles, user,  error, sessions
 from hash import check_credentials, hash_password
 import os, datetime
-from createUserFolder import newUserFolder
+from createUserFolder import newUserFolder, toStandardName, toNonStandardName
 import traceback
 from sendMail import send_mail
 
@@ -54,15 +54,15 @@ def signup():
         
         try:
             print(hashed_password)
-            send_mail(email)
             db.session.add(newuser)
             db.session.commit()
             newUserFolder(username)
+            send_mail(email)
             traceback.print_exc()
             return redirect('/login')
         except:
             traceback.print_exc()
-            return salt.encode('utf-8')
+            return error
     else:
         return render_template('sign_up.html', title=title)
 
@@ -86,10 +86,13 @@ def login():
                 db.session.commit()
                 
                 session['user_id'] = id
-                session['user_username'] = username
+                session['user_username'] = toStandardName(username)
                 session['user_email'] = email
 
-                return redirect(f'/{username}/dashboard')
+                print(session.get('user_id'), session.get('user_username'), session.get('user_email'))
+                
+                return redirect('/dashboard')
+            # /{toStandardName(username)}
             except:
                 traceback.print_exc()
                 return error
@@ -114,7 +117,7 @@ def editor():
     else:
         id = session.get('user_id')
         username = user.query.filter_by(iduser=id).first()
-        return render_template('editor.html', user=username)
+        return render_template('editor.html', user=username, _user=toStandardName(username))
 
 @app.route('/create_file', methods=['POST'])
 def create_file():
@@ -124,41 +127,71 @@ def create_file():
     filename = data['filename']
     extension = data['extension']
     content = data['content']
-    filepath = os.path.join(str(username_dir), filename + '.' + extension)
+    filepath = os.path.join(str(username_dir), toStandardName(filename) + '.' + extension)
     with open(filepath, 'w') as f:
         f.write(content)
     return 'File created successfully'
 
-@app.route('/<string:username>/dashboard')
-def dashboard(username):
-    if 'user_id' not in session:
-        return redirect('/login')
+@app.route('/dashboard')
+def dashboard():
     
-    # Ruta a la carpeta donde se encuentran los archivos
-    path = f'userFiles/{username}/saved_files'
-
-    # Obtener una lista de todos los archivos en la carpeta
-    files = os.listdir(path)
-
-    # Crear una lista de diccionarios para cada archivo
-    file_list = []
-    for file in files:
-        file_dict = {}
-        file_dict['name'] = file
-        file_dict['creation_time'] = datetime.datetime.fromtimestamp(os.path.getctime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
-        file_dict['update_time'] = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
-        file_dict['extension'] = os.path.splitext(file)[1]
-        file_list.append(file_dict)
-
-    return render_template('dashboard.html', files=file_list, username=username, id=session.get('user_id'))
-
-@app.route('/<string:username>/settings')
-def settings(username):
     if 'user_id' not in session:
         return redirect('/login')
     else:
+        username = toNonStandardName(session.get('user_username'))
+        _username = session.get('user_username')
+        title='Dashboard'
+        # Ruta a la carpeta donde se encuentran los archivos
+        path = f'userFiles/{_username}/saved_files'
+
+        # Obtener una lista de todos los archivos en la carpeta
+        files = os.listdir(path)
+
+        # Crear una lista de diccionarios para cada archivo
+        file_list = []
+        for file in files:
+            file_dict = {}
+            file_dict['name'] = file
+            file_dict['creation_time'] = datetime.datetime.fromtimestamp(os.path.getctime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+            file_dict['update_time'] = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+            file_dict['extension'] = os.path.splitext(file)[1]
+            file_list.append(file_dict)
+
+        return render_template('dashboard.html', title=title, files=file_list, username=username, _username=_username, id=session.get('user_id'))
+
+@app.route('/settings')
+def settings():
+    if 'user_id' not in session:
+        return redirect('/login')
+    else:
+        title='Configuración'
         user_info = user.query.filter_by(iduser=session.get('user_id')).first()
-        return render_template('settings.html', username=username, id=session.get('user_id'), user_info=user_info)
+        return render_template('settings.html', title=title, username=session.get('user_username'), id=session.get('user_id'), user_info=user_info)
+
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect('/login')
+    else:
+        title='Mi perfil'
+        user_info = user.query.filter_by(iduser=session.get('user_id')).first()
+        return render_template('profile.html', title=title, username=toNonStandardName(session.get('user_username')), id=session.get('user_id'), user_info=user_info)
+
+@app.route('/profile/profile_picture')
+def profile_picture():
+    if 'user_id' not in session:
+        return redirect('/login')
+    else:
+        title='Foto de perfil'
+        user_info = user.query.filter_by(iduser=session.get('user_id')).first()
+        return render_template('settings.html', title=title, username=toNonStandardName(session.get('user_username')), id=session.get('user_id'), user_info=user_info)
+
+@app.route('/logout')
+def logout():
+    # Clear session data
+    session.clear()
+    # Redirect the user to the login page or any other desired location
+    return redirect('/login')
 
 @app.route('/notfound')
 def notfound():

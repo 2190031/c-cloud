@@ -17,3 +17,7 @@ tmp/
 .env
 config.py
 settings.py
+
+# User files#
+user_files/*
+!user_files/readme.md
