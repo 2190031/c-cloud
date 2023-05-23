@@ -4,6 +4,7 @@ from hash import check_credentials, hash_password
 import os, datetime
 from createUserFolder import newUserFolder, toStandardName, toNonStandardName
 import traceback
+import builtins
 from sendMail import send_mail
 
 app = Flask(__name__)
@@ -117,20 +118,36 @@ def editor():
     else:
         id = session.get('user_id')
         username = user.query.filter_by(iduser=id).first()
-        return render_template('editor.html', user=username, _user=toStandardName(username))
+        _username = session.get('user_username')
+        path = f'userFiles/{_username}/saved_files'
+        files = os.listdir(path)
+        
+        file_list = []
+        for file in files:
+            file_dict = {}
+            file_dict['name'] = file
+            file_dict['creation_time'] = datetime.datetime.fromtimestamp(os.path.getctime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+            file_dict['update_time'] = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+            file_dict['extension'] = os.path.splitext(file)[1]
+            file_list.append(file_dict)
+
+        return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'))#
 
 @app.route('/create_file', methods=['POST'])
 def create_file():
-    username_dir = 'userFiles/' + session.get('user_username') + '/saved_files'
-    print(username_dir)
+    username = session.get('user_username') 
     data = request.json
     filename = data['filename']
-    extension = data['extension']
+    extension = '.' + data['extension']
     content = data['content']
-    filepath = os.path.join(str(username_dir), toStandardName(filename) + '.' + extension)
-    with open(filepath, 'w') as f:
+    directory = "userFiles/" + username + "/saved_files/"
+    filepath = os.path.join(directory, filename + extension )
+    print(filepath)
+
+    with builtins.open(filepath, 'w') as f:
         f.write(content)
     return 'File created successfully'
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -185,6 +202,26 @@ def profile_picture():
         title='Foto de perfil'
         user_info = user.query.filter_by(iduser=session.get('user_id')).first()
         return render_template('settings.html', title=title, username=toNonStandardName(session.get('user_username')), id=session.get('user_id'), user_info=user_info)
+
+@app.route('/load_file', methods=['POST'])
+def load_file():
+    username = session.get('user_username')
+    filename = request.form['filename']
+    directory =  "userFiles/" + username + "/saved_files/"
+    file_path = os.path.join(directory, filename)
+
+    print(file_path)
+    
+    if os.path.isfile(file_path):
+        try:
+            with builtins.open(file_path, 'r') as f:
+                lines = f.readlines()
+            content = '\n'.join(line for line in lines if not line.isspace())
+            return content, filename
+        except FileNotFoundError:
+            return "No file found"
+    else:
+        return 'File not found'
 
 @app.route('/logout')
 def logout():

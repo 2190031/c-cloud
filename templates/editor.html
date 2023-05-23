@@ -70,7 +70,8 @@
                                                                             </ul>
                                                                         </div>
                                                                     </li>
-                                                                    <li><a class="dropdown-item" href="#">Abrir</a></li>
+                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" 
+                                                                        data-bs-target="#open">Abrir</a></li>
                                                                     <li><a class="dropdown-item" href="#"
                                                                             id="download-btn">Descargar</a></li>
                                                                     <li><a class="dropdown-item" href="/notfound"
@@ -182,7 +183,7 @@
                         </a>
                         <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
                             <li>
-                                <a class="dropdown-item text-white" href="/{{ user.username }}/dashboard">
+                                <a class="dropdown-item text-white" href="/dashboard">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-house" viewBox="0 0 16 16">
                                     <path
@@ -191,7 +192,7 @@
                                     Inicio
                                 </a>
                             </li>
-                            <li><a class="dropdown-item text-white" href="/{{ username }}/settings">
+                            <li><a class="dropdown-item text-white" href="/settings">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-gear" viewBox="0 0 16 16">
                                         <path
@@ -212,7 +213,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item text-white" href="/{{ username }}/logout">
+                            <li><a class="dropdown-item text-white" href="/logout">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
@@ -233,10 +234,10 @@
         </div>
     </nav>
 
-    <div class="modal fade" id="themes" tabindex="-1" aria-labelledby="themes" aria-hidden="true">
+    <div class="modal fade" id="themes" tabindex="-1" aria-labelledby="Themes" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark text-light">
-                <div class="modal-header">
+                <div class="modal-header" data-bs-theme="dark">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Temas</h1>
                     <button type="button" class="btn-close text-light" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -290,10 +291,10 @@
         </div>
     </div>
 
-    <div class="modal fade" id="langs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="langs" tabindex="-1" aria-labelledby="Languages" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark text-light">
-                <div class="modal-header">
+                <div class="modal-header" data-bs-theme="dark">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Lenguaje</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -325,6 +326,59 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save-lang"
                         onclick="saveLang()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="open" tabindex="-1" aria-labelledby="Open files" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header" data-bs-theme="dark">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Abrir...</h1>
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive overflow-y-scroll" id="files">
+                        <table class="table table-responsive text-white table-borderless overflow-y-scroll">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Extensión</th>
+                                </tr>
+                            </thead>
+                            <tbody style="max-height: 30vh; overflow-y: hidden;">
+                                {% if not files %}
+                                <td colspan="3">No results</td>
+                                {% else %}
+                                {% for file in files %}
+                                <tr id="{{ loop.index }}">
+                                    <td>
+                                        <a href="" target="_blank" rel="noopener noreferrer"
+                                            class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                                            {{ file.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ file.extension }}</td>
+                                    <td>
+                                        <button type="button" class="btn text-white rounded-circle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="load-file-btn">Abrir</button>
                 </div>
             </div>
         </div>
