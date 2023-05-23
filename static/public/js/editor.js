@@ -338,8 +338,27 @@ function download() {
     }
 }
 
+
+function loadFile() {
+    // [fileType, fileExtension] = getFileType()
+    // var filename = name + '.' + fileExtension; // Change this to the desired filename
+    var filename =  "Lorem.txt";
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/load_file', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            [content, filename] = xhr.responseText;
+            document.getElementById('filename').value = filename;
+            editor.setValue(content);
+        }
+    };
+    xhr.send('filename=' + filename);
+}
+
 document.getElementById('download-btn').addEventListener('click', download);
 document.getElementById('save-btn').addEventListener('click', createFile);
+document.getElementById('load-file-btn').addEventListener('click', loadFile);
 
 // function openFile() {
 //     let fileName = document.querySelector('#filename');

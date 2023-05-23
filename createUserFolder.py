@@ -1,7 +1,7 @@
 import os
 
 def toStandardName(string):
-    susername = string.split()
+    susername = string.split(" ")
     return "_".join(susername)
 
 def toNonStandardName(string):

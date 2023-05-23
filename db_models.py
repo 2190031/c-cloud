@@ -41,8 +41,8 @@ class user(db.Model):
     surname = db.Column(db.String(45), nullable=False)
     username = db.Column(db.String(45), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)    
-    salt = db.Column(db.String(20), nullable=False, unique=True)
+    password = db.Column(db.String(200), nullable=False)    
+    salt = db.Column(db.String(100), nullable=False, unique=True)
     usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
     creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
     

@@ -1,7 +1,7 @@
 {% extends 'form.html' %}
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
-<div class="container" id="body">
+<div class="container" id="body" data-aos="zoom-out-right" data-aos-duration="2000">
     <div class="flex items-center my-5">
         <div class="w-5/6 d-inline">
           <div class="border border-opacity-10 p-5 rounded form-container">
@@ -17,12 +17,7 @@
                   <label for="floatingPassword" class="fw-light">Contraseña</label>
                 </div>
                 <small>¿No tienes cuenta? <a href="/signup">Regístrate</a></small>
-                <br>
-                <div class="checkbox mb-3">
-                  <label class="fw-light">
-                    <input type="checkbox" value="remember-me" class="form-check-input"> Remember me
-                  </label>
-                </div>
+                
                 <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Iniciar sesión</button>
               </form>
             </div>
