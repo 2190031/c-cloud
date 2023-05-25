@@ -1,6 +1,6 @@
 from flask import request, session, send_file
-import os
-import builtins
+from db_models import db, file, detailsfile
+import os, traceback, builtins, datetime
 
 def load_file():
     username = session.get('user_username')
@@ -35,18 +35,59 @@ def load_file__blank():
     else:
         return 'File not found'
 
-def save_file():
+def save_file(filename, extension, directory, filepath, content):
+    with builtins.open(filepath, 'r') as r:
+        old_content = r.read()
+        
+        old_version_date = os.path.getmtime(filepath) #2023-10-10 ...
+        old_filename = f"{filename}_{old_version_date}{extension}" # title_2023-10-19(...).ext
+        old_file = os.path.join(directory, old_filename)
+        with builtins.open(old_file, 'w') as f:
+            f.write(old_content)
+            
+            new_file = os.path.join(directory, filename + extension)
+            
+            with builtins.open(new_file, 'w') as n:
+                n.write(content)
+                return "File saved successfully"
+            # almacenar el cambio en su tabla (revisar)
+
+def create_file():
     username = session.get('user_username') 
     data = request.json
     filename = data['filename']
     extension = '.' + data['extension']
     content = data['content']
     directory = "userFiles/" + username + "/saved_files/"
-    filepath = os.path.join(directory, filename + extension )
+    filepath = os.path.join(directory, filename + extension)
     print(filepath)
-    with builtins.open(filepath, 'w') as f:
-        f.write(content)
-    return 'File created successfully'
+    new_file = file(
+        name      = filename + extension,
+        category  = 'something',
+        extension = extension,
+    )
+    if os.path.exists(filepath):
+        save_file(filename, extension, directory, filepath, content)
+    elif not os.path.exists(filepath):
+        with builtins.open(filepath, 'w') as f:
+            f.write(content)
+            try:
+                db.session.add(new_file)
+                db.session.commit()
+                id = new_file.idfile
+                try:
+                    detail = detailsfile(
+                        idfile      = id,
+                        iduser      = session.get('user_iduser'),
+                        datecreated = datetime.datetime.now()
+                    )
+                    db.session.add(detail)
+                    db.session.commit()
+                except:
+                    return traceback.print_exc()
+            except:
+                return traceback.print_exc()
+        return 'File created successfully'
 
     
     

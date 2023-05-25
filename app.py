@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, session
 
 from db_models import db, defaultroles
 from render_pages import *
-from file_management import load_file, save_file, load_file__blank
+from file_management import load_file, create_file, load_file__blank
 from user_session import login, signup
 
 app = Flask(__name__)
@@ -41,7 +41,7 @@ def editor():
 
 @app.route('/create_file', methods=['POST'])
 def create_file():
-    return save_file()
+    return create_file()
 
 @app.route('/dashboard')
 def dashboard():
