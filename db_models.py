@@ -64,15 +64,11 @@ class file(db.Model):
 	name = db.Column(db.String(45), nullable=False)
 	category = db.Column(db.String(20), nullable=False)
 	extension = db.Column(db.String(45), nullable=False)
-	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	
 
-	def __init__(self, name, category, extension, iduser, datecreated):
+	def __init__(self, name, category, extension):
 		self.name = name
 		self.category = category
 		self.extension = extension
-		self.iduser = iduser
-		self.datecreated = datecreated
 
 	def __repr__(self):
 		return "<task %r>" % self.idfile   
@@ -112,9 +108,10 @@ class historial(db.Model):
 	def __repr__(self):
 		return "<task %r>" % self.idchange
 
+# revisar
 class change(db.Model):
     __tablename__ = 'change'
-    idcambio = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    idchange = db.Column(db.Integer, primary_key=True, autoincrement=True)
     beforechange = db.Column(db.Integer, nullable=False)
     afterchange = db.Column(db.Integer, nullable=False)
     changeline = db.Column(db.Integer, nullable=False)
@@ -128,7 +125,7 @@ class change(db.Model):
         self.changecolumn = changecolumn
 
     def __repr__(self):
-        return "<task %r>" % self.idcambio
+        return "<task %r>" % self.idchange
 
 
 class version(db.Model):
