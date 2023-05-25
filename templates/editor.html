@@ -22,7 +22,9 @@
             <div class="d-flex align-items-center">
                 <div class="flex-shrink-0">
                     <div class="ms-2">
-                        <img src="{{ url_for('static', filename='public/img/icon.png') }}" height="50" alt="...">
+                        <a href="/dashboard">
+                            <img src="{{ url_for('static', filename='public/img/icon.png') }}" height="50" alt="...">
+                        </a>
                     </div>
                 </div>
                 <div class="flex-grow-1 ms-3">
@@ -35,9 +37,9 @@
                                             <div class="row-cols-3">
                                                 <div class="input-group-sm mt-2">
                                                     <input type="text"
-                                                    class="form-control-sm bg-dark text-white border text-truncate has-validation"
-                                                    id="filename" aria-label="Nombre de archivo"
-                                                    placeholder="Nombre del archivo" autocomplete="off">
+                                                        class="form-control-sm bg-dark text-white border text-truncate has-validation"
+                                                        id="filename" aria-label="Nombre de archivo"
+                                                        placeholder="Nombre del archivo" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
@@ -46,17 +48,19 @@
                                                 <div class="collapse navbar-collapse" id="navbarScroll">
                                                     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                                                         <ul class="navbar-nav me-autor mb-2 mb-lg-0">
-                                                            <li class="nav-item dropdown m-1" onmouseover=" " onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=" "
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" data-bs-auto-close="false"
+                                                                    data-bs-toggle="dropdown" 
+                                                                    {# data-bs-auto-close="false" #} 
                                                                     aria-expanded="false">
                                                                     Archivo
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
-                                                                    onmouseout="">
+                                                                <ul class="dropdown-menu dropdown-menu-dark"
+                                                                    onmouseover="" onmouseout="">
                                                                     <li><a class="dropdown-item" href="#"
                                                                             id="save-btn">Guardar</a></li>
-                                                                    <li>
+                                                                    <!-- <li>
                                                                         <div class="btn-group dropend">
                                                                             <a class="dropdown-item dropdown-toggle"
                                                                                 data-bs-toggle="dropdown"
@@ -64,101 +68,135 @@
                                                                                 aria-expanded="false" href="#">
                                                                                 Guardar como
                                                                             </a>
-                                                                            <ul class="dropdown-menu dropdown-menu-dark">
-                                                                                <li><a class="dropdown-item" href="#">Abrir</a>
+                                                                            <ul
+                                                                                class="dropdown-menu dropdown-menu-dark">
+                                                                                <li><a class="dropdown-item"
+                                                                                        href="#">Abrir</a>
                                                                                 </li>
                                                                             </ul>
                                                                         </div>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" 
-                                                                        data-bs-target="#open">Abrir</a></li>
+                                                                    </li> -->
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#open"
+                                                                            id="open-file-btn">Abrir</a></li>
                                                                     <li><a class="dropdown-item" href="#"
                                                                             id="download-btn">Descargar</a></li>
-                                                                    <li><a class="dropdown-item" href="/notfound"
+                                                                    <li><a class="dropdown-item" href="/editor"
                                                                             target="_blank">Nueva ventana</a></li>
-                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#langs">Lenguaje</a></li>
-                                                                    <li><a class="dropdown-item" href="/notfound">Salir</a></li>
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#langs"
+                                                                            id="change-lang-btn">Lenguaje</a></li>
+                                                                    <li>
+                                                                        <hr class="dropdown-divider">
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            href="/dashboard">Salir</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Edición
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
-                                                                    onmouseout="">
-                                                                    <li><a class="dropdown-item" href="#">Deshacer</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Rehacer</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Copiar</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Cortar</a></li>
+                                                                <ul class="dropdown-menu dropdown-menu-dark"
+                                                                    onmouseover="" onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#">Deshacer</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item" href="#">Rehacer</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item" href="#">Copiar</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item" href="#">Cortar</a>
+                                                                    </li>
                                                                     <li><a class="dropdown-item" href="#">Pegar</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Buscar</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Buscar</a>
+                                                                    </li>
                                                                     <li><a class="dropdown-item" href="#">Buscar y
                                                                             reemplazar</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Comentar línea</a>
+                                                                    <li><a class="dropdown-item" href="#">Comentar
+                                                                            línea</a>
                                                                     </li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Preferencias
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            data-bs-toggle="modal"
                                                                             data-bs-target="#themes">Apariencia</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Vista
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-dark" id="dropdown-menu"
-                                                                onmouseover="" onmouseout="">
-                                                                <li><a class="dropdown-item" href="#">Comandos</a></li>
-                                                                <li><a class="dropdown-item" href="#">Distribución</a></li>
-                                                                <li><a class="dropdown-item" href="#">Distribución</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Distribución</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Distribución</a></li>
+                                                                <ul class="dropdown-menu dropdown-menu-dark"
+                                                                    id="dropdown-menu" onmouseover="" onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#">Comandos</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            href="#">Distribución</a></li>
+                                                                    <li><a class="dropdown-item"
+                                                                            href="#">Distribución</a></li>
+                                                                    <li><a class="dropdown-item"
+                                                                            href="#">Distribución</a></li>
+                                                                    <li><a class="dropdown-item"
+                                                                            href="#">Distribución</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Ejecutar
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Another action</a>
+                                                                    <li><a class="dropdown-item" href="#">Action</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item" href="#">Another
+                                                                            action</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item" href="#">Something else
                                                                             here</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Herramientas
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
-                                                                    onmouseout="">
-                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#themes">Temas</a></li>
+                                                                <ul class="dropdown-menu dropdown-menu-dark"
+                                                                    onmouseover="" onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#themes"
+                                                                            id="change-theme-btn">Temas</a></li>
                                                                     <li><a class="dropdown-item" href="#">Something else
                                                                             here</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover="" onmouseout="">
+                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                                onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Ayuda
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-dark" onmouseover=""
-                                                                    onmouseout="">
-                                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#themes">Temas</a></li>
+                                                                <ul class="dropdown-menu dropdown-menu-dark"
+                                                                    onmouseover="" onmouseout="">
+                                                                    <li><a class="dropdown-item" href="#"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#commands"
+                                                                            id="show-commands-btn">Comandos</a></li>
                                                                     <li><a class="dropdown-item" href="#">Something else
                                                                             here</a></li>
                                                                 </ul>
@@ -178,7 +216,8 @@
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
+                                class="rounded-circle me-2">
                             <strong>{{ user.username }}</strong>
                         </a>
                         <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
@@ -186,8 +225,8 @@
                                 <a class="dropdown-item text-white" href="/dashboard">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-house" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z" />
+                                        <path
+                                            d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z" />
                                     </svg>
                                     Inicio
                                 </a>
@@ -227,7 +266,8 @@
                         </ul>
                     </div>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
@@ -325,21 +365,23 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save-lang"
-                        onclick="saveLang()">Guardar</button>
+                        {# onclick="saveLang()" #} 
+                        >Guardar</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="open" tabindex="-1" aria-labelledby="Open files" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark text-light">
                 <div class="modal-header" data-bs-theme="dark">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Abrir...</h1>
-                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive overflow-y-scroll" id="files">
+                    <!-- <div class="table-responsive overflow-y-scroll" id="files">
                         <table class="table table-responsive text-white table-borderless overflow-y-scroll">
                             <thead>
                                 <tr>
@@ -347,12 +389,15 @@
                                     <th scope="col">Extensión</th>
                                 </tr>
                             </thead>
-                            <tbody style="max-height: 30vh; overflow-y: hidden;">
-                                {% if not files %}
-                                <td colspan="3">No results</td>
-                                {% else %}
-                                {% for file in files %}
-                                <tr id="{{ loop.index }}">
+                            <tbody style="max-height: 30vh; overflow-y: hidden;"> -->
+
+                    <div class="list-group list-group-flush" data-bs-theme="dark">
+                        {% if not files %}
+                        <a href="#" class="list-group-item ">No results</a>
+                        {% else %}
+
+                        {% for file in files %}
+                        <!-- <tr id="{{ loop.index }}">
                                     <td>
                                         <a href="" target="_blank" rel="noopener noreferrer"
                                             class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
@@ -369,16 +414,92 @@
                                             </svg>
                                         </button>
                                     </td>
-                                </tr>
-                                {% endfor %}
-                                {% endif %}
-                            </tbody>
-                        </table>
+                                </tr> -->
+                        <a href="#" class="list-group-item list-group-item-action" ondblclick="loadFile(`{{ file.name }}`)">
+                            {{ file.name }}
+                        </a>
+
+                        {% endfor %}
                     </div>
+                    {% endif %}
+                    <!--</tbody>
+                        </table> 
+                    </div>
+                -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="load-file-btn">Abrir</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        id="load-file-btn">Abrir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="commands" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header" data-bs-theme="dark">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Lista de comandos</h1>
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-borderless table-sm table-striped table-hover table-dark">
+                        <thead>
+                            <tr>
+                                <th>Comando</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ctrl + S</td><td>Salvar archivo</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + D</td><td>Descargar archivo</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + O</td><td>Abrir archivo</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + H</td><td>Lista de comandos (fuera del editor)</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + H</td><td>Buscar y reemplazar (dentro del editor)</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + F</td><td>Buscar en el documento</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + L</td><td>Cambiar lenguaje de archivo y editor</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + P</td><td>Cambiar apariencia del editor</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + U</td><td>Convierte la palabra(s) seleccionada(s) en mayúsculas</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + L</td><td>Ir a la línea...</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + ]</td><td>Agregar indentación de línea</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + [</td><td>Eliminar indentación de línea</td>
+                            </tr>
+                            <tr>
+                                <td>Ctrl + ,</td><td>Configuración del editor ACE (no recomendado)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        id="load-file-btn">Abrir</button>
                 </div>
             </div>
         </div>
