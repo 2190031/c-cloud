@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, session
 
 from db_models import db, defaultroles
 from render_pages import *
-from file_management import load_file, save_file
+from file_management import load_file, save_file, load_file__blank
 from user_session import login, signup
 
 app = Flask(__name__)
@@ -21,35 +21,35 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    render_index()
+    return render_index()
     
 @app.route('/signup', methods=['POST', 'GET'])
 def sign_up():
-    signup()
+    return signup()
 
 @app.route('/login', methods=['GET', 'POST'])
 def log_in():
-    login()
+    return login()
     
 @app.route('/login')
 def login_page():
-    render_login()
+    return render_login()
 
 @app.route('/editor')
 def editor():
-    render_editor()
+    return render_editor()
 
 @app.route('/create_file', methods=['POST'])
 def create_file():
-    save_file()
+    return save_file()
 
 @app.route('/dashboard')
 def dashboard():
-    render_dashboard()
+    return render_dashboard()
 
 @app.route('/settings')
 def settings():
-    render_settings()
+    return render_settings()
 
 @app.route('/profile')
 def profile():
@@ -57,11 +57,15 @@ def profile():
     
 @app.route('/profile/profile_picture')
 def profile_picture():
-    render_profile()
+    return render_profile()
 
 @app.route('/load_file', methods=['POST'])
 def open_file():
-    load_file()
+    return load_file()
+    
+@app.route('/load_file_blank', methods=['POST'])
+def open_file_blank():
+    return load_file__blank()
 
 @app.route('/logout')
 def logout():
@@ -70,7 +74,7 @@ def logout():
 
 @app.route('/notfound')
 def notfound():
-    render_notfound()
+    return render_notfound()
 
 @app.errorhandler(404)
 def page_not_found(e):

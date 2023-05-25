@@ -41,10 +41,10 @@ body {
     max-height: 70vh;
 }
 
-table tbody tr:hover {
+/* table tbody tr:hover {
     transition: ease-in 0.1s;
     background-color: rgba(117, 117, 217, 0.1);
-}
+} */
 
 #hover-dropdown:hover .dropdown-menu {
     display: block;

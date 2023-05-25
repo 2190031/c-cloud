@@ -173,6 +173,10 @@ function getFileType(mode) {
                 var fileType = languages[2];
                 var fileExtension = 'js';
                 break;
+            case 'javascript':
+                var fileType = languages[2];
+                var fileExtension = 'js';
+                break;
             case 'css':
                 var fileType = languages[3];
                 var fileExtension = 'css';
@@ -255,7 +259,10 @@ function getFileType(mode) {
 function createFile() {
     var content = ace.edit("editor").getValue();
     let filename = document.getElementById('filename').value;
-    [fileType, extension] = getFileType()
+    let selMode = document.getElementById('select-mode');
+    let mode = selMode.options[selMode.selectedIndex].value;
+    [fileType, extension] = getFileType(mode)
+    console.log(extension);
 
     if (!filename) {
         swal("Debe darle nombre al archivo", {
@@ -338,19 +345,81 @@ function download() {
     }
 }
 
+function aceLangExt(extension) {
+    let mode;
+    try {
+        switch (extension) {
+            case 'txt':
+                mode = "text";
+                return mode;
+            case 'js':
+                mode = "javascript";
+                return mode;
+            case 'py':
+                mode = "python";
+                return mode;
+            case 'md':
+                mode = "markdown";
+                return mode;
+            case 'rb':
+                mode = "ruby";
+                return mode;
+            case 'ts':
+                mode = "typescript";
+                return mode;
+            case 'rs':
+                mode = "rust";
+                return mode;
+        }
+    } catch (e) {
 
-function loadFile() {
+    }
+}
+
+function loadFile(value) {
     // [fileType, fileExtension] = getFileType()
     // var filename = name + '.' + fileExtension; // Change this to the desired filename
-    var filename =  "Lorem.txt";
+    var filename =  value;
+    console.log(filename);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/load_file', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            [content, filename] = xhr.responseText;
-            document.getElementById('filename').value = filename;
+            var content = xhr.responseText;
+            let name = filename.split('.')
+            let extension = name.at(-1);
+            let mode = aceLangExt(extension);
+            const ModeSelValue = document.getElementById('select-mode');
+            ModeSelValue.value = mode;
+            editor.session.setMode("ace/mode/" + mode);
+            name.pop()
+            document.getElementById('filename').value = name;
             editor.setValue(content);
+        }
+    };
+    xhr.send('filename=' + filename);
+}
+
+function loadFileBlank(value) {
+    var filename = "Lorem.txt"; // Change this to the desired filename
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/load_file_blank', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.responseType = 'blob'; // Set the response type to 'blob'
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var contentType = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([xhr.response], { type: contentType });
+            var url = URL.createObjectURL(blob);
+
+            // Open the file in a new tab
+            var link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
         }
     };
     xhr.send('filename=' + filename);
@@ -358,38 +427,43 @@ function loadFile() {
 
 document.getElementById('download-btn').addEventListener('click', download);
 document.getElementById('save-btn').addEventListener('click', createFile);
-document.getElementById('load-file-btn').addEventListener('click', loadFile);
+// document.getElementById('load-file-btn').addEventListener('click', loadFile);
 
-// function openFile() {
-//     let fileName = document.querySelector('#filename');
-//     let fileExtension = getFileType();
-//     var content = ace.edit("editor").getValue();
-//     const dateSaved = new Date();
+document.addEventListener("keydown", function (event) {
+    // Check for Ctrl+S (Save)
+    if (event.ctrlKey && event.key === "s") {
+      event.preventDefault(); // Prevent the default behavior of the browser
+      createFile();
+    }
+  
+    // Check for Ctrl+O (Open)
+    if (event.ctrlKey && event.key === "o") {
+      event.preventDefault(); // Prevent the default behavior of the browser
+      // Trigger the file input click event to open the file dialog
+      document.getElementById("open-file-btn").click();
+    }
 
-//     // file = {
-//     //     "n": fileName,
-//     //     "e": fileExtension,
-//     //     "c": content,
-//     //     "d": dateSaved
-//     // }
-//     getFileType()
+    if (event.ctrlKey && event.key === "l") {
+        event.preventDefault(); // Prevent the default behavior of the browser
+        // Trigger the file input click event to open the file dialog
+        document.getElementById("change-lang-btn").click();
+    }
 
-//     fetch('/save', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/x-www-form-urlencoded'
-//         },
-//         body: `filename=${fileName}&extension=${fileExtension}content=${content}`
-//         // body: `file=${file}`
-//     }).then({
-//         if () {
+    if (event.ctrlKey && event.key === "d") {
+        event.preventDefault(); // Prevent the default behavior of the browser
+        // Trigger the file input click event to open the file dialog
+        document.getElementById("download-btn").click();
+    }
+    
+    if (event.ctrlKey && event.key === "p") {
+        event.preventDefault(); // Prevent the default behavior of the browser
+        // Trigger the file input click event to open the file dialog
+        document.getElementById("change-theme-btn").click();
+    }
 
-//         }
-//     }).then(response => {
-//         if (response.ok) {
-//           console.log('Guardado correctamente');
-//         }
-//       }).catch(error => {
-//         console.error(error + "\n" + error.message);
-//       });
-// }
+    if (event.ctrlKey && event.key === "h") {
+        event.preventDefault(); // Prevent the default behavior of the browser
+        // Trigger the file input click event to open the file dialog
+        document.getElementById("show-commands-btn").click();
+    }
+});
