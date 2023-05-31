@@ -46,6 +46,12 @@ body {
     background-color: rgba(117, 117, 217, 0.1);
 } */
 
+.dropdown-menu {
+    line-height: 17px;
+    font-size: 15px;
+    width: 20px;
+}
+
 #hover-dropdown:hover .dropdown-menu {
     display: block;
 }

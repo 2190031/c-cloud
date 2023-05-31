@@ -47,17 +47,15 @@
                                             <div class="col-4 col-sm-6">
                                                 <div class="collapse navbar-collapse" id="navbarScroll">
                                                     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                                                        <ul class="navbar-nav me-autor mb-2 mb-lg-0">
-                                                            <li class="nav-item dropdown m-1" onmouseover=" "
-                                                                onmouseout="">
+                                                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                                            <li class="nav-item dropdown m-1" id="file-dropdown">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" 
                                                                     {#  data-bs-auto-close="false" #} 
                                                                     aria-expanded="false">
                                                                     Archivo
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-dark"
-                                                                    onmouseover="" onmouseout="">
+                                                                <ul class="dropdown-menu dropdown-menu-dark">
                                                                     <li><a class="dropdown-item" href="#"
                                                                             id="save-btn">Guardar</a></li>
                                                                     <!-- <li>
@@ -95,8 +93,7 @@
                                                                             href="/dashboard">Salir</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover=""
-                                                                onmouseout="">
+                                                            <li class="nav-item dropdown m-1" id="edit-dropdown">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Edición
@@ -121,8 +118,7 @@
                                                                     </li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover=""
-                                                                onmouseout="">
+                                                            <li class="nav-item dropdown m-1" id="preferences-dropdown">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Preferencias
@@ -133,7 +129,7 @@
                                                                             data-bs-target="#themes">Apariencia</a></li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover=""
+                                                            {# <li class="nav-item dropdown m-1" onmouseover=""
                                                                 onmouseout="">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -184,21 +180,33 @@
                                                                     <li><a class="dropdown-item" href="#">Something else
                                                                             here</a></li>
                                                                 </ul>
-                                                            </li>
-                                                            <li class="nav-item dropdown m-1" onmouseover=""
-                                                                onmouseout="">
+                                                            </li> #}
+                                                            <li class="nav-item dropdown m-1" id="help-dropdown">
                                                                 <button class="btn btn-dark btn-sm dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                                     Ayuda
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-dark"
                                                                     onmouseover="" onmouseout="">
-                                                                    <li><a class="dropdown-item" href="#"
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#commands"
-                                                                            id="show-commands-btn">Comandos</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Something else
-                                                                            here</a></li>
+                                                                            id="show-commands-btn">
+                                                                            Comandos
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="hr"></div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#report-error"
+                                                                        id="report-error-btn">
+                                                                        Reportar un error
+                                                                        </a>
+                                                                    </li>
                                                                 </ul>
                                                             </li>
                                                         </ul>
@@ -216,8 +224,7 @@
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                                class="rounded-circle me-2">
+                            {# <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2"> #}
                             <strong>{{ user.username }}</strong>
                         </a>
                         <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
@@ -283,6 +290,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <label for="select-theme">Apariencia del editor</label>
                     <select class="form-select align-text-bottom" id="select-theme">
                         <option value="ambiance">Ambiance</option>
                         <option value="chaos">Chaos</option>
@@ -321,11 +329,49 @@
                         <option value="vibrant_ink">Vibrant Ink</option>
                         <option value="xcode">XCode</option>
                     </select>
+
+                    <label for="font-select">Fuente</label>
+                    <select name="font-select" id="font-select">
+                        <option value="sans-serif">Sans serif</option>
+                        <option value="serif">Serif</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="Roboto Mono">Roboto Mono</option>
+                        <option value="Roboto Slab">Roboto Slab</option>
+                        <option value="Source Sans Pro">Source Sans Pro</option>
+                        <option value="Inconsolata">Inconsolata</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Noto Sans">Noto Sans</option>
+                        <option value="Open Sans">Open Sans</option>
+                        <option value="Quicksand">Quicksand</option>
+                    </select>
+                    <!-- 
+                        font-family: 'Inconsolata', mo
+                        font-family: 'Montserrat', san
+                        font-family: 'Noto Sans', sans
+                        font-family: 'Open Sans', sans
+                        font-family: 'Quicksand', sans
+                        font-family: 'Roboto', sans-se
+                        font-family: 'Roboto Mono', mo
+                        font-family: 'Roboto Slab', 
+                        font-family: 'Source Sans Pro'
+
+                     -->
+
+                    <label for="font-size-select">Tamaño de la fuente</label>
+                    <select name="font-size-select" id="font-size-select">
+                        <option value="11px">11px</option>
+                        <option value="12px">12px</option>
+                        <option value="14px">14px</option>
+                        <option value="16px">16px</option>
+                        <option value="18px">18px</option>
+                        <option value="20px">20px</option>
+                        <option value="22px">22px</option>
+                        <option value="24px">24px</option>
+                    </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save-theme"
-                        onclick="saveTheme()">Guardar</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" id="save-preference-btn">Guardar</button>
                 </div>
             </div>
         </div>
@@ -363,8 +409,8 @@
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save-lang"
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" id="save-lang"
                         {# onclick="saveLang()" #} 
                         >Guardar</button>
                 </div>
@@ -428,8 +474,8 @@
                 -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
                         id="load-file-btn">Abrir</button>
                 </div>
             </div>
@@ -497,9 +543,28 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-                        id="load-file-btn">Abrir</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="report-error" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header" data-bs-theme="dark">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar error</h1>
+                    <button type="button" class="btn-close text-light" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="report">Describa el error:</label>
+                    <textarea name="report" id="report" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"
+                        id="send-report-btn">Enviar</button>
                 </div>
             </div>
         </div>
@@ -507,13 +572,42 @@
 
     <div id="editor" class="ace_editor ace_hidpi ace-twilight ace_dark"></div>
 
+    
+    {% if o_filename %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var filename = `{{ o_filename }}`;
+                console.log(filename);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/load_file', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        var content = xhr.responseText;
+                        let name = filename.split('.')
+                        let extension = name.at(-1);
+                        let mode = aceLangExt(extension);
+                        const ModeSelValue = document.getElementById('select-mode');
+                        ModeSelValue.value = mode;
+                        editor.session.setMode("ace/mode/" + mode);
+                        name.pop()
+                        document.getElementById('filename').value = name;
+                        editor.setValue(content);
+                    }
+                };
+                xhr.send('filename=' + filename);
+            });
+        </script>
+    {% endif %}
+    
     <script src="{{ url_for('static', filename='ace-builds/src-noconflict/ace.js') }}" type="text/javascript"
-        charset="utf-8"></script>
+    charset="utf-8"></script>
     <script src="{{ url_for('static', filename='ace-builds/src-noconflict/mode-python.js') }}" type="text/javascript"
-        charset="utf-8"></script>
+    charset="utf-8"></script>
     <script src="{{ url_for('static', filename='ace-builds/src-noconflict/theme-monokai.js') }}" type="text/javascript"
-        charset="utf-8"></script>
-    <script src="{{ url_for('static', filename='public/js/editor.js') }}"></script>
+    charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='public/js/editor.js') }}">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
         crossorigin="anonymous"></script>

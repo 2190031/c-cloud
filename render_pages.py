@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect
+from flask import render_template, session, redirect, request
 from db_models import user
 import os, datetime
 from createUserFolder import toNonStandardName, toStandardName
@@ -16,6 +16,7 @@ def render_editor():
         return redirect('/login')
     else:
         id = session.get('user_id')
+        o_filename = request.args.get('o_filename')
         username = user.query.filter_by(iduser=id).first()
         _username = session.get('user_username')
         path = f'userFiles/{_username}/saved_files'
@@ -30,7 +31,7 @@ def render_editor():
             file_dict['extension'] = os.path.splitext(file)[1]
             file_list.append(file_dict)
 
-        return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'))
+        return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'), o_filename=o_filename)
 
 def render_dashboard():
     if 'user_id' not in session:
@@ -71,7 +72,7 @@ def render_profile():
     else:
         title='Mi perfil'
         user_info = user.query.filter_by(iduser=session.get('user_id')).first()
-        return render_template('profile.html', title=title, username=toNonStandardName(session.get('user_username')), id=session.get('user_id'), user_info=user_info)
+        return render_template('profile.html', title=title, username=session.get('user_username'), id=session.get('user_id'), user_info=user_info)
 
 def render_profile_picture():
     if 'user_id' not in session:
@@ -79,7 +80,7 @@ def render_profile_picture():
     else:
         title='Foto de perfil'
         user_info = user.query.filter_by(iduser=session.get('user_id')).first()
-        return render_template('settings.html', title=title, username=toNonStandardName(session.get('user_username')), id=session.get('user_id'), user_info=user_info)
+        return render_template('settings.html', title=title, username=session.get('user_username'), id=session.get('user_id'), user_info=user_info)
 
 def render_page():
     title = 'Iniciar sesión'

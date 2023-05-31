@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, session
 
 from db_models import db, defaultroles
 from render_pages import *
-from file_management import load_file, create_file, load_file__blank
+from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference
 from user_session import login, signup
 
 app = Flask(__name__)
@@ -39,9 +39,6 @@ def login_page():
 def editor():
     return render_editor()
 
-@app.route('/create_file', methods=['POST'])
-def create_file():
-    return create_file()
 
 @app.route('/dashboard')
 def dashboard():
@@ -53,25 +50,36 @@ def settings():
 
 @app.route('/profile')
 def profile():
-    render_profile()
+    return render_profile()
     
 @app.route('/profile/profile_picture')
 def profile_picture():
     return render_profile()
 
+@app.route('/create_file', methods=['POST'])
+def create():
+    return create_file()
+
 @app.route('/load_file', methods=['POST'])
 def open_file():
     return load_file()
     
-@app.route('/load_file_blank', methods=['POST'])
-def open_file_blank():
-    return load_file__blank()
+@app.route('/load_file_blank/<string:file>', methods=['GET'])
+def open_file_blank(file):
+    return load_file__blank(file)
+
+@app.route('/send_report', methods=['POST'])
+def send_report():
+    return send_error_report()
+
+@app.route('/save_preferences', methods=['POST'])
+def save_pref():
+    return save_preference()
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/login')
-
 @app.route('/notfound')
 def notfound():
     return render_notfound()
