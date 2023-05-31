@@ -26,12 +26,12 @@
                     <div class="col-xl-10 mx-auto">
                         <!-- Profile picture -->
                         <div class="card shadow-lg border-0 mt-4 mb-10 border-light-subtle text-bg-dark" data-bs-theme="dark">
-                            <div class="card-body mb-3" >
+                            <div class="card-body mb-0" >
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <a href="#" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img alt="..." src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" width="200px" class="rounded-pill">
+                                                <img alt="..." src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" width="90px" class="rounded-pill">
                                                 <!-- Enviar la imagen por variable de url desde la carpeta -->
                                             </a> 
                                             <div class="ms-4">
@@ -47,21 +47,21 @@
                             </div>
                         </div>
                         <!-- Form -->
-                        <div class="mb-5">
-                            <h5 class="mb-0">Contact Information</h5>
+                        <div class="mb-3 mt-2">
+                            <h5 class="mb-0">Datos personales</h5>
                         </div>
-                        <form class="mb-6">
+                        <form class="mb-6" data-bs-theme="dark">
                             <div class="row mb-5">
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="first_name">First name</label>
-                                        <input type="text" class="form-control" id="first_name">
+                                        <label class="form-label" for="first_name">Nombre</label>
+                                        <input type="text" class="form-control" id="first_name" placeholder="Nombre" value="{{ user_info.name }}" data-bs-theme="dark">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="last_name">Last name</label>
-                                        <input type="text" class="form-control" id="last_name">
+                                        <label class="form-label" for="last_name">Apellido</label>
+                                        <input type="text" class="form-control" id="last_name" placeholder="Apellido" value="{{ user_info.surname }}">
                                     </div>
                                 </div>
                             </div>
@@ -69,64 +69,38 @@
                                 <div class="col-md-6">
                                     <div class="">
                                         <label class="form-label" for="email">Email</label>
-                                        <input type="email" class="form-control" id="email">
+                                        <input type="email" class="form-control" id="email" placeholder="Correo" value="{{ user_info.email }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="phone_number">Phone number</label>
-                                        <input type="tel" class="form-control" id="phone_number">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="">
-                                        <label class="form-label" for="address">Address</label>
-                                        <input type="text" class="form-control" id="address">
+                                        <label class="form-label" for="phone_number">Usuario</label>
+                                        <input type="text" class="form-control" id="phone_number" placeholder="Usuario" value="{{ user_info.username }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
                                         <label class="form-label" for="city">City</label>
-                                        <input type="text" class="form-control" id="city">
+                                        <input type="password" class="form-control" id="city" placeholder="Nueva contraseña">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="country">Country</label>
-                                        <select class="form-select" id="country" placeholder="Your email"
-                                            aria-label="Default select example">
-                                            <option selected>Country</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="">
-                                        <label class="form-label" for="zip">ZIP</label>
-                                        <input type="tel" class="form-control" id="zip">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="check_primary_address"
-                                            id="check_primary_address">
-                                        <label class="form-check-label" for="check_primary_address">
-                                            Make this my default address
-                                        </label>
+                                        <label class="form-label" for="city">City</label>
+                                        <input type="password" class="form-control" id="city" placeholder="Repetir nueva contraseña">
                                     </div>
                                 </div>
                             </div>
+                            <br>
                             <div class="text-end">
-                                <button type="button" class="btn btn-sm btn-neutral me-2">Cancel</button>
-                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                <button type="button" class="btn btn-sm btn-neutral me-2">Cancelar</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
                             </div>
                         </form>
                         <hr class="my-10" />
                         <!-- Individual switch cards -->
-                        <div class="row g-6">
-                            <div class="col-md-6">
+                        <div class="row g-6" data-bs-theme="dark">
+                            {# <div class="col-md-6">
                                 <div class="card shadow border-0">
                                     <div class="card-body">
                                         <h5 class="mb-2">Public profile</h5>
@@ -154,7 +128,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> #}
                             <div class="col-md-12">
                                 <div class="card shadow border-0">
                                     <div class="card-body d-flex align-items-center">
