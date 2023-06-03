@@ -1,33 +1,65 @@
-{% extends 'form.html' %}
-{% block title %}{{ title }}{% endblock %}
-{% block body %}
+{% extends 'form.html' %} {% block title %}{{ title }}{% endblock %} {% block
+body %}
 <div class="container" id="body" data-aos="zoom-out-right" data-aos-duration="2000">
-    <div class="flex items-center my-5">
-        <div class="w-5/6 d-inline">
-          <div class="border border-opacity-10 p-4 rounded form-container" style="background-color:rgba(0, 0, 0, 0.473);">
-            <div class="col-sm-8 py-5 mx-auto">
-              <form action="/login" method="POST">
-                <h1 class="h3 mb-3 fw-light h1-lg">Iniciar sesión</h1>
-                <div class="form-floating my-4">
-                  <input type="email" name='email' class="form-control transp-input text-light" id="floatingInput" placeholder="name@example.com" autocomplete="off" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-                  <label for="floatingInput" class="fw-light">Correo electrónico</label>
-                </div>
-                <div class="form-floating my-4">
-                  <input type="password" name='password' class="form-control transp-input text-light" id="floatingPassword" placeholder="Contraseña" autocomplete="off"  required title="Debe contener al menos una mayúscula, minúsculas, al menos un número y un caracter especial (_ - # @ ^ ó un espacio)">
-                  <label for="floatingPassword" class="fw-light">Contraseña</label>
-                </div>
-                <small>¿No tienes cuenta? <a href="/signup">Regístrate</a></small>
-                
-                <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Iniciar sesión</button>
-              </form>  <br>
-              <button class="google-button" onclick="window.location.href = '/loginG'">
-                <span class="google-icon"></span>
-                <span class="google-text">Iniciar sesión con Google</span>
-              </button>
-            </div>
+  <div class="flex items-center my-5">
+    <div class="w-5/6 d-inline">
+      <div class="border border-opacity-10 p-4 rounded form-container" style="background-color: rgba(0, 0, 0, 0.473)">
+        <div class="col-sm-8 py-5 mx-auto">
+          {% if success_message %}
+          <div class="alert alert-success alert-dismissible" style="background-color: #003e0085;color: #07d007;border: 1px solid #090;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: #07d007; opacity: 0.8;">
+              ×
+            </button>
+            <h5 style="opacity: 1; color: #07d007;padding-bottom: 7px;">
+              <i class="icon fas fa-check"></i> ¡Cuenta registrada!</h5>
+              {{ success_message }}
           </div>
+          {% endif %}
+          {% if error_message %}
+          <div class="alert alert-danger alert-dismissible" style="
+              background-color: #ff000038;
+              opacity: 1;
+              color: red;
+              border: 1px solid #701919;
+            ">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"
+              style="color: #b91616; opacity: 0.8">
+              ×
+            </button>
+            <h5 style="opacity: 1; color: red; padding-bottom: 7px;">
+              <i class="icon fas fa-ban"></i> Error con tus credenciales.</h5>
+              {{ error_message }}
+          </div>
+          {% endif %}
+          <form action="/login" method="POST">
+            <h1 class="h3 mb-3 fw-light h1-lg">Iniciar sesión</h1>
+            <div class="form-floating my-4">
+              <input type="email" name="email" class="form-control transp-input text-light" id="floatingInput"
+                placeholder="name@example.com" autocomplete="off" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                required />
+              <label for="floatingInput" class="fw-light">Correo electrónico</label>
+            </div>
+            <div class="form-floating my-4">
+              <input type="password" name="password" class="form-control transp-input text-light" id="floatingPassword"
+                placeholder="Contraseña" autocomplete="off" required
+                title="Debe contener al menos una mayúscula, minúsculas, al menos un número y un caracter especial (_ - # @ ^ ó un espacio)" />
+              <label for="floatingPassword" class="fw-light">Contraseña</label>
+            </div>
+            <small>¿No tienes cuenta? <a href="/signup">Regístrate</a></small>
+
+            <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">
+              Iniciar sesión
+            </button>
+          </form>
+          <br />
+          <button class="google-button" onclick="window.location.href = '/loginG'">
+            <span class="google-icon"></span>
+            <span class="google-text">Iniciar sesión con Google</span>
+          </button>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.min.js"></script>
