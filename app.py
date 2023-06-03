@@ -5,6 +5,8 @@ from google_auth_oauthlib.flow import Flow
 from db_models import db, defaultroles, sessions, user, error
 from createUserFolder import newUserFolder, toStandardName
 import pathlib, google, requests, cachecontrol, os, traceback
+import paypalrestsd
+
 
 from render_pages import *
 from file_management import (
@@ -48,12 +50,121 @@ with app.app_context():
         defaultroles()
     except:
         print("error")
-
-
+        
 @app.route("/")
 def index():
     return render_index()
+  
+paypalrestsdk.configure({
+    "mode": "sandbox",  # sandbox or live
+    "client_id": "AdvcMAZRch_a2_IX8HcOahjLOrd0PGTh4sjj_Fq6UdgrVUsf38Gwttt04IVoCR5hc0nKcONkEGXjtghB",
+    "client_secret": "EM2-afNHVKHKLSoFtoDKbQ4Ap1U3VTmaXiXT3-8CwOILetphM5qt_KwEy8244739kZSDGJddmbcGZ5ar"
+})
 
+@app.route('/planes')
+def planes():
+    return render_template('planes.html')
+
+@app.route('/payment', methods=['POST'])
+def payment():
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://127.0.0.1:5000/execute",
+            "cancel_url": "http://127.0.0.1:5000/"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": "Plan Básico",
+                    "sku": "BASICO",
+                    "price": "10.00",
+                    "currency": "USD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "total": "10.00",
+                "currency": "USD"
+            },
+            "description": "This is the payment transaction description."
+        }]
+    })
+
+    if payment.create():
+        print('Payment success!')
+    else:
+        print(payment.error)
+
+    return jsonify({'paymentID': payment.id})
+
+@app.route('/execute', methods=['POST'])
+def execute():
+    success = False
+
+    payment = paypalrestsdk.Payment.find(request.form['paymentID'])
+
+    if payment.execute({'payer_id': request.form['payerID']}):
+        print('Execute success!')
+        success = True
+    else:
+        print(payment.error)
+
+    return jsonify({'success': success})
+
+@app.route('/payment/premium', methods=['POST'])
+def payment_premium():
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://127.0.0.1:5000/execute/premium",
+            "cancel_url": "http://127.0.0.1:5000/"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": "Plan Premium",
+                    "sku": "PREMIUM",
+                    "price": "20.00",
+                    "currency": "USD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "total": "20.00",
+                "currency": "USD"
+            },
+            "description": "This is the payment transaction description."
+        }]
+    })
+
+    if payment.create():
+        print('Payment success!')
+    else:
+        print(payment.error)
+
+    return jsonify({'paymentID': payment.id})
+
+@app.route('/execute/premium', methods=['POST'])
+def execute_premium():
+    success = False
+
+    payment = paypalrestsdk.Payment.find(request.form['paymentID'])
+
+    if payment.execute({'payer_id': request.form['payerID']}):
+        print('Execute success!')
+        
+        success = True
+    else:
+        print(payment.error)
+
+    return jsonify({'success': success})
 
 @app.route("/callback")
 def callback():
@@ -131,8 +242,8 @@ def callback():
     else:
         return redirect("/")
 
-
 @app.route("/signup", methods=["POST", "GET"])
+
 def sign_up():
     return signup()
 
@@ -152,7 +263,6 @@ def login_google():
         )
         return redirect(authorization_url)
 
-
 @app.route("/login")
 def login_page():
     return render_login()
@@ -165,31 +275,25 @@ def editor():
 def create_files():
     return create_file()
 
-
 @app.route("/dashboard")
 def dashboard():
     return render_dashboard()
-
 
 @app.route("/settings")
 def settings():
     return render_settings()
 
-
 @app.route("/profile")
 def profile():
     return render_profile()
-
 
 @app.route("/profile/profile_picture")
 def profile_picture():
     return render_profile_picture()
 
-
 @app.route("/create_file", methods=["POST"])
 def create():
     return create_file()
-
 
 @app.route("/load_file", methods=["POST"])
 def open_file():
@@ -202,7 +306,6 @@ def open_file_blank(file):
 @app.route("/send_report", methods=["POST"])
 def send_report():
     return send_error_report()
-
 
 @app.route("/save_preferences", methods=["POST"])
 def save_pref():
@@ -225,16 +328,13 @@ def logout():
 def notfound():
     return render_notfound()
 
-
 @app.route("/auth_update", methods=["POST"])
 def auth():
     return auth_update()
 
-
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("notfound.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
