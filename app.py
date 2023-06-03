@@ -18,7 +18,7 @@ from file_management import (
 from user_session import login, signup, update_p_data, auth_update
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:c55h32o5n4Mg@localhost/c_cloud"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:a19b15821@localhost/c_cloud"
 app.config["SECRET_KEY"] = "secret_key"
 app.secret_key = "ODNFAOFNA09q09qpomao989j"
 
@@ -96,7 +96,7 @@ def callback():
                 _iduser = user.query.filter_by(google_id = googleid).first()
                 print(_iduser)
 
-                session["user_id"] = _iduser
+                session["user_id"] = _iduser.iduser
                 session["user_name"] = google_name
                 session["user_email"] = id_info.get("email")
                 session["google_picture"] = id_info.get("picture")
@@ -109,6 +109,7 @@ def callback():
         else:
             google_verify = user.query.filter_by(email=google_email).first()
         if google_verify:
+            session["error"] = "El correo está registrado con contraseña. Por favor, ingrese los credenciales"
             return redirect("/login")
         else:
             new_user = user(
@@ -125,7 +126,7 @@ def callback():
             db.session.add(new_user)
             db.session.commit()
             newUserFolder(google_username)
-
+            session["success"] = "Inicie sesión nuevamente"
             return redirect("/login")
     else:
         return redirect("/")
