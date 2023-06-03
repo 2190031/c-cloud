@@ -4,7 +4,7 @@
 <div class="container" id="body" data-aos="zoom-out-right" data-aos-duration="2000">
     <div class="flex items-center my-5">
         <div class="w-5/6 d-inline">
-          <div class="border border-opacity-10 p-5 rounded form-container">
+          <div class="border border-opacity-10 p-4 rounded form-container" style="background-color:rgba(0, 0, 0, 0.473);">
             <div class="col-sm-8 py-5 mx-auto">
               <form action="/login" method="POST">
                 <h1 class="h3 mb-3 fw-light h1-lg">Iniciar sesión</h1>
@@ -19,7 +19,11 @@
                 <small>¿No tienes cuenta? <a href="/signup">Regístrate</a></small>
                 
                 <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Iniciar sesión</button>
-              </form>
+              </form>  <br>
+              <button class="google-button" onclick="window.location.href = '/loginG'">
+                <span class="google-icon"></span>
+                <span class="google-text">Iniciar sesión con Google</span>
+              </button>
             </div>
           </div>
         </div>

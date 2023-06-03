@@ -35,7 +35,7 @@
             style="width: 280px; height: 93vh;" id="sidebar">
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/editor" class="nav-link active" aria-current="page">
+                    <a href="/editor" class="nav-link text-white" aria-current="page">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
                             <path
@@ -43,7 +43,7 @@
                             <path
                                 d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
                         </svg>
-                        Nuevo
+                        Ir al editor
                     </a>
                 </li>
                 <li>
@@ -96,7 +96,11 @@
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if "google_picture" in session %}
+                    <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                    {% else %}
                     <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    {% endif %}
                     <strong>{{ username }}</strong>
                 </a>
                 <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">

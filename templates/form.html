@@ -34,6 +34,8 @@
     
 
     {% block body %}
+
+    
     {% endblock %}
 
     <footer class="object-fit-fill" data-aos="fade-up" data-aos-duration="2000">
@@ -75,19 +77,19 @@
             
             <div class="col-md-5 offset-md-1 mb-3">
                 <form>
-                    <h5>Subscribe to our newsletter</h5>
-                    <p>Monthly digest of what's new and exciting from us.</p>
+                    <h5>Suscríbete a nuestro boletín informativo</h5>
+                    <p>Recibe mensualmente las novedades más emocionantes de nuestra parte.</p>
                     <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                        <label for="newsletter1" class="visually-hidden">Email address</label>
-                        <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
-                        <button class="btn btn-primary" type="button">Subscribe</button>
+                        <label for="newsletter1" class="visually-hidden">Correo electrónico</label>
+                        <input id="newsletter1" type="mail" class="form-control" placeholder="Tu correo electrónico">
+                        <button class="btn btn-primary" type="button">Suscribirse</button>
                     </div>
                 </form>
             </div>
         </div>
         
         <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
-            <p>© 2022 Company, Inc. All rights reserved.</p>
+            <p id="anio-actual"></p>
             <!-- <button class="sticky-bottom float-end go-top"><img src="https://cdn-icons-png.flaticon.com/512/130/130906.png" alt=""></button> -->
         </div>
     </footer>
@@ -96,6 +98,14 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init();
+</script>
+<script>
+  function mostrarAnioActual() {
+  var anio = new Date().getFullYear();
+  var mensaje = '© ' + anio + ' C-Cloud, Inc. Todos los derechos reservados.';
+  document.getElementById('anio-actual').innerHTML = mensaje;
+}
+mostrarAnioActual();
 </script>
 <script src="{{ url_for('static', filename='public/js/main.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>

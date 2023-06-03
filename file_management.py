@@ -78,7 +78,7 @@ def create_file():
                 try:
                     detail = detailsfile(
                         idfile      = id,
-                        iduser      = session.get('user_iduser'),
+                        iduser      = session.get('user_id'),
                         datecreated = datetime.datetime.now()
                     )
                     db.session.add(detail)
