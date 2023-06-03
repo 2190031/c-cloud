@@ -1,5 +1,5 @@
-import hashlib
-import os
+import hashlib, os
+
 from db_models import user
 
 def hash_password(password):

@@ -1,12 +1,118 @@
-from flask import render_template, request, redirect, session, jsonify
-import traceback, hashlib, logging
-from sqlalchemy import update
+import traceback, hashlib, logging, secrets, os, pathlib, google, requests, cachecontrol
 
+from flask import render_template, request, redirect, session, jsonify, abort
+
+from sqlalchemy import update
 from google_auth_oauthlib.flow import Flow
+from google.oauth2 import id_token
+
 from db_models import db, user,  error, sessions
 from hash import hash_password, check_credentials
 from createUserFolder import newUserFolder, toStandardName
 from sendMail import send_mail
+
+GOOGLE_CLIENT_ID = (
+    "621438977816-o6ee2tto4rgsk9isrvpv6mm1ctvnkagb.apps.googleusercontent.com"
+)
+client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
+
+flow = Flow.from_client_secrets_file(
+    client_secrets_file=client_secrets_file,
+    scopes=[
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email",
+        "openid",
+    ],
+    redirect_uri="http://127.0.0.1:5000/callback",
+)
+
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+    if "state" in session:
+        if not session["state"] == request.args["state"]:
+            abort(500)
+
+        credentials = flow.credentials
+        request_session = requests.Session()
+        cached_session = cachecontrol.CacheControl(request_session)
+        token_request = google.auth.transport.requests.Request(session=cached_session)
+
+        id_info = id_token.verify_oauth2_token(
+            id_token=credentials._id_token,
+            request=token_request,
+            audience=GOOGLE_CLIENT_ID,
+        )
+
+        googleid = id_info.get("sub")
+        google_name = id_info.get("name")
+        google_email = id_info.get("email")
+        google_picture = id_info.get("picture")
+        if "family_name" in id_info:
+            google_family_name = id_info["family_name"]
+        else:
+            google_family_name = None
+
+        google_username = google_email.split("@")[0]
+        google_user_verify = user.query.filter_by(google_id=googleid).first()
+
+        if google_user_verify:
+            session.clear()
+            id = google_user_verify.iduser
+            newsession = sessions(iduser=id)
+            try:
+                db.session.add(newsession)
+                db.session.commit()
+
+                _iduser = user.query.filter_by(google_id = googleid).first()
+                print(_iduser)
+
+                session["user_id"] = _iduser.iduser
+                session["user_name"] = google_name
+                session["user_email"] = id_info.get("email")
+                session["google_picture"] = id_info.get("picture")
+                session["user_username"] = google_user_verify.username
+
+                return redirect("/")
+            except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error': str(e)})
+        else:
+            google_verify = user.query.filter_by(email=google_email).first()
+        if google_verify:
+            session["error"] = "El correo está registrado con contraseña. Por favor, ingrese los credenciales"
+            return redirect("/login")
+        else:
+            new_user = user(
+                google_id=googleid,
+                name=google_name,
+                username=google_username,
+                surname=google_family_name,
+                password=None,
+                salt=None,
+                email=google_email,
+                picture=google_picture,
+                usertype=1,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            newUserFolder(google_username)
+            session["success"] = "Inicie sesión nuevamente"
+            return redirect("/login")
+    else:
+        return redirect("/")
+
+def login_google():
+    if "google_id" in session or "user_id" in session:
+        return redirect("/")
+    else:
+        state = secrets.token_urlsafe(16)  # Generar un valor único para 'state'
+        session["state"] = state
+        authorization_url, _ = flow.authorization_url(
+            prompt="select_account", state=state
+        )
+        return redirect(authorization_url)
+
+
 
 def signup():
     title = 'Registrarse'
