@@ -96,7 +96,7 @@ def callback():
                 _iduser = user.query.filter_by(google_id = googleid).first()
                 print(_iduser)
 
-                session["user_id"] = _iduser
+                session["user_id"] = _iduser.iduser
                 session["user_name"] = google_name
                 session["user_email"] = id_info.get("email")
                 session["google_picture"] = id_info.get("picture")
