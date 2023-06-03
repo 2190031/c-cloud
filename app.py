@@ -4,16 +4,11 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from db_models import db, defaultroles, sessions, user, error
 from createUserFolder import newUserFolder, toStandardName
-import pathlib
-import google
-import requests
-import cachecontrol
-import os
-import traceback
-from file_management import load_file, load_file__blank, create_file
+import pathlib, google, requests, cachecontrol, os, traceback
 
-from render_pages import render_dashboard, render_editor, render_index, render_login, render_notfound, render_profile, render_profile_picture, render_settings
-from user_session import login, signup
+from render_pages import *
+from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture
+from user_session import login, signup, update_p_data, auth_update
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:a19b15821@localhost/c_cloud'
@@ -154,22 +149,45 @@ def profile():
 def profile_picture():
     return render_profile_picture()
 
+@app.route('/create_file', methods=['POST'])
+def create():
+    return create_file()
+
 @app.route('/load_file', methods=['POST'])
 def open_file():
     return load_file()
+    
+@app.route('/load_file_blank/<string:file>', methods=['GET'])
+def open_file_blank(file):
+    return load_file__blank(file)
 
-@app.route('/load_file_blank', methods=['POST'])
-def open_file_blank():
-    return load_file__blank()
+@app.route('/send_report', methods=['POST'])
+def send_report():
+    return send_error_report()
+
+@app.route('/save_preferences', methods=['POST'])
+def save_pref():
+    return save_preference()
+
+@app.route('/upload_profile_picture', methods=['POST'])
+def upload_profile_picture():
+    return upload_p_picture()
+
+@app.route('/update_profile_data', methods=['POST'])
+def update_profile_data():
+    return update_p_data()
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/login')
-
 @app.route('/notfound')
 def notfound():
     return render_notfound()
+
+@app.route('/auth_update', methods=['POST'])
+def auth():
+    return auth_update()
 
 @app.errorhandler(404)
 def page_not_found(e):

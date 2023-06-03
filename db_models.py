@@ -97,16 +97,18 @@ class historial(db.Model):
 	__tablename__ = 'historial'
 	idchange = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), primary_key=True)
-	datemodified = db.Column(db.String(30), nullable=False)
+	datemodified = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	idmodificationtype = db.Column(db.Integer, nullable=False)
+	# idmodificationtype = db.Column(db.Integer, nullable=False)
 
 
-	def __init__(self, idfile, datemodified, iduser, idmodificationtype):
+	def __init__(self, idfile, datemodified, iduser
+            #   , idmodificationtype
+              ):
 		self.idfile = idfile
 		self.datemodified = datemodified
 		self.iduser = iduser
-		self.idmodificationtype = idmodificationtype
+		# self.idmodificationtype = idmodificationtype
 
 
 	def __repr__(self):
@@ -115,23 +117,24 @@ class historial(db.Model):
 # revisar
 class change(db.Model):
     __tablename__ = 'change'
-    idchange = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    idmodification = db.Column(db.Integer, primary_key=True, autoincrement=True)
     beforechange = db.Column(db.Integer, nullable=False)
     afterchange = db.Column(db.Integer, nullable=False)
-    changeline = db.Column(db.Integer, nullable=False)
-    changecolumn = db.Column(db.Integer, nullable=False)
+    # changeline = db.Column(db.Integer, nullable=False)
+    # changecolumn = db.Column(db.Integer, nullable=False) # implementar despues
     idchange = db.Column(db.Integer, db.ForeignKey('historial.idchange'), primary_key=True)
 
     def __init__(self, beforechange, afterchange, changeline, changecolumn):
         self.beforechange = beforechange
         self.afterchange = afterchange
-        self.changeline = changeline
-        self.changecolumn = changecolumn
+        # self.changeline = changeline
+        # self.changecolumn = changecolumn
 
     def __repr__(self):
-        return "<task %r>" % self.idchange
+        return "<task %r>" % self.idmodification
 
 
+#No uso por ahora
 class version(db.Model):
 	__tablename__ = 'version'
 	idversion = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -149,13 +152,15 @@ class error(db.Model):
 	__tablename__ = 'error'
 	iderror = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), nullable=False)
+	# idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), nullable=False)
 	description = db.Column(db.String(255), nullable=False)
 	datereported = db.Column(db.DateTime, default=dt.utcnow)
 	
-	def __init__(self, iduser, idfile, description, datereported):
+	def __init__(self, iduser, 
+            #   idfile, 
+              description, datereported):
 		self.iduser = iduser
-		self.idfile = idfile
+		# self.idfile = idfile
 		self.description = description
 		self.datereported = datereported
 
@@ -210,44 +215,35 @@ class comment(db.Model):
 
 	def __repr__(self):
 		return "<task %r>" % self.idcomment
-	
+
+#reparar
 class preference(db.Model):
 	__tablename__ = 'preference'
 	idpreference = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	fontsize = db.Column(db.Float, nullable=False)
-	profile = db.Column(db.String(45), nullable=False)
-	autosave = db.Column(db.Boolean, nullable=False)
-	lang = db.Column(db.String(3), nullable=False)
+	profile_picture = db.Column(db.String(45), nullable=True)
+	font = db.Column(db.String(45), nullable=True)
+	fontsize = db.Column(db.Float, nullable=True)
+	fontcolor = db.Column(db.String(7), nullable=True) # hex
+	theme = db.Column(db.String(45), nullable=True)
+	# autosave = db.Column(db.Boolean, nullable=False)
+	# lang = db.Column(db.String(3), nullable=False)
 
-	def __init__(self, iduser,  fontsize, profile, autosave, lang):
+	def __init__(self, iduser,  fontsize, profile,
+            # autosave, lang,
+            font, 
+            # fontcolor, 
+            theme):
 		self.iduser = iduser
+		self.profile_picture = profile
+		self.font = font
 		self.fontsize = fontsize
-		self.profile = profile
-		self.autosave = autosave
-		self.lang = lang
+		self.theme = theme
+		# self.autosave = autosave
+		# self.lang = lang
 
 	def __repr__(self):
 		return "<task %r>" % self.idpreference
-
-class preferences(db.Model):
-    __tablename__ = 'preferences'
-    idcolour = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    idpreference = db.Column(db.Integer, db.ForeignKey('preference.idpreference'), nullable=False)
-    iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-    bkgcolour = db.Column(db.String(45), nullable=False)
-    font = db.Column(db.String(45), nullable=False)
-    fontcolour = db.Column(db.String(45), nullable=False)
-
-    def __init__(self, iduser, bkgcolour, font, fontcolour, idpreference):
-        self.iduser = iduser
-        self.bkgcolour = bkgcolour
-        self.font = font
-        self.fontcolour = fontcolour
-        self.idpreference = idpreference
-
-    def __repr__(self):
-        return "<task %r>" % self.idcolour
 
 class paytransaction(db.Model):
 	__tablename__ = 'paytransaction'

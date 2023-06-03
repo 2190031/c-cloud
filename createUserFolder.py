@@ -11,11 +11,13 @@ def toNonStandardName(string):
 def newUserFolder(username):
     s_username = toStandardName(username)
     dir = f"userFiles/{s_username}/saved_files"
+    old_files_dir = f"userFiles/{s_username}/saved_files/old"
     account_settings_dir = f"userFiles/{s_username}/acc_settings"
     acc_profile_pic = f"userFiles/{s_username}/acc_settings/profile_pic"
 
     # Ruta completa de la carpeta hija
     path_a = os.path.join(dir)
+    path_a_a = os.path.join(old_files_dir)
     path_b = os.path.join(account_settings_dir)
     path_c = os.path.join(acc_profile_pic)
 
@@ -23,6 +25,7 @@ def newUserFolder(username):
     if not os.path.exists(path_a):
         try:
             os.makedirs(path_a)
+            os.makedirs(path_a_a)
             os.makedirs(path_b)
             os.makedirs(path_c)
             print("Folder creado correctamente.")
