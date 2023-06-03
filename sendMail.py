@@ -2,14 +2,12 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def send_mail(to):
+def send_mail(to, subject, message):
     
     # Email configuration
     sender_email = 'c_cloud2023@outlook.com'
     receiver_email = to
     password = 'C-cloud2023'
-    subject = 'Subject of the email'
-    message = 'Body of the email'
 
     # Create a multipart message and set the headers
     msg = MIMEMultipart()

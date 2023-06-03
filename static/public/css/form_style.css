@@ -47,6 +47,42 @@ a {
     white-space: nowrap;
 }
 
+.google-button {
+    display: inline-block;
+    background-color: #ffffff00;
+    color: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    line-height: 36px;
+    padding: 0 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    height: 52px;
+  }
+  
+  .google-button:hover {
+    background-color: #ffffff;
+    color: black;
+  }
+  
+  .google-icon {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/2991/2991148.png'); /* Reemplaza 'ruta/al/icono-de-google.png' con la ruta real de tu icono de Google */
+    background-size: cover;
+    margin-right: 8px;
+    vertical-align: middle;
+   
+  }
+  
+  .google-text {
+    vertical-align: middle;
+  }
+
 .form-signin {
     transition: all 0.5s ease-in-out;
     max-width: 50%;

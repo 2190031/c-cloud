@@ -13,7 +13,7 @@
                     <div class="row align-items-center">
                         <div class="col-sm-6 col-12 mb-4 mb-sm-0">
                             <!-- Title -->
-                            <h1 class="h2 mb-0 ls-tight">Account Settings</h1>
+                            <h1 class="h2 mb-0 ls-tight">Ajustes de Perfil</h1>
                         </div>
                     </div>
                 </div>
@@ -25,43 +25,51 @@
                 <div class="row shadow overflow-y-scroll">
                     <div class="col-xl-10 mx-auto">
                         <!-- Profile picture -->
-                        <div class="card shadow-lg border-0 mt-4 mb-10 border-light-subtle text-bg-dark" data-bs-theme="dark">
-                            <div class="card-body mb-3" >
+                        <div class="card shadow-lg border-0 mt-4 mb-10 border-light-subtle text-bg-dark"
+                            data-bs-theme="dark">
+                            <div class="card-body mb-0">
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <a href="#" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img alt="..." src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" width="200px" class="rounded-pill">
+                                                <img alt="..."
+                                                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
+                                                    width="90px" class="rounded-pill">
                                                 <!-- Enviar la imagen por variable de url desde la carpeta -->
-                                            </a> 
+                                            </a>
                                             <div class="ms-4">
-                                                <span class="h4 d-block mb-0">{{ user_info.name }} {{ user_info.surname }}</span>
+                                                <span class="h4 d-block mb-0">{{ user_info.name }} {{ user_info.surname
+                                                    }}</span>
                                                 <a href="#" class="text-sm font-semibold text-muted">View Profile</a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="ms-auto">
-                                        <button type="button" class="btn btn-sm btn-neutral">Upload</button>
+                                        <input type="file" name="profile-picture" id="upload" accept="image/*" hidden>
+                                        <label for="upload" class="btn btn-sm btn-neutral">Choose file</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Form -->
-                        <div class="mb-5">
-                            <h5 class="mb-0">Contact Information</h5>
+                        <div class="mb-3 mt-2">
+                            <h5 class="mb-0">Datos personales</h5>
+                            <small>Se unió el: {{ user_info.creationdate }}</small>
                         </div>
-                        <form class="mb-6">
+                        <form class="mb-6" data-bs-theme="dark">
                             <div class="row mb-5">
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="first_name">First name</label>
-                                        <input type="text" class="form-control" id="first_name">
+                                        <label class="form-label" for="firstname">Nombre</label>
+                                        <input type="text" class="form-control" id="firstname" name="firstname"
+                                            placeholder="Nombre" value="{{ user_info.name }}" data-bs-theme="dark">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="last_name">Last name</label>
-                                        <input type="text" class="form-control" id="last_name">
+                                        <label class="form-label" for="surname">Apellido</label>
+                                        <input type="text" class="form-control" id="surname" name="surname"
+                                            placeholder="Apellido" value="{{ user_info.surname }}">
                                     </div>
                                 </div>
                             </div>
@@ -69,92 +77,41 @@
                                 <div class="col-md-6">
                                     <div class="">
                                         <label class="form-label" for="email">Email</label>
-                                        <input type="email" class="form-control" id="email">
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            placeholder="Correo" value="{{ user_info.email }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="phone_number">Phone number</label>
-                                        <input type="tel" class="form-control" id="phone_number">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="">
-                                        <label class="form-label" for="address">Address</label>
-                                        <input type="text" class="form-control" id="address">
+                                        <label class="form-label" for="username">Usuario</label>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            placeholder="Usuario" value="{{ user_info.username }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="city">City</label>
-                                        <input type="text" class="form-control" id="city">
+                                        <label class="form-label" for="new-password">Nueva contraseña</label>
+                                        <input type="password" class="form-control" id="new-password"
+                                            name="new-password" placeholder="Nueva contraseña">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="country">Country</label>
-                                        <select class="form-select" id="country" placeholder="Your email"
-                                            aria-label="Default select example">
-                                            <option selected>Country</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="">
-                                        <label class="form-label" for="zip">ZIP</label>
-                                        <input type="tel" class="form-control" id="zip">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="check_primary_address"
-                                            id="check_primary_address">
-                                        <label class="form-check-label" for="check_primary_address">
-                                            Make this my default address
-                                        </label>
+                                        <label class="form-label" for="repeat-password">Repetir nueva contraseña</label>
+                                        <input type="password" class="form-control" id="repeat-password"
+                                            name="repeat-password" placeholder="Repetir nueva contraseña">
                                     </div>
                                 </div>
                             </div>
+                            <br>
                             <div class="text-end">
-                                <button type="button" class="btn btn-sm btn-neutral me-2">Cancel</button>
-                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                <button type="button" class="btn btn-sm btn-neutral me-2">Cancelar</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="update-data-btn" data-bs-toggle="modal" data-bs-target="#auth-update">Guardar</button>
                             </div>
                         </form>
                         <hr class="my-10" />
                         <!-- Individual switch cards -->
-                        <div class="row g-6">
-                            <div class="col-md-6">
-                                <div class="card shadow border-0">
-                                    <div class="card-body">
-                                        <h5 class="mb-2">Public profile</h5>
-                                        <p class="text-sm text-muted mb-6">
-                                            Making your profile public means that anyone on the network will be able to
-                                            find you.
-                                        </p>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"
-                                                checked>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card shadow border-0">
-                                    <div class="card-body">
-                                        <h5 class="mb-2">Show my email</h5>
-                                        <p class="text-sm text-muted mb-6">
-                                            Showing your e-mail adresses means that anyone on the network will be able
-                                            to find you.
-                                        </p>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="row g-6" data-bs-theme="dark">
                             <div class="col-md-12">
                                 <div class="card shadow border-0">
                                     <div class="card-body d-flex align-items-center">
@@ -177,4 +134,53 @@
         </main>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="auth-update" aria-labelledby="auth" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-4 shadow bg-dark text-light" data-bs-theme="dark">
+            <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                <h1 class="modal-title fs-5">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-0">
+                <p>Para confirmar debe escribir su correo electrónico y contraseña actual.</p>
+                <p class="text-warning"><i>* Estos cambios no podrán deshacerse</i></p>
+                <div class="row">
+                    <div class="p-2 col-10 mx-auto">
+                        <label for="ver-email">Correo</label>
+                        <input type="email" name="ver-email" id="ver-email" class="form-control" placeholder="Correo" required>
+                    </div>
+                    <div class="p-2 col-10 mx-auto">
+                        <label for="ver-password">Contraseña</label>
+                        <input type="password" name="ver-password" id="ver-password" class="form-control" placeholder="Contraseña" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal" id="confirm-update-btn">Confirmar</button>
+                <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="auth-" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header" data-bs-theme="dark">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar cambio</h1>
+                <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='public/js/profile.js') }}"></script>{% endblock %}

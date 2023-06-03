@@ -4,11 +4,36 @@
 <div class="container" id="body" data-aos="zoom-out-right" data-aos-duration="2000">
     <div class="flex items-center my-5">
         <div class="w-5/6 d-inline">
-          <div class="border border-opacity-10 border-1 p-5 rounded form-container">
+          <div class="border border-opacity-10 border-1 p-5 rounded form-container"  style="background-color:rgba(0, 0, 0, 0.473);">
             <div class="col-sm-8 py-5 mx-auto">
+              {% if success_message %}
+              <div class="alert alert-success alert-dismissible" style="background-color: #003e0085;color: #07d007;border: 1px solid #090;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: #07d007; opacity: 0.8;">
+                  ×
+                </button>
+                <h5 style="opacity: 1; color: #07d007;padding-bottom: 7px;">
+                  <i class="icon fas fa-check"></i> ¡Cuenta registrada!</h5>
+                  {{ success_message }}
+              </div>
+              {% endif %}
+              {% if error_message %}
+              <div class="alert alert-danger alert-dismissible" style="
+                  background-color: #ff000038;
+                  opacity: 1;
+                  color: red;
+                  border: 1px solid #701919;
+                ">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"
+                  style="color: #b91616; opacity: 0.8">
+                  ×
+                </button>
+                <h5 style="opacity: 1; color: red; padding-bottom: 7px;">
+                  <i class="icon fas fa-ban"></i> Error con tus credenciales.</h5>
+                  {{ error_message }}
+              </div>
+              {% endif %}
               <form action="/signup" method="POST">
                 <h1 class="h3 mb-3 fw-light h1-lg text-center">Registrarse</h1>
-
                 <div class="form-floating my-4">
                   <input type="text" name='name' class="form-control transp-input text-light" id="name" placeholder="Nombre" autocomplete="off"  required>
                   <label for="name" class="fw-light">Nombre</label>
@@ -37,7 +62,13 @@
                 <small>¿Ya tienes cuenta? <a href="/login" class="info-link muted">Inicia sesión</a></small>
                 <br>
                 <button class="w-100 btn btn-lg btn-outline-primary fw-light" type="submit">Registrarse</button>
-              </form>
+              
+              </form> <br>
+
+              <button class="google-button" onclick="window.location.href = '/loginG'">
+                <span class="google-icon"></span>
+                <span class="google-text">Registrarse con Google</span>
+              </button>
             </div>
           </div>
         </div>
