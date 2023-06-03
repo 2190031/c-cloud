@@ -20,33 +20,39 @@ def signup():
             email    = request.form.get('email')
             password = request.form.get('password')
             usertype = request.form.get('usertype', 1)
+            
+            verify_email = user.query.filter_by(email=email).first()
+            if verify_email:
+                session["error"] = "El correo que proporcionaste está registrado. Debe iniciar sesión si quiere acceder con él."
+                return redirect("/signup")
+            else:
+                hashed_password, salt = hash_password(password)
+                newuser = user(name        =name, 
+                                surname     =surname, 
+                                username    =username, 
+                                email       =email, 
+                                password    =hashed_password,
+                                salt        =salt, 
+                                usertype    =usertype)
+                try:
+                    print(hashed_password)
+                    db.session.add(newuser)
+                    db.session.commit()
+                    newUserFolder(username)
+                    subject = 'Bienvenido a C-Cloud'
+                    message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravida mattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nisl placerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenas ornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortis congue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urna cursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo, laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullam luctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortor lorem, ultricies nec sagittis vitae, porttitor at enim.'
 
-            hashed_password, salt = hash_password(password)
-
-            newuser = user(name        =name, 
-                           surname     =surname, 
-                           username    =username, 
-                           email       =email, 
-                           password    =hashed_password,
-                           salt        =salt, 
-                           usertype    =usertype)
-
-            try:
-                print(hashed_password)
-                db.session.add(newuser)
-                db.session.commit()
-                newUserFolder(username)
-                subject = 'Bienvenido a C-Cloud'
-                message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravida mattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nisl placerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenas ornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortis congue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urna cursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo, laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullam luctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortor lorem, ultricies nec sagittis vitae, porttitor at enim.'
-
-                send_mail(email, subject, message)
-                traceback.print_exc()
-                return redirect('/login')
-            except:
-                traceback.print_exc()
-                return error
+                    send_mail(email, subject, message)
+                    traceback.print_exc()
+                    session["success"] = "Inicie sesión nuevamente"
+                    return redirect('/login')
+                except:
+                    traceback.print_exc()
+                    return error
         else:
-          return render_template('sign_up.html', title=title)
+            success_message = session.pop("success", None)
+            error_message = session.pop("error", None)
+            return render_template('sign_up.html', title=title, success_message=success_message, error_message=error_message)
         
 def login():
     if "google_id" in session or "user_id" in session:
@@ -79,9 +85,12 @@ def login():
                     traceback.print_exc()
                     return error
             else:
+                session["error"] = "Credenciales incorrectas."
                 return redirect('/login')
         else:
-            return render_template('login.html', title=title)
+            success_message = session.pop("success", None)
+            error_message = session.pop("error", None)
+            return render_template('login.html', title=title, error_message=error_message, success_message=success_message)
     
 def update_p_data():
     logging.basicConfig()

@@ -5,6 +5,7 @@ from createUserFolder import toNonStandardName, toStandardName
 
 def render_index():
     title = 'Inicio - C-Cloud'
+    
     return render_template('index.html', title=title) 
 
 def render_login():
