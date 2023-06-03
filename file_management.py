@@ -1,7 +1,8 @@
 from flask import request, session, send_file, jsonify, redirect, url_for
 from db_models import db, file, detailsfile, change,\
 historial, user, error, preference
-import os, traceback, builtins, datetime
+import os, traceback, builtins, datetime, base64
+from werkzeug.utils import secure_filename
 
 def load_file():
     username = session.get('user_username')
@@ -178,3 +179,32 @@ def save_preference():
         return "Preference submited successfully"   
     except:
         return traceback.print_exc()
+
+def upload_p_picture():
+    username = session.get('user_username')
+    data = request.json
+    
+    image_b64 = data['image']
+    
+    _dir = f'userFiles/{username}/acc_settings/profile_pic'
+    
+    # check if the file has been uploaded
+    if image_b64:
+        # strip the leading path from the file name
+        
+        image_data = image_b64.split(',')[1]
+        image_bytes = base64.b64decode(image_data)
+        
+        fn = secure_filename('profile_pic.png') #os.path.basename(fileitem)
+        
+        path = os.path.join(_dir, fn)
+       # open read and write the file into the server
+        try:
+            with open(path, 'wb') as f:
+                f.write(image_bytes)
+            return jsonify({'message': 'Profile picture uploaded successfully'})
+        except Exception as e:
+            print(traceback.format_exc())
+            return jsonify({'error': str(e)})
+    else:
+        return jsonify({'error': 'No image file received'})

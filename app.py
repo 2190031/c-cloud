@@ -2,8 +2,8 @@ from flask import Flask, render_template, redirect, session
 
 from db_models import db, defaultroles
 from render_pages import *
-from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference
-from user_session import login, signup
+from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture
+from user_session import login, signup, update_p_data, auth_update
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:c55h32o5n4Mg@localhost/c_cloud'
@@ -76,6 +76,14 @@ def send_report():
 def save_pref():
     return save_preference()
 
+@app.route('/upload_profile_picture', methods=['POST'])
+def upload_profile_picture():
+    return upload_p_picture()
+
+@app.route('/update_profile_data', methods=['POST'])
+def update_profile_data():
+    return update_p_data()
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -83,6 +91,10 @@ def logout():
 @app.route('/notfound')
 def notfound():
     return render_notfound()
+
+@app.route('/auth_update', methods=['POST'])
+def auth():
+    return auth_update()
 
 @app.errorhandler(404)
 def page_not_found(e):

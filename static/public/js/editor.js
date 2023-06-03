@@ -486,7 +486,7 @@ function savePreference() {
         });
         xhr.send(data);
     } catch (e) {
-
+        console.log(e);
     }
 }
 
