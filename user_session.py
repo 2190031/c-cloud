@@ -14,73 +14,73 @@ def signup():
        return redirect("/")
     else:
         if request.method == 'POST':
-         name     = request.form.get('name')
-         surname  = request.form.get('surname')
-         username = request.form.get('username')
-         email    = request.form.get('email')
-         password = request.form.get('password')
-         usertype = request.form.get('usertype', 1)
-        
-         hashed_password, salt = hash_password(password)
+            name     = request.form.get('name')
+            surname  = request.form.get('surname')
+            username = request.form.get('username')
+            email    = request.form.get('email')
+            password = request.form.get('password')
+            usertype = request.form.get('usertype', 1)
 
-         newuser = user(name        =name, 
-                        surname     =surname, 
-                        username    =username, 
-                        email       =email, 
-                        password    =hashed_password,
-                        salt        =salt, 
-                        usertype    =usertype)
-        
-         try:
-             print(hashed_password)
-             db.session.add(newuser)
-             db.session.commit()
-             newUserFolder(username)
-             subject = 'Bienvenido a C-Cloud'
-             message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravida mattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nisl placerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenas ornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortis congue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urna cursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo, laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullam luctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortor lorem, ultricies nec sagittis vitae, porttitor at enim.'
-            
-             send_mail(email, subject, message)
-             traceback.print_exc()
-             return redirect('/login')
-         except:
-             traceback.print_exc()
-             return error
+            hashed_password, salt = hash_password(password)
+
+            newuser = user(name        =name, 
+                           surname     =surname, 
+                           username    =username, 
+                           email       =email, 
+                           password    =hashed_password,
+                           salt        =salt, 
+                           usertype    =usertype)
+
+            try:
+                print(hashed_password)
+                db.session.add(newuser)
+                db.session.commit()
+                newUserFolder(username)
+                subject = 'Bienvenido a C-Cloud'
+                message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravida mattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nisl placerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenas ornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortis congue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urna cursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo, laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullam luctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortor lorem, ultricies nec sagittis vitae, porttitor at enim.'
+
+                send_mail(email, subject, message)
+                traceback.print_exc()
+                return redirect('/login')
+            except:
+                traceback.print_exc()
+                return error
         else:
           return render_template('sign_up.html', title=title)
         
 def login():
     if "google_id" in session or "user_id" in session:
-      return redirect('/')
+        return redirect('/')
     else:
         title = 'Iniciar sesión'
         if request.method == 'POST':
-           email    = request.form.get('email')
-           password = request.form.get('password')
-        
-           passwordsMatch = check_credentials(email, password)
-           inserteduser = user.query.filter_by(email=email).first()
+            email    = request.form.get('email')
+            password = request.form.get('password')
+         
+            passwordsMatch = check_credentials(email, password)
+            inserteduser = user.query.filter_by(email=email).first()
+ 
+            if inserteduser and passwordsMatch == True:
+                id = inserteduser.iduser
+                username = inserteduser.username
+                newsession = sessions(iduser=id)
+                try:
+                    db.session.add(newsession)
+                    db.session.commit()
 
-           if inserteduser and passwordsMatch == True:
-             id = inserteduser.iduser
-             username = inserteduser.username
-             newsession = sessions(iduser=id)
-             try:
-                 db.session.add(newsession)
-                 db.session.commit()
-                
-                 session['user_id'] = id
-                 session['user_username'] = toStandardName(username)
-                 session['user_email'] = email
+                    session['user_id'] = id
+                    session['user_username'] = toStandardName(username)
+                    session['user_email'] = email
+    
+                    print(session.get('user_id'), session.get('user_username'), session.get('user_email'))
 
-                 print(session.get('user_id'), session.get('user_username'), session.get('user_email'))
-                
-                 return redirect('/dashboard')
-             except:
-                 traceback.print_exc()
-                 return error
-           else:
-            return redirect('/login')
-       else:
+                    return redirect('/dashboard')
+                except:
+                    traceback.print_exc()
+                    return error
+            else:
+                return redirect('/login')
+        else:
             return render_template('login.html', title=title)
     
 def update_p_data():

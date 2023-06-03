@@ -48,16 +48,16 @@ class user(db.Model):
     usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
     creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
     
-    def __init__(self, name, surname, username, email, password, salt, picture, usertype=1, google_id=None):
-     self.name = name
-     self.surname = surname
-     self.username = username
-     self.email = email
-     self.password = password
-     self.picture = picture
-     self.salt = salt
-     self.usertype = usertype
-     self.google_id = google_id
+    def __init__(self, name, surname, username, email, password, salt, picture=None, usertype=1, google_id=None):
+        self.name = name
+        self.surname = surname
+        self.username = username
+        self.email = email
+        self.password = password
+        self.picture = picture
+        self.salt = salt
+        self.usertype = usertype
+        self.google_id = google_id
 
     def __repr__(self):
         return "<task %r>" % self.iduser	
