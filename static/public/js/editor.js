@@ -280,7 +280,7 @@ function createFile() {
         });
     } else {
         try {
-            console.log('Guardando...')
+            console.log('Guardando...');
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/create_file', true);
             xhr.setRequestHeader('Content-Type', 'application/json');

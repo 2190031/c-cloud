@@ -37,23 +37,27 @@ def defaultroles():
 class user(db.Model):
     __tablename__ = 'user'
     iduser = db.Column(db.Integer, primary_key=True, autoincrement=True, default=0)
+    google_id = db.Column(db.String(100), nullable=True, unique=True)
     name = db.Column(db.String(45), nullable=False)
-    surname = db.Column(db.String(45), nullable=False)
+    surname = db.Column(db.String(45), nullable=True)
     username = db.Column(db.String(45), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(200), nullable=False)    
-    salt = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(200), nullable=True)
+    picture = db.Column(db.String(255), nullable=True)    
+    salt = db.Column(db.String(100), nullable=True, unique=True)
     usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
     creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
     
-    def __init__(self, name, surname, username, email, password, salt, usertype=1):
-        self.name = name
-        self.surname = surname
-        self.username = username
-        self.email = email
-        self.password = password
-        self.salt = salt
-        self.usertype = usertype
+    def __init__(self, name, surname, username, email, password, salt, picture, usertype=1, google_id=None):
+     self.name = name
+     self.surname = surname
+     self.username = username
+     self.email = email
+     self.password = password
+     self.picture = picture
+     self.salt = salt
+     self.usertype = usertype
+     self.google_id = google_id
 
     def __repr__(self):
         return "<task %r>" % self.iduser	
