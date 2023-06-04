@@ -1,15 +1,17 @@
 import os
 
-from flask import Flask, render_template, redirect, send_file, session
+from flask import Flask, render_template, redirect, session
 from paypal_payments import payment, execute, payment_premium, execute_premium
 from user_session import callback, login_google
 from db_models import db, defaultlicence, defaultroles
 from user_session import login, signup, update_p_data, auth_update
 from render_pages import *
-from file_management import (load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture)
+from file_management import (load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture, get_profile_pic)
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:a19b15821@localhost/c_cloud"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Mauricio2021@localhost/c_cloud"
+
 app.config["SECRET_KEY"] = "secret_key"
 app.secret_key = "ODNFAOFNA09q09qpomao989j"
 
@@ -135,6 +137,10 @@ def notfound():
 @app.route("/auth_update", methods=["POST"])
 def auth():
     return auth_update()
+
+@app.route('/get_profile_pic', methods=['GET'])
+def profile_photo():
+    return get_profile_pic()
 
 @app.errorhandler(404)
 def page_not_found(e):

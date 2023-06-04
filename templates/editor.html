@@ -85,9 +85,10 @@
                                                                     <li><a class="dropdown-item" href="#"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#langs"
+                                                                            
                                                                             id="change-lang-btn">Lenguaje</a></li>
                                                                     <li>
-                                                                        <hr class="dropdown-divider">
+                                                                        <hr class="dropdown-divider" >
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             href="/dashboard">Salir</a></li>
@@ -228,7 +229,7 @@
                         {% if "google_picture" in session %}
                         <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
                         {% else %}
-                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                            <img alt="" width="32" height="32" class="rounded-circle me-2" id="profile-picture">
                         {% endif %}
                         <strong>{{  session['user_name']|title }} </strong>
                     </a>
@@ -285,8 +286,9 @@
                     <button type="button" class="btn-close text-light" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" data-bs-theme="dark">
                     <label for="select-theme">Apariencia del editor</label>
+                    <br>
                     <select class="form-select align-text-bottom" id="select-theme">
                         <option value="ambiance">Ambiance</option>
                         <option value="chaos">Chaos</option>
@@ -325,9 +327,10 @@
                         <option value="vibrant_ink">Vibrant Ink</option>
                         <option value="xcode">XCode</option>
                     </select>
-
                     <label for="font-select">Fuente</label>
-                    <select name="font-select" id="font-select">
+                    <br>
+                    <select class="form-select align-text-bottom" name="font-select" id="font-select">
+                        <br>
                         <option value="sans-serif">Sans serif</option>
                         <option value="serif">Serif</option>
                         <option value="Roboto">Roboto</option>
@@ -340,6 +343,7 @@
                         <option value="Open Sans">Open Sans</option>
                         <option value="Quicksand">Quicksand</option>
                     </select>
+                    
                     <!-- 
                         font-family: 'Inconsolata', mo
                         font-family: 'Montserrat', san
@@ -354,7 +358,8 @@
                      -->
 
                     <label for="font-size-select">Tamaño de la fuente</label>
-                    <select name="font-size-select" id="font-size-select">
+                    <br>
+                    <select class="form-select align-text-bottom" name="font-size-select" id="font-size-select">
                         <option value="11px">11px</option>
                         <option value="12px">12px</option>
                         <option value="14px">14px</option>
@@ -381,7 +386,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <select class="form-select" id="select-mode">
+                    <select class="form-select" id="select-mode" data-bs-theme="dark">
                         <option value="text">Texto</option>
                         <option value="html">HTML</option>
                         <option value="javascript">Javascript</option>
@@ -555,7 +560,7 @@
                 </div>
                 <div class="modal-body">
                     <label for="report">Describa el error:</label>
-                    <textarea name="report" id="report" class="form-control"></textarea>
+                    <textarea name="report" id="report" class="form-control" data-bs-theme="dark" ></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -602,8 +607,8 @@
     charset="utf-8"></script>
     <script src="{{ url_for('static', filename='ace-builds/src-noconflict/theme-monokai.js') }}" type="text/javascript"
     charset="utf-8"></script>
-    <script src="{{ url_for('static', filename='public/js/editor.js') }}">
-    </script>
+    <script src="{{ url_for('static', filename='public/js/editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='public/js/profile_pic.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
         crossorigin="anonymous"></script>

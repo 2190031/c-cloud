@@ -32,9 +32,12 @@
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <a href="#" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img alt="..."
-                                                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-                                                    width="90px" class="rounded-pill">
+                                                <!-- <img alt="..." width="90px" class="rounded-pill" id="profile-picture-display"> -->
+                                                {% if "google_picture" in session %}
+                                                    <img src="{{session['google_picture']}}" alt="" height="90" class="rounded-pill">
+                                                {% else %}
+                                                    <img alt="" width="90" height="90" class="rounded-pill" id="profile-picture-display">
+                                                {% endif %}
                                                 <!-- Enviar la imagen por variable de url desde la carpeta -->
                                             </a>
                                             <div class="ms-4">
@@ -106,7 +109,8 @@
                             <br>
                             <div class="text-end">
                                 <button type="button" class="btn btn-sm btn-neutral me-2">Cancelar</button>
-                                <button type="button" class="btn btn-sm btn-primary" id="update-data-btn" data-bs-toggle="modal" data-bs-target="#auth-update">Guardar</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="update-data-btn"
+                                    data-bs-toggle="modal" data-bs-target="#auth-update">Guardar</button>
                             </div>
                         </form>
                         <hr class="my-10" />
@@ -148,16 +152,19 @@
                 <div class="row">
                     <div class="p-2 col-10 mx-auto">
                         <label for="ver-email">Correo</label>
-                        <input type="email" name="ver-email" id="ver-email" class="form-control" placeholder="Correo" required>
+                        <input type="email" name="ver-email" id="ver-email" class="form-control" placeholder="Correo"
+                            required>
                     </div>
                     <div class="p-2 col-10 mx-auto">
                         <label for="ver-password">Contraseña</label>
-                        <input type="password" name="ver-password" id="ver-password" class="form-control" placeholder="Contraseña" required>
+                        <input type="password" name="ver-password" id="ver-password" class="form-control"
+                            placeholder="Contraseña" required>
                     </div>
                 </div>
             </div>
             <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
-                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal" id="confirm-update-btn">Confirmar</button>
+                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal"
+                    id="confirm-update-btn">Confirmar</button>
                 <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -183,4 +190,6 @@
 
 {% endblock %}
 {% block script %}
-<script src="{{ url_for('static', filename='public/js/profile.js') }}"></script>{% endblock %}
+<script src="{{ url_for('static', filename='public/js/profile.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='public/js/profile_pic.js') }}"></script> -->
+{% endblock %}
