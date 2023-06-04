@@ -1,23 +1,14 @@
-import secrets
-from flask import Flask, render_template, redirect, request, session, abort, jsonify
-from google.oauth2 import id_token
-from google_auth_oauthlib.flow import Flow
-from db_models import db, defaultroles, sessions, user, error
-from createUserFolder import newUserFolder, toStandardName
-import pathlib, google, requests, cachecontrol, os, traceback
-import paypalrestsd
+import os
 
+from flask import Flask, render_template, redirect, send_file, session
 
-from render_pages import *
-from file_management import (
-    load_file,
-    create_file,
-    load_file__blank,
-    send_error_report,
-    save_preference,
-    upload_p_picture,
-)
+from paypal_payments import payment, execute, payment_premium, execute_premium
+from user_session import callback, login_google
+
+from db_models import db, defaultlicence, defaultroles
 from user_session import login, signup, update_p_data, auth_update
+from render_pages import *
+from file_management import (load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:a19b15821@localhost/c_cloud"
@@ -26,221 +17,44 @@ app.secret_key = "ODNFAOFNA09q09qpomao989j"
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-GOOGLE_CLIENT_ID = (
-    "621438977816-o6ee2tto4rgsk9isrvpv6mm1ctvnkagb.apps.googleusercontent.com"
-)
-client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-
-flow = Flow.from_client_secrets_file(
-    client_secrets_file=client_secrets_file,
-    scopes=[
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-        "openid",
-    ],
-    redirect_uri="http://127.0.0.1:5000/callback",
-)
-
 db.init_app(app)
-
 with app.app_context():
     try:
         db.create_all()
         db.session.commit()
         defaultroles()
+        defaultlicence()
     except:
-        print("error")
+        print("hola")
         
 @app.route("/")
 def index():
     return render_index()
   
-paypalrestsdk.configure({
-    "mode": "sandbox",  # sandbox or live
-    "client_id": "AdvcMAZRch_a2_IX8HcOahjLOrd0PGTh4sjj_Fq6UdgrVUsf38Gwttt04IVoCR5hc0nKcONkEGXjtghB",
-    "client_secret": "EM2-afNHVKHKLSoFtoDKbQ4Ap1U3VTmaXiXT3-8CwOILetphM5qt_KwEy8244739kZSDGJddmbcGZ5ar"
-})
 
-@app.route('/planes')
+@app.route('/licences')
 def planes():
-    return render_template('planes.html')
+    return render_template('licences.html')
 
 @app.route('/payment', methods=['POST'])
-def payment():
-    payment = paypalrestsdk.Payment({
-        "intent": "sale",
-        "payer": {
-            "payment_method": "paypal"
-        },
-        "redirect_urls": {
-            "return_url": "http://127.0.0.1:5000/execute",
-            "cancel_url": "http://127.0.0.1:5000/"
-        },
-        "transactions": [{
-            "item_list": {
-                "items": [{
-                    "name": "Plan Básico",
-                    "sku": "BASICO",
-                    "price": "10.00",
-                    "currency": "USD",
-                    "quantity": 1
-                }]
-            },
-            "amount": {
-                "total": "10.00",
-                "currency": "USD"
-            },
-            "description": "This is the payment transaction description."
-        }]
-    })
-
-    if payment.create():
-        print('Payment success!')
-    else:
-        print(payment.error)
-
-    return jsonify({'paymentID': payment.id})
+def pay():
+    return payment()
 
 @app.route('/execute', methods=['POST'])
-def execute():
-    success = False
-
-    payment = paypalrestsdk.Payment.find(request.form['paymentID'])
-
-    if payment.execute({'payer_id': request.form['payerID']}):
-        print('Execute success!')
-        success = True
-    else:
-        print(payment.error)
-
-    return jsonify({'success': success})
+def execute_pay():
+    return execute()
 
 @app.route('/payment/premium', methods=['POST'])
-def payment_premium():
-    payment = paypalrestsdk.Payment({
-        "intent": "sale",
-        "payer": {
-            "payment_method": "paypal"
-        },
-        "redirect_urls": {
-            "return_url": "http://127.0.0.1:5000/execute/premium",
-            "cancel_url": "http://127.0.0.1:5000/"
-        },
-        "transactions": [{
-            "item_list": {
-                "items": [{
-                    "name": "Plan Premium",
-                    "sku": "PREMIUM",
-                    "price": "20.00",
-                    "currency": "USD",
-                    "quantity": 1
-                }]
-            },
-            "amount": {
-                "total": "20.00",
-                "currency": "USD"
-            },
-            "description": "This is the payment transaction description."
-        }]
-    })
-
-    if payment.create():
-        print('Payment success!')
-    else:
-        print(payment.error)
-
-    return jsonify({'paymentID': payment.id})
+def payment__premium():
+    return payment_premium()
 
 @app.route('/execute/premium', methods=['POST'])
-def execute_premium():
-    success = False
-
-    payment = paypalrestsdk.Payment.find(request.form['paymentID'])
-
-    if payment.execute({'payer_id': request.form['payerID']}):
-        print('Execute success!')
-        
-        success = True
-    else:
-        print(payment.error)
-
-    return jsonify({'success': success})
+def execute_premium_payment():
+    return execute_premium()
 
 @app.route("/callback")
-def callback():
-    flow.fetch_token(authorization_response=request.url)
-    if "state" in session:
-        if not session["state"] == request.args["state"]:
-            abort(500)
-
-        credentials = flow.credentials
-        request_session = requests.Session()
-        cached_session = cachecontrol.CacheControl(request_session)
-        token_request = google.auth.transport.requests.Request(session=cached_session)
-
-        id_info = id_token.verify_oauth2_token(
-            id_token=credentials._id_token,
-            request=token_request,
-            audience=GOOGLE_CLIENT_ID,
-        )
-
-        googleid = id_info.get("sub")
-        google_name = id_info.get("name")
-        google_email = id_info.get("email")
-        google_picture = id_info.get("picture")
-        if "family_name" in id_info:
-            google_family_name = id_info["family_name"]
-        else:
-            google_family_name = None
-
-        google_username = google_email.split("@")[0]
-        google_user_verify = user.query.filter_by(google_id=googleid).first()
-
-        if google_user_verify:
-            session.clear()
-            id = google_user_verify.iduser
-            newsession = sessions(iduser=id)
-            try:
-                db.session.add(newsession)
-                db.session.commit()
-
-                _iduser = user.query.filter_by(google_id = googleid).first()
-                print(_iduser)
-
-                session["user_id"] = _iduser.iduser
-                session["user_name"] = google_name
-                session["user_email"] = id_info.get("email")
-                session["google_picture"] = id_info.get("picture")
-                session["user_username"] = google_user_verify.username
-
-                return redirect("/")
-            except Exception as e:
-                print(traceback.format_exc())
-                return jsonify({'error': str(e)})
-        else:
-            google_verify = user.query.filter_by(email=google_email).first()
-        if google_verify:
-            session["error"] = "El correo está registrado con contraseña. Por favor, ingrese los credenciales"
-            return redirect("/login")
-        else:
-            new_user = user(
-                google_id=googleid,
-                name=google_name,
-                username=google_username,
-                surname=google_family_name,
-                password=None,
-                salt=None,
-                email=google_email,
-                picture=google_picture,
-                usertype=1,
-            )
-            db.session.add(new_user)
-            db.session.commit()
-            newUserFolder(google_username)
-            session["success"] = "Inicie sesión nuevamente"
-            return redirect("/login")
-    else:
-        return redirect("/")
+def call_back():
+    return callback()
 
 @app.route("/signup", methods=["POST", "GET"])
 
@@ -252,16 +66,8 @@ def log_in():
     return login()
 
 @app.route("/loginG")
-def login_google():
-    if "google_id" in session or "user_id" in session:
-        return redirect("/")
-    else:
-        state = secrets.token_urlsafe(16)  # Generar un valor único para 'state'
-        session["state"] = state
-        authorization_url, _ = flow.authorization_url(
-            prompt="select_account", state=state
-        )
-        return redirect(authorization_url)
+def log_in_google():
+    return login_google()
 
 @app.route("/login")
 def login_page():
