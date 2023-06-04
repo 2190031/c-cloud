@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='public/img/icon.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/src-min-noconflict/ace.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/css/ace.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/planes.css') }}" media="screen">
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='public/js/jquery.js') }}"
+        defer=""></script>
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='public/js/nicepage.js') }}"
+        defer=""></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/nicepage.css') }}" media="screen">
+    <link id="u-theme-google-font" rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <link id="u-page-google-font" rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i">
+
+
+
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+</head>
+
+<body>
+
+    <div class="banner" id="header">
+        <div class="container" id="nav">
+            <ul class="nav justify-content-end" style="font-size: 16px !important;
+            margin: 0;
+            line-height: 0;"> 
+                <li class="nav-item rounded-lg">
+                    <a class="nav-link text-light" href="/" id="index">Inicio</a>
+                </li>
+                <li class="nav-item rounded-lg">
+                    <a class="nav-link text-light" href="/licences" id="index">Planes</a>
+                </li>
+                {% if 'user_id' in session or 'google_id' in session %}
+                <li class="nav-item rounded-lg">
+                    <a class="nav-link text-light" href="/dashboard" id="index">Mi Panel</a>
+                </li>
+                {% endif %}
+                <div class="vr" style="margin-right: 20px;"></div>
+                {% if 'user_id' in session or 'google_id' in session %}
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if "google_picture" in session %}
+                        <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                        {% else %}
+                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                        {% endif %}
+                        <strong>{{  session['user_name']|title }} </strong>
+                    </a>
+                    <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">                       
+                        <li><a class="dropdown-item text-white" href="/settings">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+                                </svg>
+                                Settings
+                            </a></li>
+                        <li><a class="dropdown-item text-white" href="/profile">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-person" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                                </svg>
+                                Profile
+                            </a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-white" href="/logout">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                    <path fill-rule="evenodd"
+                                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                </svg>
+                                Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+
+                {% else %}
+                <li class="nav-item rounded-lg">
+                    <a class="nav-link btn btn-outline-light btn-sm" href="/login" id="login">Iniciar sesión</a>
+                </li>
+                <li class="nav-item rounded-lg">
+                    <a class="nav-link btn btn-outline-light btn-sm" href="/signup" id="signup">Registrarse</a>
+                </li>
+
+                {% endif %}
+            </ul>
+        </div>
+        <div class="bann-logo">
+            <h1 class="display-3 shadow-sm" style="font-size: 4rem;font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Noto Sans,Liberation Sans,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-weight: 300;">C-cloud</h1>
+            <a class="btn btn-outline-light" href="/" id="bann-btn">Ver más</a>
+        </div>
+
+    </div>
+
+    <section class="body">
+
+        <section class="u-align-center u-clearfix u-section-1" id="carousel_5fcd"
+            style="max-width: 1500px; margin: 0 auto;">
+            <div class="u-clearfix u-sheet u-sheet-1">
+                <h2 class="u-custom-font u-font-source-sans-pro u-text u-text-default u-text-palette-5-dark-2 u-text-1"
+                    style="color: white !important;">Planes promocionales</h2>
+                <p class="u-text u-text-default u-text-2" style="color: white !important;">C-Cloud es un sistema de
+                    almacenamiento en la nube que permite a los usuarios guardar, sincronizar y acceder a sus archivos y
+                    datos de manera segura desde cualquier dispositivo conectado a Internet. </p>
+                <div class="u-expanded-width u-table u-table-responsive u-table-1">
+                    <br>
+                    <span class="u-text-icon u-text-palette-1-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                            xml:space="preserve" class="u-svg-content" viewBox="0 0 426.667 426.667" x="0px" y="0px"
+                            style="width: 1em; height: 1em;">
+                            <g>
+                                <g>
+                                    <path
+                                        d="M421.876,56.307c-6.548-6.78-17.352-6.968-24.132-0.42c-0.142,0.137-0.282,0.277-0.42,0.42L119.257,334.375    l-90.334-90.334c-6.78-6.548-17.584-6.36-24.132,0.42c-6.388,6.614-6.388,17.099,0,23.713l102.4,102.4    c6.665,6.663,17.468,6.663,24.132,0L421.456,80.44C428.236,73.891,428.424,63.087,421.876,56.307z">
+                                    </path>
+                                </g>
+                            </g>
+                        </svg>
+                    </span>
+                  
+                    <table class="u-table-entity u-table-entity-1"
+                        style="border: 0;padding: 10px !important;border-collapse: separate;border-spacing: 20px;">
+                        <colgroup>
+                            <col width="23.7%">
+                            <col width="26.1%">
+                            <col width="25.2%">
+                            <col width="25%">
+                        </colgroup>
+                        <thead class="u-align-center u-table-header u-table-header-1" style="
+    margin: 10px;
+">
+                            <tr style="
+    padding: 10px;
+">
+                                <th class="u-align-left u-border-3 u-border-white u-table-cell u-table-cell-1"
+                                    style="color: white; background-color:rgba(225, 187, 187, 0.571); border: 0;">
+                                    Comparación de los planes </th>
+
+
+                                <th class="u-border-3 u-border-white u-palette-3-base u-table-cell u-table-cell-3"
+                                    style="color: rgb(41, 41, 2);  background-color:rgba(255, 255, 0, 0.793); border: 0;">
+                                    <b>Avanzado</b>
+                                </th>
+                                <th class="u-border-3 u-border-white u-palette-1-base u-table-cell u-table-cell-4"
+                                    style="color: white; background-color: rgba(141, 141, 237, 0.955); border: 0;">
+                                    <b>Estándar</b>
+                                </th>
+                                <th class="u-border-3 u-border-white u-palette-5-dark-2 u-table-cell u-table-cell-2"
+                                    style="color: white; border: 0;"><b>Gratuito</b>
+                                    <br>
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tbody class="u-align-center u-table-body u-table-body-1">
+                            <tr>
+                                <td class="u-align-left u-border-3  u-table-cell" style="color: white; border: 0;">
+                                    Precio</td>
+                                <td class="u-border-2  u-table-cell u-text-palette-3-base u-table-cell-7"
+                                    style="font-size: 24px;   border: 0;">
+                                    USD$19.99</td>
+                                <td class="u-border-2  u-table-cell u-text-palette-1-base u-table-cell-8"
+                                    style="font-size: 24px;  border: 0;">
+                                    USD$9.99</td>
+                                <td class="u-border-2  u-table-cell u-text-palette-5-dark-1 u-table-cell-6"
+                                    style="font-size: 24px; border: 0;">
+                                    USD$0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="u-align-left u-border-3 u-border-white u-first-column u-table-cell"
+                                    style="color: white; border: 0;">Espacio de almacenamiento</td>
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-11"
+                                    style="color: white; border: 0;">1 TB</td>
+                                <td class="u-border-2 u-border-white u-table-cell" style="color: white; border: 0;">100
+                                    GB</td>
+                                <td class="u-border-2 u-border-white u-table-cell" style="color: white; border: 0;">500
+                                    MB</td>
+
+                            </tr>
+                            <tr>
+                                <td class="u-align-left u-border-3 u-border-white u-first-column u-table-cell"
+                                    style="color: white; border: 0;">Soporte 24/7</td>
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-14" style="border: 0;">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                                        viewBox="0 0 100 100">
+                                        <path d="M10,50 L40,80 L90,20" fill="none" stroke="white" stroke-width="4" />
+                                    </svg>
+
+                                </td>
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-16"
+                                    style="color: white; border: 0;">-</td>
+
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-16"
+                                    style="color: white; border: 0;">-</td>
+                            </tr>
+                            <tr>
+                                <td class="u-align-left u-border-3 u-border-white u-table-cell"
+                                    style="color: white; border: 0;">Copias de seguridad
+                                    automáticas </td>
+                                <td class="u-border-2 u-border-white u-table-cell u-text-palette-1-base u-table-cell-14"
+                                    style="color: white; border: 0;">
+                                    <span class="u-text-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                                            viewBox="0 0 100 100">
+                                            <path d="M10,50 L40,80 L90,20" fill="none" stroke="white"
+                                                stroke-width="4" />
+                                        </svg>
+                                    </span>
+                                </td>
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-16"
+                                    style="color: white; border: 0;">-</td>
+
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-20"
+                                    style="color: white; border: 0;">-</td>
+
+
+                            </tr>
+                            <tr>
+                                <td class="u-align-left u-border-2 u-border-white u-first-column u-table-cell"
+                                    style="color: white; border: 0;">Acceso
+                                    seguro</td>
+                                <td class="u-border-2 u-border-white u-table-cell u-text-palette-1-base u-table-cell-14"
+                                    style="border: 0;">
+                                    <span class="u-text-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                                            viewBox="0 0 100 100">
+                                            <path d="M10,50 L40,80 L90,20" fill="none" stroke="white"
+                                                stroke-width="4" />
+                                        </svg>
+                                    </span>
+                                </td>
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-14"
+                                    style="border: 0; color: white;"> <span class="u-text-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                                            viewBox="0 0 100 100">
+                                            <path d="M10,50 L40,80 L90,20" fill="none" stroke="white"
+                                                stroke-width="4" />
+                                        </svg>
+                                    </span>
+                                </td>
+
+                                <td class="u-border-2 u-border-white u-table-cell u-text-palette-1-base u-table-cell-14"
+                                    style="color: white; border: 0;">
+                                    <span class="u-text-icon" style="color: white;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                                            viewBox="0 0 100 100">
+                                            <path d="M10,50 L40,80 L90,20" fill="none" stroke="white"
+                                                stroke-width="4" />
+                                        </svg>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                            <tr>
+                                <td class="u-align-left u-border-3 u-border-white u-first-column u-table-cell"
+                                    style="color: white; border: 0;">Capacidad
+                                    de archivos</td>
+                                <td class="u-border-2 u-border-white u-table-cell u-table-cell-11"
+                                    style="color: white; border: 0;">
+                                    Ilimitado</td>
+                                <td class="u-border-2 u-border-white u-table-cell" style="color: white; border: 0;">50
+                                </td>
+                                <td class="u-border-2 u-border-white u-table-cell" style="color: white; border: 0;">5
+                                </td>
+                            </tr>
+                            {% if 'user_id' in session %}
+                            <tr>
+                                <td class="u-align-left u-border-3 u-border-white u-table-cell" style="border: 0;"></td>
+                                <td class="u-border-3 u-border-white u-table-cell" style="border: 0;">
+                                    
+                                    <div class="paypal-btn" id="paypal-button-premium"></div>
+                                </td>
+                                <td class="u-border-3 u-border-white u-table-cell u-table-cell-27" style="border: 0;">
+                                    <div class="paypal-btn" id="paypal-button"></div>
+                                    
+                                </td>
+                                <td class="u-border-3 u-border-white u-table-cell" style="border: 0;">
+                                    <a href="#" class="u-border-radius-50 u-btn u-btn-round u-button-style u-palette-3-base u-btn-2">Seleccionado</a>
+                                 
+                                </td>
+
+                                <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+                                <script>
+                                    var CREATE_BASIC_PAYMENT_URL = 'http://127.0.0.1:5000/payment';
+                                    var EXECUTE_BASIC_PAYMENT_URL = 'http://127.0.0.1:5000/execute';
+
+                                    var CREATE_PREMIUM_PAYMENT_URL = 'http://127.0.0.1:5000/payment/premium';
+                                    var EXECUTE_PREMIUM_PAYMENT_URL = 'http://127.0.0.1:5000/execute/premium';
+
+                                    paypal.Button.render({
+
+                                        env: 'sandbox', // Or 'sandbox'
+
+                                        commit: true, // Show a 'Pay Now' button
+
+                                        payment: function () {
+                                            return paypal.request.post(CREATE_BASIC_PAYMENT_URL).then(function (data) {
+                                                return data.paymentID;
+                                            });
+                                        },
+
+                                        onAuthorize: function (data) {
+                                            return paypal.request.post(EXECUTE_BASIC_PAYMENT_URL, {
+                                                paymentID: data.paymentID,
+                                                payerID: data.payerID
+                                            }).then(function (res) {
+
+                                                console.log(res.success)
+                                                // The payment is complete!
+                                                // You can now show a confirmation message to the customer
+                                            });
+                                        }
+
+                                    }, '#paypal-button');
+
+                                    paypal.Button.render({
+
+                                        env: 'sandbox', // Or 'sandbox'
+
+                                        commit: true, // Show a 'Pay Now' button
+
+                                        payment: function () {
+                                            return paypal.request.post(CREATE_PREMIUM_PAYMENT_URL).then(function (data) {
+                                                return data.paymentID;
+                                            });
+                                        },
+
+                                        onAuthorize: function (data) {
+                                            return paypal.request.post(EXECUTE_PREMIUM_PAYMENT_URL, {
+                                                paymentID: data.paymentID,
+                                                payerID: data.payerID
+                                            }).then(function (res) {
+
+                                                console.log(res.success)
+                                                // The payment is complete!
+                                                // You can now show a confirmation message to the customer
+                                            });
+                                        }
+
+                                    }, '#paypal-button-premium');
+                                </script>
+                                          
+                            </tr>
+                            {% else %} 
+                             <tr style="font-size: 22px; color: white;">
+                                 <td style="text-align: center" colspan="7"><a href="/signup" style="font-size: 22px; margin: 10px;">  Regístrate </a> o  <a href="/login" style="font-size: 22px; margin: 10px;">  Inicia sesión </a> </td>
+                             </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+    </section>
+
+
+
+    <div class="container-fluid" id="footer">
+        <footer class="object-fit-fill ">
+            <div class="container">
+                <footer class="pt-5">
+                    <div class="row text">
+                        <div class="col-6 col-md-2 mb-3">
+                            <h5>Section</h5>
+                            <ul class="nav flex-column text ligh">
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Home</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Features</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Pricing</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">FAQs</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">About</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-6 col-md-2 mb-3">
+                            <h5>Section</h5>
+                            <ul class="nav flex-column">
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Home</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Features</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Pricing</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">FAQs</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">About</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-6 col-md-2 mb-3">
+                            <h5>Section</h5>
+                            <ul class="nav flex-column">
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Home</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Features</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Pricing</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">FAQs</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">About</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-5 offset-md-1 mb-3">
+                            <form>
+                                <h5>Subscribe to our newsletter</h5>
+                                <p>Monthly digest of what's new and exciting from us.</p>
+                                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                                    <label for="newsletter1" class="visually-hidden">Email address</label>
+                                    <input id="newsletter1" type="text" class="form-control"
+                                        placeholder="Email address">
+                                    <button class="btn btn-primary" type="button">Subscribe</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
+                        <p>c-cloud© 2022 Company, Inc. All rights reserved.</p>
+                        <!-- <button class="sticky-bottom float-end go-top"><img src="https://cdn-icons-png.flaticon.com/512/130/130906.png" alt=""></button> -->
+                    </div>
+                </footer>
+            </div>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='public/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
