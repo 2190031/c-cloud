@@ -97,9 +97,9 @@
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     {% if "google_picture" in session %}
-                    <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
                     {% else %}
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <img alt="" width="32" height="32" class="rounded-circle me-2" id="profile-picture">
                     {% endif %}
 
                     <strong>{{ username }}</strong>
@@ -181,6 +181,7 @@
     </script>
 
     {% block script %}{% endblock %}
+    <script src="{{ url_for('static', filename='public/js/profile_pic.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
         crossorigin="anonymous"></script>
