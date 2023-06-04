@@ -2,11 +2,11 @@ import traceback, hashlib, logging, secrets, os, pathlib, google, requests, cach
 
 from flask import render_template, request, redirect, session, jsonify, abort
 
-from sqlalchemy import update
+from sqlalchemy import desc, update
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 
-from db_models import db, user,  error, sessions
+from db_models import db, licence, paytransaction, user,  error, sessions
 from hash import hash_password, check_credentials
 from createUserFolder import newUserFolder, toStandardName
 from sendMail import send_mail
@@ -64,13 +64,23 @@ def callback():
                 db.session.commit()
 
                 _iduser = user.query.filter_by(google_id = googleid).first()
-                print(_iduser)
 
                 session["user_id"] = _iduser.iduser
                 session["user_name"] = google_name
                 session["user_email"] = id_info.get("email")
                 session["google_picture"] = id_info.get("picture")
                 session["user_username"] = google_user_verify.username
+
+                user_id_licence = session.get('user_id')
+
+                last_transaction = paytransaction.query.filter_by(iduser=user_id_licence).order_by(desc(paytransaction.datepaid)).first()
+                if last_transaction:
+                    plan = licence.query.get(last_transaction.idlicence).idlicence
+                    session["id_licence_user"] = plan
+                else:
+                    plan = licence.query.get(3).idlicence
+                    session["id_licence_user"] = plan
+                   
 
                 return redirect("/")
             except Exception as e:
@@ -182,8 +192,18 @@ def login():
                     session['user_id'] = id
                     session['user_username'] = toStandardName(username)
                     session['user_email'] = email
-    
-                    print(session.get('user_id'), session.get('user_username'), session.get('user_email'))
+
+                    user_id_licence = session.get('user_id')
+                
+                    last_transaction = paytransaction.query.filter_by(iduser=user_id_licence).order_by(desc(paytransaction.datepaid)).first()
+                    if last_transaction:
+                        plan = licence.query.get(last_transaction.idlicence).idlicence
+                        session["id_licence_user"] = plan
+
+                    else:
+                        plan = licence.query.get(3).idlicence
+                        session["id_licence_user"] = plan                   
+                        
 
                     return redirect('/dashboard')
                 except:

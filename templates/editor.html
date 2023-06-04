@@ -15,7 +15,7 @@
     <title>Editor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='public/css/editor_style.css') }}">
 </head>
-
+{% if 'user_id' in session %}
 <body id="body">
     <nav class="navbar-expand-lg bg-dark text-white fixed-top" data-bs-theme="dark">
         <div class="container-fluid">
@@ -623,5 +623,5 @@
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
-
+{% endif %}
 </html>
