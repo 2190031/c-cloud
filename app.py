@@ -25,7 +25,7 @@ with app.app_context():
         defaultroles()
         defaultlicence()
     except:
-        print("hola")
+        print("")
         
 @app.route("/")
 def index():

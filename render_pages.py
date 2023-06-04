@@ -2,7 +2,6 @@ import os, datetime
 
 from flask import render_template, session, redirect, request
 from sqlalchemy import desc
-
 from db_models import licence, paytransaction, user
 from createUserFolder import toNonStandardName, toStandardName
 
@@ -21,13 +20,11 @@ def render_licences():
         user_id = session.get('user_id')
         last_transaction = paytransaction.query.filter_by(iduser=user_id).order_by(desc(paytransaction.datepaid)).first()
         if last_transaction:
-            
-            plan = licence.query.get(last_transaction.idlicence).plan
+            plan = licence.query.get(last_transaction.idlicence).idlicence
             print(plan)
             return render_template('licences.html', title=title)
         else:
-
-            plan = licence.query.get(3).plan
+            plan = licence.query.get(3).idlicence
             print(plan)
             return render_template('licences.html', title=title)
     else:
@@ -50,8 +47,6 @@ def render_editor():
             file_dict['update_time'] = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
             file_dict['extension'] = os.path.splitext(file)[1]
             file_list.append(file_dict)
-
-
         return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'), o_filename=o_filename)
 
 def render_dashboard():

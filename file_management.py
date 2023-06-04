@@ -1,7 +1,8 @@
-import os, traceback, builtins, datetime, base64
+import os, traceback, builtins, datetime, base64, io
 
 from flask import request, session, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
+from PIL import Image
 
 from db_models import db, file, detailsfile, change, historial, user, error, preference
 
@@ -216,11 +217,28 @@ def get_profile_pic():
     path = os.path.join(_dir)
 
     if os.path.exists(path):
-        image_bytes = builtins.open(path, 'rb').read()
-        # Convertir la imagen a base64
-        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+        with Image.open(path) as image:
+        # Recortar la imagen en un cuadrado
+            width, height = image.size
+            size = min(width, height)
+            left = (width - size) // 2
+            top = (height - size) // 2
+            right = (width + size) // 2
+            bottom = (height + size) // 2
+            cropped_image = image.crop((left, top, right, bottom))
 
-        # Retornar la imagen como respuesta en formato JSON
+            # Redimensionar la imagen a un tamaño específico (opcional)
+            # cropped_image = cropped_image.resize((200, 200))
+
+            # Convertir la imagen recortada a base64
+            buffered = io.BytesIO()
+            cropped_image.save(buffered, format="PNG")
+            image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        # image_bytes = builtins.open(path, 'rb').read()
+        # # Convertir la imagen a base64
+        # image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+
+        # # Retornar la imagen como respuesta en formato JSON
         return {'image': image_base64}
     else:
         return {'error': 'El archivo de imagen no existe'}
