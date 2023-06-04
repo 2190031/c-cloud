@@ -1,8 +1,9 @@
 import os, datetime
 
 from flask import render_template, session, redirect, request
+from sqlalchemy import desc
 
-from db_models import user
+from db_models import licence, paytransaction, user
 from createUserFolder import toNonStandardName, toStandardName
 
 def render_index():
@@ -13,6 +14,24 @@ def render_index():
 def render_login():
     title = 'Iniciar sesión'
     return render_template('login.html', title=title)
+
+def render_licences():
+    title = 'Planes - C-Cloud'
+    if 'user_id' in session or 'google_id' in session:
+        user_id = session.get('user_id')
+        last_transaction = paytransaction.query.filter_by(iduser=user_id).order_by(desc(paytransaction.datepaid)).first()
+        if last_transaction:
+            
+            plan = licence.query.get(last_transaction.idlicence).plan
+            print(plan)
+            return render_template('licences.html', title=title)
+        else:
+
+            plan = licence.query.get(3).plan
+            print(plan)
+            return render_template('licences.html', title=title)
+    else:
+        return render_template('licences.html', title=title)
 
 def render_editor():
     if 'user_id' in session or 'google_id' in session:
@@ -34,12 +53,6 @@ def render_editor():
 
 
         return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'), o_filename=o_filename)
-
-def render_dashboard():
-    if 'user_id' not in session:
-        return redirect('/login')
-    else:
-        return redirect('/login')
         
 def render_dashboard():
     if 'user_id' in session or 'google_id' in session:
