@@ -34,7 +34,7 @@ def index():
 
 @app.route('/licences')
 def planes():
-    return render_template('licences.html')
+    return render_licences()
 
 @app.route('/payment', methods=['POST'])
 def pay():

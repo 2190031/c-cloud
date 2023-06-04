@@ -10,8 +10,7 @@ class role(db.Model):
 
 	__table_args__ = (db.UniqueConstraint('role', name='_role_uc'),)
 
-	def __init__(self, idrole, role):
-		self.idrole = idrole
+	def __init__(self, role):
 		self.role = role
 	
 	def __repr__(self):
