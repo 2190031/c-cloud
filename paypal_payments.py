@@ -40,21 +40,18 @@ def payment():
         print('Payment success!')
     else:
         print(payment.error)
+    return jsonify({'paymentID':payment.id})
 
-    return jsonify({'paymentID': payment.id})
 
 def execute():
     success = False
-
     payment = paypalrestsdk.Payment.find(request.form['paymentID'])
-
-    if payment.execute({'payer_id': request.form['payerID']}):
+    if payment.execute({'payer_id':request.form['payerID']}):
         print('Execute success!')
         success = True
     else:
         print(payment.error)
-
-    return jsonify({'success': success})
+    return jsonify({'success':success})
 
 def payment_premium():
     payment = paypalrestsdk.Payment({
@@ -88,19 +85,16 @@ def payment_premium():
         print('Payment success!')
     else:
         print(payment.error)
+    return jsonify({'paymentID':payment.id})
 
-    return jsonify({'paymentID': payment.id})
 
 def execute_premium():
     success = False
-
     payment = paypalrestsdk.Payment.find(request.form['paymentID'])
-
-    if payment.execute({'payer_id': request.form['payerID']}):
+    if payment.execute({'payer_id':request.form['payerID']}):
         print('Execute success!')
-        
         success = True
     else:
         print(payment.error)
+        return jsonify({'success':success})
 
-    return jsonify({'success': success})

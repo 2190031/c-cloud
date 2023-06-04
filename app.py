@@ -1,11 +1,9 @@
 import os
 
-from flask import Flask, render_template, redirect, session, send_file
-
+from flask import Flask, render_template, redirect, session
 from paypal_payments import payment, execute, payment_premium, execute_premium
 from user_session import callback, login_google
-
-from db_models import db, defaultroles
+from db_models import db, defaultlicence, defaultroles
 from user_session import login, signup, update_p_data, auth_update
 from render_pages import *
 from file_management import (load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture, get_profile_pic)
@@ -23,17 +21,18 @@ with app.app_context():
         db.create_all()
         db.session.commit()
         defaultroles()
+        defaultlicence()
     except:
-        print("error")
+        print("hola")
         
 @app.route("/")
 def index():
     return render_index()
   
 
-@app.route('/planes')
+@app.route('/licences')
 def planes():
-    return render_template('planes.html')
+    return render_template('licences.html')
 
 @app.route('/payment', methods=['POST'])
 def pay():
