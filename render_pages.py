@@ -1,6 +1,8 @@
-from flask import render_template, session, redirect, request
-from db_models import user
 import os, datetime
+
+from flask import render_template, session, redirect, request
+
+from db_models import user
 from createUserFolder import toNonStandardName, toStandardName
 
 def render_index():
