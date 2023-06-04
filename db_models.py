@@ -11,8 +11,7 @@ class role(db.Model):
 
 	__table_args__ = (db.UniqueConstraint('role', name='_role_uc'),)
 
-	def __init__(self, idrole, role):
-		self.idrole = idrole
+	def __init__(self, role):
 		self.role = role
 	
 	def __repr__(self):
@@ -20,20 +19,20 @@ class role(db.Model):
     
 def defaultroles():
 	try:
-		userrole = role(idrole=1, role='user')
+		userrole = role(role='user')
 		db.session.add(userrole)
 		db.session.commit()
 		print('role user inserted')
 	except:
-		print('Error')
+		print('')
 
 	try:
-		adminrole = role(idrole=2, role='admin')
+		adminrole = role(role='admin')
 		db.session.add(adminrole)
 		db.session.commit()
 		print('role admin inserted')
 	except:
-		print('Error')
+		print('')
 
 class user(db.Model):
     __tablename__ = 'user'
@@ -171,18 +170,51 @@ class error(db.Model):
 class licence(db.Model):
 	__tablename__ = 'licence'
 	idlicence = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	plan = db.Column(db.String(100), nullable=False)
-	price = db.Column(db.Float, nullable=False)
-	packages = db.Column(db.String(45), nullable=False)
+	plan = db.Column(db.String(100),nullable=False,unique=True)
+	price = db.Column(db.Float,nullable=False)
+	max_storage_mb = db.Column(db.Integer,nullable=False)
+	support_24_7 = db.Column(db.Boolean,nullable=False)
+	automatic_backups = db.Column(db.Boolean,nullable=False)
+	secure_access = db.Column(db.Boolean,nullable=False)
+	file_capacity = db.Column(db.Integer,nullable=False)
 
-
-	def __init__(self, plan, price, packages):
+	def __init__(self, plan, price, max_storage_mb, support_24_7, automatic_backups, secure_access, file_capacity):
 		self.plan = plan
 		self.price = price
-		self.packages = packages
+		self.max_storage_mb = max_storage_mb
+		self.support_24_7 = support_24_7
+		self.automatic_backups = automatic_backups
+		self.secure_access = secure_access
+		self.file_capacity = file_capacity
 
 	def __repr__(self):
 		return "<task %r>" % self.idlicence
+
+def defaultlicence():
+    try:
+        licence1 = licence(plan='Plan Premium', price=19.99, max_storage_mb=51200, support_24_7=True, automatic_backups=True, secure_access=True, file_capacity=5000)
+        db.session.add(licence1)
+        db.session.commit()
+        print('Plan Premium inserted')
+    except Exception as e:
+        print('')
+
+    try:
+        licence2 = licence(plan='Plan Estandar', price=9.99, max_storage_mb=25600, support_24_7=True, automatic_backups=False, secure_access=True, file_capacity=50)
+        db.session.add(licence2)
+        db.session.commit()
+        print('Plan Estandar inserted')
+    except Exception as e:
+       print('')
+
+
+    try:
+        licence3 = licence(plan='Plan Gratuito', price=0, max_storage_mb=500, support_24_7=False, automatic_backups=False, secure_access=True, file_capacity=5)
+        db.session.add(licence3)
+        db.session.commit()
+        print('Plan Gratuito inserted')
+    except Exception as e:
+        print('')
 
 class detailsLicence(db.Model):
     __tablename__ = 'detailslicence'
