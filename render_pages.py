@@ -22,17 +22,16 @@ def render_licences():
         last_transaction = paytransaction.query.filter_by(iduser=user_id).order_by(desc(paytransaction.datepaid)).first()
         if last_transaction:
             
-            plan = licence.query.get(last_transaction.idlicence).plan
+            plan = licence.query.get(last_transaction.idlicence).idlicence
             print(plan)
             return render_template('licences.html', title=title)
         else:
 
-            plan = licence.query.get(3).plan
+            plan = licence.query.get(3).idlicence
             print(plan)
             return render_template('licences.html', title=title)
     else:
         return render_template('licences.html', title=title)
-
 
 def render_editor():
     if 'user_id' in session or 'google_id' in session:
@@ -54,12 +53,6 @@ def render_editor():
 
 
         return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'), o_filename=o_filename)
-
-def render_dashboard():
-    if 'user_id' not in session:
-        return redirect('/login')
-    else:
-        return redirect('/login')
         
 def render_dashboard():
     if 'user_id' in session or 'google_id' in session:
