@@ -1,10 +1,8 @@
 import os
 
 from flask import Flask, render_template, redirect, send_file, session
-
 from paypal_payments import payment, execute, payment_premium, execute_premium
 from user_session import callback, login_google
-
 from db_models import db, defaultlicence, defaultroles
 from user_session import login, signup, update_p_data, auth_update
 from render_pages import *

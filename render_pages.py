@@ -1,7 +1,9 @@
+import os, datetime
+
 from flask import render_template, session, redirect, request
+
 from sqlalchemy import desc
 from db_models import licence, paytransaction, user
-import os, datetime
 from createUserFolder import toNonStandardName, toStandardName
 
 def render_index():
