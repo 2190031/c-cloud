@@ -35,12 +35,7 @@ def render_editor():
 
         return render_template('editor.html', user=username, _user=username, files=file_list, id=session.get('user_id'), o_filename=o_filename)
 
-def render_dashboard():
-    if 'user_id' not in session:
-        return redirect('/login')
-    else:
-        return redirect('/login')
-        
+       
 def render_dashboard():
     if 'user_id' in session or 'google_id' in session:
         username = toNonStandardName(session.get('user_username'))

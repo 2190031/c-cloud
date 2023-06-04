@@ -126,19 +126,20 @@ def signup():
             email    = request.form.get('email')
             password = request.form.get('password')
             usertype = request.form.get('usertype', 1)
-            
+            path = f'userFiles/{username}/acc_settings/profile_pic/profile_pic.png'
             verify_email = user.query.filter_by(email=email).first()
             if verify_email:
-                session["error"] = "El correo que proporcionaste está registrado. Debe iniciar sesión si quiere acceder con él."
+                session["error"] = "El correo que proporcionaste está registrado. Debe iniciar sesión si quiere acceder conél."
                 return redirect("/signup")
             else:
                 hashed_password, salt = hash_password(password)
-                newuser = user(name        =name, 
+                newuser = user( name        =name, 
                                 surname     =surname, 
                                 username    =username, 
                                 email       =email, 
                                 password    =hashed_password,
                                 salt        =salt, 
+                                picture     =path, 
                                 usertype    =usertype)
                 try:
                     print(hashed_password)
@@ -146,15 +147,13 @@ def signup():
                     db.session.commit()
                     newUserFolder(username)
                     subject = 'Bienvenido a C-Cloud'
-                    message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravida mattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nisl placerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenas ornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortis congue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urna cursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo, laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullam luctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortor lorem, ultricies nec sagittis vitae, porttitor at enim.'
-
+                    message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravidamattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nislplacerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenasornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortiscongue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urnacursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo,laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullamluctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortorlorem, ultricies nec sagittis vitae, porttitor at enim.'
                     send_mail(email, subject, message)
-                    traceback.print_exc()
                     session["success"] = "Inicie sesión nuevamente"
                     return redirect('/login')
-                except:
-                    traceback.print_exc()
-                    return error
+                except Exception as e:
+                    print(traceback.format_exc())
+                    return jsonify({'error': str(e)})
         else:
             success_message = session.pop("success", None)
             error_message = session.pop("error", None)
@@ -216,11 +215,6 @@ def update_p_data():
             hash_object = hashlib.sha256(salted_password.encode('latin-1'))
             hashed_salted_password = hash_object.hexdigest()
 
-            # update_user.name = data['firstname']
-            # update_user.surname  = data['surname']
-            # update_user.username  = data['username']
-            # update_user.password  = hashed_salted_password
-
             email = update_user.email
             subject = 'Cambio de contraseña'
             message = f'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravida mattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nisl placerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenas ornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortis congue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urna cursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo, laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullam luctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortor lorem, ultricies nec sagittis vitae, porttitor at enim.\
@@ -244,10 +238,6 @@ def update_p_data():
             return jsonify({'error': str(e)})
     elif password == '':
         try:
-            # update_user.firstname = data['firstname']
-            # update_user.surname  = data['surname']
-            # update_user.username  = data['username']
-
             update_query = update(user).where(user.iduser == idu).values(
                 name=data['firstname'],
                 surname=data['surname'],

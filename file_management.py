@@ -209,3 +209,18 @@ def upload_p_picture():
             return jsonify({'error': str(e)})
     else:
         return jsonify({'error': 'No image file received'})
+    
+def get_profile_pic():
+    usern = user.query.filter_by(iduser=session.get('user_id')).first()
+    _dir = usern.picture
+    path = os.path.join(_dir)
+
+    if os.path.exists(path):
+        image_bytes = builtins.open(path, 'rb').read()
+        # Convertir la imagen a base64
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+
+        # Retornar la imagen como respuesta en formato JSON
+        return {'image': image_base64}
+    else:
+        return {'error': 'El archivo de imagen no existe'}
