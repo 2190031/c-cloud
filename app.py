@@ -9,7 +9,7 @@ from render_pages import *
 from file_management import (load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture)
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:a19b15821@localhost/c_cloud"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Mauricio2021@localhost/c_cloud"
 app.config["SECRET_KEY"] = "secret_key"
 app.secret_key = "ODNFAOFNA09q09qpomao989j"
 
@@ -32,7 +32,7 @@ def index():
 
 @app.route('/licences')
 def planes():
-    return render_template('licences.html')
+    return render_licences()
 
 @app.route('/payment', methods=['POST'])
 def pay():
