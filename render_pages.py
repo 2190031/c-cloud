@@ -4,6 +4,9 @@ from flask import render_template, session, redirect, request
 from sqlalchemy import desc
 from db_models import licence, paytransaction, user
 from createUserFolder import toNonStandardName, toStandardName
+import datetime
+import pytz
+from babel.dates import format_datetime
 
 def render_index():
     title = 'Inicio - C-Cloud'
@@ -54,23 +57,41 @@ def render_dashboard():
         username = toNonStandardName(session.get('user_username'))
         _username = session.get('user_username')
         title='Dashboard'
+        id_licence = session.get('id_licence')
+        licence_u = licence.query.get(id_licence)
         # Ruta a la carpeta donde se encuentran los archivos
         path = f'userFiles/{_username}/saved_files'
 
         # Obtener una lista de todos los archivos en la carpeta
         files = os.listdir(path)
 
-        # Crear una lista de diccionarios para cada archivo
+      # Crear una lista de diccionarios para cada archivo
         file_list = []
         for file in files:
             file_dict = {}
             file_dict['name'] = file
-            file_dict['creation_time'] = datetime.datetime.fromtimestamp(os.path.getctime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
-            file_dict['update_time'] = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+
+            archivo_completo = os.path.join(path, file)
+            fecha_creacion_timestamp = os.path.getctime(archivo_completo)
+            fecha_creacion = datetime.datetime.fromtimestamp(fecha_creacion_timestamp)
+             
+            fecha_actualizacion_timestamp = os.path.getmtime(archivo_completo)
+            fecha_actualizacion = datetime.datetime.fromtimestamp(fecha_actualizacion_timestamp)
+
+            tz = pytz.timezone('America/Santo_Domingo')
+            fecha_creacion_local = fecha_creacion.astimezone(tz)
+            fecha_actualizacion_local = fecha_actualizacion.astimezone(tz)
+
+            formato_fecha = "d 'de' MMMM 'de' yyyy 'a las' hh:mm a"
+            fecha_creacion_formateada = format_datetime(fecha_creacion_local, formato_fecha, locale='es_DO')
+            fecha_actualizacion_formateada = format_datetime(fecha_actualizacion_local, formato_fecha, locale='es_DO')
+
+            file_dict['creation_time'] = fecha_creacion_formateada
+            file_dict['update_time'] = fecha_actualizacion_formateada
             file_dict['extension'] = os.path.splitext(file)[1]
             file_list.append(file_dict)
 
-        return render_template('dashboard.html', title=title, files=file_list, username=username, _username=_username, id=session.get('user_id'))
+        return render_template('dashboard.html', title=title, files=file_list, username=username, _username=_username, id=session.get('user_id'), licence_u=licence_u)
     else:
         return redirect('/login')
   
