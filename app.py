@@ -4,13 +4,13 @@ from flask import Flask, render_template, redirect, session
 from paypal_payments import payment, execute, payment_premium, execute_premium
 from user_session import callback, login_google
 from db_models import db, defaultlicence, defaultroles
-from user_session import login, signup, update_p_data, auth_update
+from user_session import login, signup, update_p_data, auth_update, deactivate_account
 from render_pages import *
-from file_management import (load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture, get_profile_pic)
+from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture, get_profile_pic, delete_file, download_file
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:Mauricio2021@localhost/c_cloud"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:c55h32o5n4Mg@localhost/c_cloud"
 
 app.config["SECRET_KEY"] = "secret_key"
 app.secret_key = "ODNFAOFNA09q09qpomao989j"
@@ -81,9 +81,17 @@ def editor():
 def create_files():
     return create_file()
 
+@app.route("/download_file", methods=["POST"])
+def download():
+    return download_file()
+
 @app.route("/dashboard")
 def dashboard():
     return render_dashboard()
+
+@app.route("/deleted_files")
+def deleted_files():
+    return render_trash_dashboard()
 
 @app.route("/settings")
 def settings():
@@ -100,6 +108,10 @@ def profile_picture():
 @app.route("/create_file", methods=["POST"])
 def create():
     return create_file()
+
+@app.route("/delete_file", methods=["POST"])
+def delete():
+    return delete_file()
 
 @app.route("/load_file", methods=["POST"])
 def open_file():
@@ -137,6 +149,10 @@ def notfound():
 @app.route("/auth_update", methods=["POST"])
 def auth():
     return auth_update()
+
+@app.route("/auth_deactivate", methods=["POST"])
+def deact_account():
+    return deactivate_account()
 
 @app.route('/get_profile_pic', methods=['GET'])
 def profile_photo():

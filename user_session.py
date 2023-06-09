@@ -122,8 +122,6 @@ def login_google():
         )
         return redirect(authorization_url)
 
-
-
 def signup():
     title = 'Registrarse'
     if "google_id" in session or "user_id" in session:
@@ -150,7 +148,8 @@ def signup():
                                 password    =hashed_password,
                                 salt        =salt, 
                                 picture     =path, 
-                                usertype    =usertype)
+                                usertype    =usertype,
+                                is_active   =True)
                 try:
                     print(hashed_password)
                     db.session.add(newuser)
@@ -181,7 +180,7 @@ def login():
             passwordsMatch = check_credentials(email, password)
             inserteduser = user.query.filter_by(email=email).first()
  
-            if inserteduser and passwordsMatch == True:
+            if inserteduser and inserteduser.is_active == True and passwordsMatch == True:
                 id = inserteduser.iduser
                 username = inserteduser.username
                 newsession = sessions(iduser=id)
@@ -209,6 +208,9 @@ def login():
                 except:
                     traceback.print_exc()
                     return error
+            elif inserteduser.is_active == False:
+                session["error"] = "Parece que esta cuenta ha sido eliminada o desactivada."
+                return redirect('/login')
             else:
                 session["error"] = "Credenciales incorrectas."
                 return redirect('/login')
@@ -299,3 +301,41 @@ def auth_update():
     except Exception as e:
         print(traceback.format_exc())
         return jsonify({'error':str(e)})
+    
+def deactivate_account():
+    data = request.json
+    
+    auth_email = session.get('user_email')
+    ver_email = data['ver_email']
+    ver_password = data['ver_password']
+    
+    get_auth_password = user.query.filter(user.email == ver_email).first()
+    
+    auth_password = get_auth_password.password
+    salt = get_auth_password.salt
+    
+    try:
+        salted_password = str(salt) + ver_password
+        hash_object = hashlib.sha256(salted_password.encode('latin-1'))
+        hashed_salted_password = hash_object.hexdigest()
+        
+        print(f'Input: {hashed_salted_password} \n\nExpected: {auth_password}')
+        
+        if auth_email == ver_email and hashed_salted_password == auth_password:            
+            update_query = update(user).where(user.iduser == session.get('user_id')).values(
+                is_active = False
+            )
+            
+            # user_state = user.query.filter_by(iduser = session.get('user_id')).first()
+            # user_state.is_active = False
+            
+            try:
+                db.session.add(update_query)
+                db.commit()
+            except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error':str(e)})
+    except Exception as e:
+        print(traceback.formate_exc())
+        return jsonify({'error':str(e)})        
+    
