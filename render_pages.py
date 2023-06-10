@@ -94,6 +94,31 @@ def render_dashboard():
         return render_template('dashboard.html', title=title, files=file_list, username=username, _username=_username, id=session.get('user_id'), licence_u=licence_u)
     else:
         return redirect('/login')
+
+def render_trash_dashboard():
+    if 'user_id' in session or 'google_id' in session:
+        username = toNonStandardName(session.get('user_username'))
+        _username = session.get('user_username')
+        title='Archivos eliminados'
+        # Ruta a la carpeta donde se encuentran los archivos
+        path = f'userFiles/{_username}/saved_files/trash'
+
+        # Obtener una lista de todos los archivos en la carpeta
+        files = os.listdir(path)
+
+        # Crear una lista de diccionarios para cada archivo
+        file_list = []
+        for file in files:
+            file_dict = {}
+            file_dict['name'] = file
+            file_dict['creation_time'] = datetime.datetime.fromtimestamp(os.path.getctime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+            file_dict['update_time'] = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(path, file))).strftime('%Y-%m-%d %H:%M:%S')
+            file_dict['extension'] = os.path.splitext(file)[1]
+            file_list.append(file_dict)
+
+        return render_template('deleted_files.html', title=title, files=file_list, username=username, _username=_username, id=session.get('user_id'))
+    else:
+        return redirect('/login')
   
 def render_settings():
     if 'user_id' in session or 'google_id' in session:

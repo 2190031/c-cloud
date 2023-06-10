@@ -45,10 +45,11 @@ class user(db.Model):
     password = db.Column(db.String(200), nullable=True)
     picture = db.Column(db.String(255), nullable=True)    
     salt = db.Column(db.String(100), nullable=True, unique=True)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
     usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
     creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
     
-    def __init__(self, name, surname, username, email, password, salt, picture=None, usertype=1, google_id=None):
+    def __init__(self, name, surname, username, email, password, salt, picture=None, usertype=1, is_active=True, google_id=None):
         self.name = name
         self.surname = surname
         self.username = username
@@ -57,6 +58,7 @@ class user(db.Model):
         self.picture = picture
         self.salt = salt
         self.usertype = usertype
+        self.is_active = is_active
         self.google_id = google_id
 
     def __repr__(self):
@@ -119,7 +121,7 @@ class change(db.Model):
     __tablename__ = 'change'
     idmodification = db.Column(db.Integer, primary_key=True, autoincrement=True)
     beforechange = db.Column(db.Integer, nullable=False)
-    afterchange = db.Column(db.Integer, nullable=False)
+    afterchange = db.Column(db.Integer, nullable=True)
     # changeline = db.Column(db.Integer, nullable=False)
     # changecolumn = db.Column(db.Integer, nullable=False) # implementar despues
     idchange = db.Column(db.Integer, db.ForeignKey('historial.idchange'), primary_key=True)

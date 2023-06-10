@@ -34,9 +34,11 @@
                                             <a href="#" class="avatar avatar-lg bg-warning rounded-circle text-white">
                                                 <!-- <img alt="..." width="90px" class="rounded-pill" id="profile-picture-display"> -->
                                                 {% if "google_picture" in session %}
-                                                    <img src="{{session['google_picture']}}" alt="" height="90" class="rounded-pill">
+                                                <img src="{{session['google_picture']}}" alt="" height="90"
+                                                    class="rounded-pill">
                                                 {% else %}
-                                                    <img alt="" width="90" height="90" class="rounded-pill" id="profile-picture-display">
+                                                <img alt="" width="90" height="90" class="rounded-pill"
+                                                    id="profile-picture-display">
                                                 {% endif %}
                                                 <!-- Enviar la imagen por variable de url desde la carpeta -->
                                             </a>
@@ -126,7 +128,8 @@
                                             </p>
                                         </div>
                                         <div class="ms-auto">
-                                            <button type="button" class="btn btn-sm btn-danger">Deactivate</button>
+                                            <button type="button" class="btn btn-sm btn-danger" id="deact-account-btn"
+                                                data-bs-toggle="modal" data-bs-target="#auth-deactivate">Deactivate</button>
                                         </div>
                                     </div>
                                 </div>
@@ -165,6 +168,38 @@
             <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
                 <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal"
                     id="confirm-update-btn">Confirmar</button>
+                <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="auth-deactivate" aria-labelledby="auth" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-4 shadow bg-dark text-light" data-bs-theme="dark">
+            <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                <h1 class="modal-title fs-5">Confirmar desactivación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-0">
+                <p>Para confirmar debe escribir su correo electrónico y contraseña actual.</p>
+                <p class="text-warning"><i>* Esta acción no podrá deshacerse</i></p>
+                <div class="row">
+                    <div class="p-2 col-10 mx-auto">
+                        <label for="ver-deact-email">Correo</label>
+                        <input type="email" name="ver-deact-email" id="ver-deact-email" class="form-control"
+                            placeholder="Correo" required>
+                    </div>
+                    <div class="p-2 col-10 mx-auto">
+                        <label for="ver-deact-password">Contraseña</label>
+                        <input type="password" name="ver-deact-password" id="ver-deact-password" class="form-control"
+                            placeholder="Contraseña" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal"
+                    id="confirm-deact-btn">Confirmar</button>
                 <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

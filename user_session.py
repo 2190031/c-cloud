@@ -1,4 +1,4 @@
-import traceback, hashlib, logging, secrets, os, pathlib, google, requests, cachecontrol
+import traceback, hashlib, logging, secrets, os, pathlib, google, requests, cachecontrol, shutil
 
 from flask import render_template, request, redirect, session, jsonify, abort
 
@@ -106,6 +106,9 @@ def callback():
             db.session.add(new_user)
             db.session.commit()
             newUserFolder(google_username)
+            subject = 'Bienvenido a C-Cloud'
+            message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pellentesque, nibh quis gravidamattis, diam neque rhoncus dui, eget bibendum mauris eros non dolor. Etiam ullamcorper mi at nislplacerat viverra. Integer ligula sapien, malesuada vel hendrerit vel, efficitur at neque. Maecenasornare lobortis fermentum. Duis posuere urna odio, sed aliquet mauris laoreet at. Praesent lobortiscongue scelerisque. Mauris non viverra ex. Vestibulum ullamcorper nisl ac leo lobortis, sed rutrum urnacursus. Etiam non nibh dolor. Praesent quis leo at turpis posuere molestie. Pellentesque enim leo,laoreet quis tincidunt non, pulvinar a ligula. Duis vitae lacus urna. Morbi ac consequat sapien. Nullamluctus nec massa hendrerit rhoncus. Phasellus id ipsum non mi laoreet blandit at id eros. Duis tortorlorem, ultricies nec sagittis vitae, porttitor at enim.'
+            # send_mail(google_email, subject, message)
             session["success"] = "Inicie sesión nuevamente"
             return redirect("/login")
     else:
@@ -121,8 +124,6 @@ def login_google():
             prompt="select_account", state=state
         )
         return redirect(authorization_url)
-
-
 
 def signup():
     title = 'Registrarse'
@@ -150,7 +151,8 @@ def signup():
                                 password    =hashed_password,
                                 salt        =salt, 
                                 picture     =path, 
-                                usertype    =usertype)
+                                usertype    =usertype,
+                                is_active   =True)
                 try:
                     print(hashed_password)
                     db.session.add(newuser)
@@ -181,7 +183,7 @@ def login():
             passwordsMatch = check_credentials(email, password)
             inserteduser = user.query.filter_by(email=email).first()
  
-            if inserteduser and passwordsMatch == True:
+            if inserteduser and inserteduser.is_active == True and passwordsMatch == True:
                 id = inserteduser.iduser
                 username = inserteduser.username
                 newsession = sessions(iduser=id)
@@ -209,6 +211,9 @@ def login():
                 except:
                     traceback.print_exc()
                     return error
+            elif inserteduser.is_active == False:
+                session["error"] = "Parece que esta cuenta ha sido eliminada o desactivada."
+                return redirect('/login')
             else:
                 session["error"] = "Credenciales incorrectas."
                 return redirect('/login')
@@ -299,3 +304,52 @@ def auth_update():
     except Exception as e:
         print(traceback.format_exc())
         return jsonify({'error':str(e)})
+    
+def deactivate_account():
+    data = request.json
+    
+    auth_email = session.get('user_email')
+    ver_email = data['ver_email']
+    ver_password = data['ver_password']
+    
+    get_auth_password = user.query.filter(user.email == ver_email).first()
+    
+    auth_password = get_auth_password.password
+    salt = get_auth_password.salt
+    
+    try:
+        salted_password = str(salt) + ver_password
+        hash_object = hashlib.sha256(salted_password.encode('latin-1'))
+        hashed_salted_password = hash_object.hexdigest()
+        
+        print(f'Input: {hashed_salted_password} \nExpected: {auth_password}')
+        
+        if auth_email == ver_email and hashed_salted_password == auth_password:            
+            update_query = update(user).where(user.iduser == session.get('user_id')).values(
+                is_active = False
+            )
+            
+            try:
+                user_folder = f'userFiles/{session.get("user_username")}/'
+                db.session.add(update_query)
+                db.session.commit()
+                shutil.rmtree(user_folder)
+                send_mail(session.get('user_email'), 'Desactivación de cuenta', 'Su cuenta ha sido deshabilitada, para eliminar totalmente haga click <a href="#">aquí</a>.') # Correo que confirme si se desea eliminar totalmente la cuenta 
+                session.clear()
+                return 'True'
+            except FileNotFoundError:
+                # La carpeta no existe, pero se considera una eliminación exitosa
+                db.session.add(update_query)
+                db.session.commit()
+                send_mail(session.get('user_email'), 'Desactivación de cuenta', 'Su cuenta ha sido deshabilitada, para eliminar totalmente haga click <a href="#">aquí</a>.') # Correo que confirme si se desea eliminar totalmente la cuenta 
+                session.clear()
+                return 'True'
+            except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error':str(e)})
+        else:
+            return 'False'
+    except Exception as e:
+        print(traceback.formate_exc())
+        return jsonify({'error':str(e)})        
+    

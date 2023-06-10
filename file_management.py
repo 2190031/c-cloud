@@ -1,6 +1,6 @@
-import os, traceback, builtins, datetime, base64, io
+import os, traceback, builtins, datetime, base64, io, requests, mimetypes
 
-from flask import request, session, jsonify, redirect, url_for
+from flask import request, session, jsonify, redirect, url_for, make_response
 from werkzeug.utils import secure_filename
 from PIL import Image
 
@@ -107,9 +107,14 @@ def create_file():
     directory = "userFiles/" + username + "/saved_files/"
     filepath = os.path.join(directory, filename + extension)
     print(filepath)
+    
+    # Obtener el tipo MIME del archivo
+    mimetype, _ = mimetypes.guess_type(filepath)
+    category = mimetype if mimetype else 'unknown'
+    
     new_file = file(
         name      = filename + extension,
-        category  = 'something',
+        category  = category, # mime type
         extension = extension,
     )
     if os.path.exists(filepath): # If the file already exists, update and create a backup copy
@@ -141,6 +146,64 @@ def create_file():
             except Exception as e:
                 print(traceback.format_exc())
                 return jsonify({'error': str(e)})
+
+def delete_file(filename, extension):
+    filepath = f'userFiles/{username}/saved_files/{filename}{extension}'
+    username = session.get('user_username')
+    trash_files_folder = f'userFiles/{username}/saved_files/trash/'
+    trash_files_directory = os.path.join(trash_files_folder)
+    with builtins.open(filepath, 'r') as r:
+        to_delete_file_content = r.read()
+        to_delete_file_version_date = datetime.datetime.fromtimestamp(os.path.getmtime(filepath)) #2023-10-10 ...
+        to_delete_file_filename = f"{filename}_{to_delete_file_version_date.strftime('%Y-%m-%d_%H_%M_%S')}{extension}" # title_2023-10-19(...).ext
+        to_delete_file = os.path.join(trash_files_directory, to_delete_file_filename)
+        with builtins.open(to_delete_file, 'w') as f: # Copia del archivo
+            f.write(to_delete_file_content)
+            
+            # new_trash_file = os.path.join(directory, filename + extension)
+            
+            # with builtins.open(new_trash_file, 'w') as t: #Modificacion del archivo, cambiar aqui
+            #     t.write(content)
+            os.remove(filepath) #Eliminar el archivo de saved_files
+            
+            try: #Archivo ya copiado, se hacen consultas
+                # idfile = db.session.query(file, user, detailsfile).join(file, detailsfile.idfile == file.idfile).join(user, detailsfile.iduser == session.get('user_id')).filter_by().first()
+                query = db.session.query(file.idfile).\
+                join(detailsfile, detailsfile.idfile == file.idfile).\
+                join(user, user.iduser == detailsfile.iduser).\
+                filter(user.iduser == session.get('user_id'))
+                
+                u_file = query.first()
+                
+                date = datetime.datetime.now()
+                now = date.strftime("%Y-%m-%d %H:%M:%S")
+                print(now, u_file)
+                historial_change = historial(
+                    idfile       = u_file.idfile,
+                    datemodified = now,
+                    iduser       = session.get('user_id')
+                )
+                db.session.add(historial_change)
+                db.session.commit()
+                try:
+                    idchange = historial.query.filter_by(
+                        datemodified=now, iduser=session.get('user_id'), idfile=u_file.idfile
+                    ).first()
+                    
+                    new_change =  change(
+                        idchange     = idchange.idchange,
+                        beforechange = to_delete_file_content,
+                        afterchange  = None
+                    )
+                    db.session.add(new_change)
+                    db.session.commit()
+                    return "File deleted successfully"
+                except Exception as e:
+                    print(traceback.format_exc())
+                    return jsonify({'error': str(e)})
+            except Exception as e:
+                    print(traceback.format_exc())
+                    return jsonify({'error': str(e)})
 
 def send_error_report():
     data = request.json
@@ -227,18 +290,29 @@ def get_profile_pic():
             bottom = (height + size) // 2
             cropped_image = image.crop((left, top, right, bottom))
 
-            # Redimensionar la imagen a un tamaño específico (opcional)
-            # cropped_image = cropped_image.resize((200, 200))
-
             # Convertir la imagen recortada a base64
             buffered = io.BytesIO()
             cropped_image.save(buffered, format="PNG")
             image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        # image_bytes = builtins.open(path, 'rb').read()
-        # # Convertir la imagen a base64
-        # image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
         # # Retornar la imagen como respuesta en formato JSON
         return {'image': image_base64}
     else:
         return {'error': 'El archivo de imagen no existe'}
+
+def download_file():
+    url = request.form['url']
+    print(url)
+    response = requests.get(url)
+    if response.status_code == 200:
+        content = response.content
+            
+        filename = os.path.basename(url)
+        file_path = os.path.join(os.path.expanduser("~/Downloads"), filename)
+        with open(file_path, "wb") as file:
+            file.write(content)
+        print("Archivo descargado correctamente en:", file_path)
+        return make_response("Archivo descargado correctamente.", 200)
+    else:
+        print("Error al descargar el archivo.")
+        return make_response("Error al descargar el archivo.", 500)
