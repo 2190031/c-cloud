@@ -431,18 +431,18 @@ function authDeactivate () {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            if (xhr.responseText === 'True') {
-                try {
-                    
-                } catch (error) {
-                    console.error(error)
-                }
-            } else if (xhr.responseText === 'False') {
+            if (xhr.responseText === 'False') {
                 swal({
                     title: 'Datos erróneos',
                     text: 'El correo o contraseña son incorrectos.',
                     icon: 'error',
                     timer: 3000,
+                });
+            } else {
+                swal({
+                    title: 'Desactivación exitosa',
+                    text: 'Su cuanta ha sido desactivada, esto surtirá efecto la próxima vez que cargue o recargue la página.',
+                    icon: 'info'
                 });
             }
         }

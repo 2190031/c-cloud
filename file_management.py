@@ -1,4 +1,4 @@
-import os, traceback, builtins, datetime, base64, io, requests
+import os, traceback, builtins, datetime, base64, io, requests, mimetypes
 
 from flask import request, session, jsonify, redirect, url_for, make_response
 from werkzeug.utils import secure_filename
@@ -107,9 +107,14 @@ def create_file():
     directory = "userFiles/" + username + "/saved_files/"
     filepath = os.path.join(directory, filename + extension)
     print(filepath)
+    
+    # Obtener el tipo MIME del archivo
+    mimetype, _ = mimetypes.guess_type(filepath)
+    category = mimetype if mimetype else 'unknown'
+    
     new_file = file(
         name      = filename + extension,
-        category  = 'something',
+        category  = category, # mime type
         extension = extension,
     )
     if os.path.exists(filepath): # If the file already exists, update and create a backup copy

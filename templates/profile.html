@@ -34,9 +34,11 @@
                                             <a href="#" class="avatar avatar-lg bg-warning rounded-circle text-white">
                                                 <!-- <img alt="..." width="90px" class="rounded-pill" id="profile-picture-display"> -->
                                                 {% if "google_picture" in session %}
-                                                    <img src="{{session['google_picture']}}" alt="" height="90" class="rounded-pill">
+                                                <img src="{{session['google_picture']}}" alt="" height="90"
+                                                    class="rounded-pill">
                                                 {% else %}
-                                                    <img alt="" width="90" height="90" class="rounded-pill" id="profile-picture-display">
+                                                <img alt="" width="90" height="90" class="rounded-pill"
+                                                    id="profile-picture-display">
                                                 {% endif %}
                                                 <!-- Enviar la imagen por variable de url desde la carpeta -->
                                             </a>
@@ -126,7 +128,8 @@
                                             </p>
                                         </div>
                                         <div class="ms-auto">
-                                            <button type="button" class="btn btn-sm btn-danger">Deactivate</button>
+                                            <button type="button" class="btn btn-sm btn-danger" id="deact-account-btn"
+                                                data-bs-toggle="modal" data-bs-target="#auth-deactivate">Deactivate</button>
                                         </div>
                                     </div>
                                 </div>
@@ -184,8 +187,8 @@
                 <div class="row">
                     <div class="p-2 col-10 mx-auto">
                         <label for="ver-deact-email">Correo</label>
-                        <input type="email" name="ver-deact-email" id="ver-deact-email" class="form-control" placeholder="Correo"
-                            required>
+                        <input type="email" name="ver-deact-email" id="ver-deact-email" class="form-control"
+                            placeholder="Correo" required>
                     </div>
                     <div class="p-2 col-10 mx-auto">
                         <label for="ver-deact-password">Contraseña</label>
