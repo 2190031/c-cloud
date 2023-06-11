@@ -443,6 +443,8 @@ function authDeactivate () {
                     title: 'Desactivación exitosa',
                     text: 'Su cuanta ha sido desactivada, esto surtirá efecto la próxima vez que cargue o recargue la página.',
                     icon: 'info'
+                }).then(function() {
+                    location.reload();
                 });
             }
         }

@@ -325,21 +325,20 @@ def deactivate_account():
         print(f'Input: {hashed_salted_password} \nExpected: {auth_password}')
         
         if auth_email == ver_email and hashed_salted_password == auth_password:            
-            update_query = update(user).where(user.iduser == session.get('user_id')).values(
-                is_active = False
-            )
-            
             try:
                 user_folder = f'userFiles/{session.get("user_username")}/'
-                db.session.add(update_query)
+                update_query = update(user).where(user.iduser == session.get('user_id')).values(
+                    is_active = False
+                )
+                db.session.execute(update_query)
                 db.session.commit()
-                shutil.rmtree(user_folder)
                 send_mail(session.get('user_email'), 'Desactivación de cuenta', 'Su cuenta ha sido deshabilitada, para eliminar totalmente haga click <a href="#">aquí</a>.') # Correo que confirme si se desea eliminar totalmente la cuenta 
+                shutil.rmtree(user_folder)
                 session.clear()
                 return 'True'
             except FileNotFoundError:
                 # La carpeta no existe, pero se considera una eliminación exitosa
-                db.session.add(update_query)
+                db.session.execute(update_query)
                 db.session.commit()
                 send_mail(session.get('user_email'), 'Desactivación de cuenta', 'Su cuenta ha sido deshabilitada, para eliminar totalmente haga click <a href="#">aquí</a>.') # Correo que confirme si se desea eliminar totalmente la cuenta 
                 session.clear()
