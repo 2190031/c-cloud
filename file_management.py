@@ -1,4 +1,4 @@
-import os, traceback, builtins, datetime, base64, io, requests, mimetypes
+import os, traceback, builtins, datetime, base64, io, requests, mimetypes, asyncio, aiofiles
 
 from flask import request, session, jsonify, redirect, url_for, make_response
 from werkzeug.utils import secure_filename
@@ -205,6 +205,88 @@ def delete_file(filename, extension):
                     print(traceback.format_exc())
                     return jsonify({'error': str(e)})
 
+def permanently_delete():
+    data = request.json
+    file = data['filename']
+    username = session.get('user_username')
+    _dir = f"userFiles/{username}/saved_files/trash"
+    path = os.path.join(_dir, file)
+    try:
+        if os.path.exists(path):
+            os.remove(path)
+            return 'File deleted successfully'
+        else:
+            return jsonify({'error': str('File not found')})
+    except Exception as e:
+        print(traceback.format_exc())
+        return jsonify({'error': str(e)})
+
+async def restore_file_async():
+    username = session.get('user_username')
+    data = request.json
+    filename = data['filename']
+    
+    filepath = f'userFiles/{username}/saved_files/trash/'
+    trash_folder_file = os.path.join(filepath, filename)
+    
+    saved_files_folder = f'userFiles/{username}/saved_files/'
+    saved_files_directory = os.path.join(saved_files_folder, filename)
+    async with aiofiles.open(trash_folder_file, 'r') as r:
+        to_delete_file_content = await r.read()
+        
+        async with aiofiles.open(saved_files_directory, 'w') as f: # Copia del archivo
+            await f.write(to_delete_file_content)
+        
+        try: #Archivo ya copiado, se hacen consultas
+            # idfile = db.session.query(file, user, detailsfile).join(file, detailsfile.idfile == file.idfile).join(user, detailsfile.iduser == session.get('user_id')).filter_by().first()
+            query = db.session.query(file.idfile).join(detailsfile, detailsfile.idfile == file.idfile).join(user, user.iduser == detailsfile.iduser).filter(user.iduser == session.get('user_id')).first()
+            
+            u_file = query
+            
+            date = datetime.datetime.now()
+            now = date.strftime("%Y-%m-%d %H:%M:%S")
+            print(now, u_file)
+            historial_change = historial(
+                idfile       = u_file.idfile,
+                datemodified = now,
+                iduser       = session.get('user_id')
+            )
+            db.session.add(historial_change)
+            db.session.commit()
+            try:
+                idchange = historial.query.filter_by(
+                        datemodified=now, iduser=session.get('user_id'), idfile=u_file.idfile
+                    ).first()
+                
+                new_change = change(
+                        idchange     = idchange.idchange,
+                        beforechange = to_delete_file_content,
+                        afterchange  = None
+                    )
+                db.session.add(new_change)
+                db.session.commit()
+                
+                await asyncio.sleep(1)
+                
+                return "File restored successfully"
+            except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error': str(e)})
+        except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error': str(e)})
+
+def restore_file():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(restore_file_async())
+    loop.close()
+    username = session.get('user_username')
+    filepath = f"userFiles/{username}/saved_files/trash/"
+    data = request.json
+    filename = data['filename']
+    os.remove(os.path.join(filepath, filename)) #Eliminar el archivo de trash
+
 def send_error_report():
     data = request.json
     iduser = session.get('user_id')
@@ -316,3 +398,70 @@ def download_file():
     else:
         print("Error al descargar el archivo.")
         return make_response("Error al descargar el archivo.", 500)
+    
+async def move_to_trash_async():
+    username = session.get('user_username')
+    data = request.json
+    filename = data["filename"]
+    
+    filepath = f'userFiles/{username}/saved_files/'
+    trash_filepath = f'userFiles/{username}/saved_files/trash/'
+    
+    _dir = os.path.join(filepath, filename)
+    trash_dir = os.path.join(trash_filepath, filename)
+    
+    async with aiofiles.open(_dir, 'r') as r:
+        to_delete_file_content = await r.read()
+        
+        async with aiofiles.open(trash_dir, 'w') as f: # Copia del archivo
+            await f.write(to_delete_file_content)
+
+        try: #Archivo ya copiado, se hacen consultas
+            # idfile = db.session.query(file, user, detailsfile).join(file, detailsfile.idfile == file.idfile).join(user, detailsfile.iduser == session.get('user_id')).filter_by().first()
+            query = db.session.query(file.idfile).join(detailsfile, detailsfile.idfile == file.idfile).join(user, user.iduser == detailsfile.iduser).filter(user.iduser == session.get('user_id')).first()
+            
+            u_file = query
+            
+            date = datetime.datetime.now()
+            now = date.strftime("%Y-%m-%d %H:%M:%S")
+            print(now, u_file)
+            historial_change = historial(
+                idfile       = u_file.idfile,
+                datemodified = now,
+                iduser       = session.get('user_id')
+            )
+            db.session.add(historial_change)
+            db.session.commit()
+            try:
+                idchange = historial.query.filter_by(
+                        datemodified=now, iduser=session.get('user_id'), idfile=u_file.idfile
+                    ).first()
+                
+                new_change = change(
+                        idchange     = idchange.idchange,
+                        beforechange = to_delete_file_content,
+                        afterchange  = None
+                    )
+                db.session.add(new_change)
+                db.session.commit()
+                
+                await asyncio.sleep(1)
+                
+                return "File restored successfully"
+            except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error': str(e)})
+        except Exception as e:
+                print(traceback.format_exc())
+                return jsonify({'error': str(e)})
+    
+def move_to_trash():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(move_to_trash_async())
+    loop.close()
+    username = session.get('user_username')
+    filepath = f"userFiles/{username}/saved_files/"
+    data = request.json
+    filename = data['filename']
+    os.remove(os.path.join(filepath, filename)) #Eliminar el archivo de saved_files

@@ -1,42 +1,4 @@
-function downloadFile(filename) {
-    console.log(filename);
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/download_file', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            swal(
-                `Archivo ${filename} descargado correctamente.\nRevise su carpeta de Descargas.`,
-                {
-                    buttons: false,
-                    icon: 'success',
-                    timer: 3000
-                }
-            )
-        } else {
-            swal(
-                'Ha ocurrido un error.',
-                {
-                    buttons: false,
-                    icon: 'error',
-                    timer: 3000
-                }
-            )
-        }
-    };
-
-    // Generar el nombre del archivo con la fecha actual en JavaScript
-    var currentDate = new Date();
-    var formattedDate = currentDate.toISOString().slice(0, 19).replace(/:/g, '_');
-    var extensionIndex = filename.lastIndexOf('.');
-    var filenameWithoutExtension = filename.slice(0, extensionIndex);
-    var fileExtension = filename.slice(extensionIndex);
-    var filenameWithDate = filenameWithoutExtension + '_' + formattedDate + fileExtension;
-    var url = 'http://127.0.0.1:5000/userFiles/MR/savedFiles/' + encodeURIComponent(filenameWithDate);
-    xhr.send('url=' + encodeURIComponent(url));
-}
-
-function deleteFile(filename) {
+function confirmDelete(file) {
     swal(
         "Estás seguro de que quieres eliminar este archivo?", {
         buttons: {
@@ -54,9 +16,9 @@ function deleteFile(filename) {
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             swal(`Archivo ${file} eliminado exitosamente.`)
-                                .then(function () {
-                                    location.reload();
-                                })
+                            .then(function () {
+                                location.reload();
+                            })
                             console.log(this.responseText);
                         }
                     };
@@ -77,12 +39,12 @@ function deleteFile(filename) {
     })
 }
 
-function moveToTrash(file) {
+function confirmRestore(file) {
     swal(
-        "Estás seguro de que quieres eliminar este archivo?", {
+        "Estás seguro de que quieres restaurar este archivo?", {
         buttons: {
             cancel: "Cancelar",
-            confirm: "Eliminar"
+            confirm: "Restaurar"
         }
     }
     ).then((value) => {
@@ -90,14 +52,14 @@ function moveToTrash(file) {
             case true:
                 try {
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', '/move_to_trash', true);
+                    xhr.open('POST', '/restore_file', true);
                     xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4 && xhr.status === 200) {
-                            swal(`Archivo ${file} eliminado exitosamente.`)
-                                .then(function () {
-                                    location.reload();
-                                })
+                            swal(`Archivo ${file} restaurado exitosamente.`)
+                            .then(function () {
+                                location.reload();
+                            })
                             console.log(this.responseText);
                         }
                     };

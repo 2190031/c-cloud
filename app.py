@@ -1,12 +1,12 @@
 import os
 
-from flask import Flask, render_template, redirect, session
+from flask import Flask, render_template, redirect, session, jsonify
 from paypal_payments import payment, execute, payment_premium, execute_premium
 from user_session import callback, login_google
 from db_models import db, defaultlicence, defaultroles
 from user_session import login, signup, update_p_data, auth_update, deactivate_account
-from render_pages import *
-from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture, get_profile_pic, delete_file, download_file
+from render_pages import render_dashboard, render_editor, render_index, render_licences, render_login, render_notfound, render_profile, render_profile_picture, render_settings, render_template, render_trash_dashboard
+from file_management import load_file, create_file, load_file__blank, send_error_report, save_preference, upload_p_picture, get_profile_pic, delete_file, download_file, permanently_delete, restore_file, move_to_trash
 
 app = Flask(__name__)
 
@@ -30,7 +30,6 @@ with app.app_context():
 @app.route("/")
 def index():
     return render_index()
-  
 
 @app.route('/licences')
 def planes():
@@ -112,6 +111,18 @@ def create():
 @app.route("/delete_file", methods=["POST"])
 def delete():
     return delete_file()
+
+@app.route("/move_to_trash", methods=["POST"])
+def to_trash():
+    return jsonify(move_to_trash())
+
+@app.route("/perm_delete", methods=["POST"])
+def perm_delete():
+    return permanently_delete()
+
+@app.route("/restore_file", methods=["POST"])
+def rest_file():
+    return jsonify(restore_file())
 
 @app.route("/load_file", methods=["POST"])
 def open_file():

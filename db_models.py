@@ -120,13 +120,14 @@ class historial(db.Model):
 class change(db.Model):
     __tablename__ = 'change'
     idmodification = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    beforechange = db.Column(db.Integer, nullable=False)
-    afterchange = db.Column(db.Integer, nullable=True)
+    beforechange = db.Column(db.Text, nullable=False)
+    afterchange = db.Column(db.Text, nullable=True)
     # changeline = db.Column(db.Integer, nullable=False)
     # changecolumn = db.Column(db.Integer, nullable=False) # implementar despues
     idchange = db.Column(db.Integer, db.ForeignKey('historial.idchange'), primary_key=True)
 
-    def __init__(self, beforechange, afterchange, changeline, changecolumn):
+    def __init__(self, idchange, beforechange, afterchange):
+        self.idchange = idchange
         self.beforechange = beforechange
         self.afterchange = afterchange
         # self.changeline = changeline
