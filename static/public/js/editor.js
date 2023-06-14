@@ -106,6 +106,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
         let ThemeSelValue = document.getElementById('select-theme');
         let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
+        // let ThemeFontValue = document.getElementById('font-select');
+        // let font = ThemeFontValue.options[ThemeFontValue.selectedIndex].value;
+        // let ThemeSizeValue = document.getElementById('font-select');
+        // let size = ThemeSizeValue.options[ThemeSizeValue.selectedIndex].value;
 
         if (mode != "") {
             editor.session.setMode("ace/mode/" + mode);
@@ -113,6 +117,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (theme != "") {
             editor.setTheme("ace/theme/" + theme);
         }
+        // if (font != "") {
+        //     editor.setOptions({
+        //         fontFamily: font,
+        //         size: size
+        //     });
+        // }
     } catch (e) {
         console.log(e.message)
     }
@@ -410,6 +420,7 @@ function loadFile(value) {
     };
     xhr.send('filename=' + filename);
 }
+
 function sendErrorReport() {
     let report = document.getElementById('report').value;
 
