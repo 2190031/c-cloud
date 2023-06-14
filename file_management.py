@@ -384,12 +384,14 @@ def get_profile_pic():
 
 def download_file():
     url = request.form['url']
-    print(url)
-    response = requests.get(url)
+    username = session.get('user_username')
+    new_url = url.replace('_username_', str(username))
+    print(new_url)
+    response = requests.get(new_url)
     if response.status_code == 200:
         content = response.content
             
-        filename = os.path.basename(url)
+        filename = os.path.basename(new_url)
         file_path = os.path.join(os.path.expanduser("~/Downloads"), filename)
         with open(file_path, "wb") as file:
             file.write(content)
