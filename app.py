@@ -10,7 +10,7 @@ from file_management import load_file, create_file, load_file__blank, send_error
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:c55h32o5n4Mg@localhost/c_cloud"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:a19b15821@localhost/c_cloud"
 
 app.config["SECRET_KEY"] = "secret_key"
 app.secret_key = "ODNFAOFNA09q09qpomao989j"
