@@ -32,7 +32,7 @@ function downloadFile(filename) {
     var filenameWithoutExtension = filename.slice(0, extensionIndex);
     var fileExtension = filename.slice(extensionIndex);
     var filenameWithDate = filenameWithoutExtension + '_' + formattedDate + fileExtension;
-    var url = 'http://127.0.0.1:5000/userFiles/MR/savedFiles/' + encodeURIComponent(filenameWithDate);
+    var url = 'http://https://wady01.pythonanywhere.com/userFiles/_username_/savedFiles/' + encodeURIComponent(filenameWithDate);
     xhr.send('url=' + encodeURIComponent(url));
 }
 
