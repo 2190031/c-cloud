@@ -65,6 +65,131 @@
     }
   </style>
 {% endif %}
+{% if last_licence_id == 2 %}
+ <style>
+    @import url('https://fonts.cdnfonts.com/css/gotham-bold');
+    @import url('https://fonts.cdnfonts.com/css/gotham-book');
+     .bg-gray {
+       background-color: #878f9f !important;
+       height: 50%;
+       display: flex;
+       align-items: center;
+     }
+
+     .card {
+       height: 500px;
+     }
+
+     .btn-custom {
+       background-color: transparent;
+       border: 2px solid #ffffff;
+       color: #fbfbfb;
+       font-weight: bold;
+       font-size: 18px;
+       padding: 5px 15px;
+       border-radius: 15px;
+     }
+
+     .card-title {
+       font-size: 36px;
+       text-align: left;
+       margin-left: 30px;
+       font-family: 'Gotham Bold', sans-serif;
+     }
+
+     .btn-join {
+       margin-top: 20px;
+     }
+
+     .feature-list {
+       margin-left: 20px;
+       list-style: none;
+       padding-left: 0;
+       line-height: 2;
+       font-family: 'Gotham Book', sans-serif;
+     }
+
+     .bold-text {
+       font-weight: bold;
+     }
+     .bg-gray{
+       background-color: #9999 !important;
+     }
+
+     .plan-heading {
+       font-size: 24px;
+       text-align: center;
+       font-family: 'Gotham Bold', sans-serif;
+     }
+
+     .plan-content {
+       font-family: 'Gotham Book', sans-serif;
+     }
+   </style>
+{% endif %}
+{% if last_licence_id == 1 %}
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/gotham-bold');
+    @import url('https://fonts.cdnfonts.com/css/gotham-book');
+     .bg-gray {
+       background-color: #878f9f !important;
+       height: 50%;
+       display: flex;
+       align-items: center;
+     }
+
+     .card {
+       height: 500px;
+     }
+
+     .btn-custom {
+       background-color: transparent;
+       border: 2px solid #0c0c0c;
+       color: #000000;
+       font-weight: bold;
+       font-size: 18px;
+       padding: 5px 15px;
+       border-radius: 15px;
+     }
+
+     .card-title {
+       font-size: 36px;
+       text-align: left;
+       margin-left: 30px;
+       font-family: 'Gotham Bold', sans-serif;
+     }
+
+     .btn-join {
+       margin-top: 20px;
+     }
+
+     .feature-list {
+       margin-left: 20px;
+       list-style: none;
+       padding-left: 0;
+       line-height: 2;
+       font-family: 'Gotham Book', sans-serif;
+     }
+
+     .bold-text {
+       font-weight: bold;
+     }
+     .bg-gray{
+       background-color: #9999 !important;
+     }
+
+     .plan-heading {
+       font-size: 24px;
+       text-align: center;
+       font-family: 'Gotham Bold', sans-serif;
+     }
+
+     .plan-content {
+       font-family: 'Gotham Book', sans-serif;
+     }
+   </style>
+                             {% endif %}
+
     <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
         <div class="h-screen flex-grow-1 overflow-y-lg-auto">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
@@ -117,6 +242,7 @@
                            </div>
                            <br>
                            {% endif %}
+
                             {% if last_licence_id == 3 %}
                              <div class="container">
 
@@ -135,11 +261,29 @@
                                             <b><p class="card-text plan-content">Almacenamiento limitado</p></b>
                                             <br>
                                                 <ul class="card-text feature-list">
-                                                    <li><i class="fas fa-hdd" style="margin-right: 10px;"></i> 500 MB de SSD</li>
-                                                    <li><i class="fas fa-clock" style="margin-right: 10px;"></i> No tiene soporte 24/7</li>
-                                                    <li><i class="fas fa-cloud-upload-alt" style="margin-right: 10px;"></i> No tiene copias de seguridad automáticas</li>
-                                                    <li><i class="fas fa-lock" style="margin-right: 10px;"></i> Acceso seguro</li>
-                                                    <li><i class="fas fa-layer-group" style="margin-right: 10px;"></i> Peso máximo por archivo: 10 MB</li>
+                                                    <li><i class="fas fa-hdd" style="margin-right: 10px;"></i> {{details_licence.max_storage_mb}} MB de SSD</li>
+                                                    <li><i class="fas fa-clock" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.support_24_7 %}
+                                                       Soporte 24/7
+                                                    {% else %}
+                                                       No tiene soporte 24/7
+                                                     {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-cloud-upload-alt" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.automatic_backups %}
+                                                    Copias de seguridad diaras automáticas
+                                                    {% else %}
+                                                    No tiene copias de seguridad automáticas
+                                                    {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-lock" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.secure_access %}
+                                                    Acceso seguro
+                                                    {% else %}
+                                                    Acceso no seguro
+                                                    {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-layer-group" style="margin-right: 10px;"></i> Peso máximo por archivo: {{details_licence.file_capacity}} MB de SSD</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -148,6 +292,106 @@
 
                             </div>
                              {% endif %}
+
+                             {% if last_licence_id == 2 %}
+                              <div class="container">
+                                   <div class="row">
+                                        <div class="col-md-8 offset-md-2">
+                                            <div class="card">
+                                               <div class="card-header bg-gray" style="background-color: #5a88e4 !important;">
+                                                    <h5 class="card-title" style="
+                                                                             color: rgb(255, 255, 255);
+                                                                                        ">C-Cloud Estándar <br> <a href="/licences" class="btn btn-custom btn-join">Únete a Premium</a> </h5>
+                                                </div>
+                                                <div class="card-body" style="
+                                                                                 background-color: #000000;
+                                                                         color: white;
+                                                        ">
+                                                <b><p class="card-text plan-content">Almacenamiento limitado</p></b>
+                                                <br>
+                                                  <ul class="card-text feature-list">
+                                                    <li><i class="fas fa-hdd" style="margin-right: 10px;"></i> {{details_licence.max_storage_mb}} MB de SSD</li>
+                                                    <li><i class="fas fa-clock" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.support_24_7 %}
+                                                       Soporte 24/7
+                                                    {% else %}
+                                                       No tiene soporte 24/7
+                                                     {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-cloud-upload-alt" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.automatic_backups %}
+                                                    Copias de seguridad diaras automáticas
+                                                    {% else %}
+                                                    No tiene copias de seguridad automáticas
+                                                    {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-lock" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.secure_access %}
+                                                    Acceso seguro
+                                                    {% else %}
+                                                    Acceso no seguro
+                                                    {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-layer-group" style="margin-right: 10px;"></i> Peso máximo por archivo: {{details_licence.file_capacity}} MB de SSD</li>
+                                                </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  </div>
+
+                                </div>
+                             {% endif %}
+                             {% if last_licence_id == 1 %}
+                                <div class="container">
+
+                                       <div class="row">
+                                             <div class="col-md-8 offset-md-2">
+                                                 <div class="card">
+                                                    <div class="card-header bg-gray" style="background-color: hsl(59, 72%, 62%) !important;">
+                                                         <h5 class="card-title" style="
+                                                                                  color: rgb(0, 0, 0);
+                                                                                             ">C-Cloud Premium <br> <a href="/licences" class="btn btn-custom btn-join">Cambiar de plan</a> </h5>
+                                                     </div>
+                                                     <div class="card-body" style="
+                                                                                      background-color: #000000;
+                                                                              color: white;
+                                                             ">
+                                                     <b><p class="card-text plan-content">Almacenamiento limitado</p></b>
+                                                     <br>
+                                                         <ul class="card-text feature-list">
+                                                    <li><i class="fas fa-hdd" style="margin-right: 10px;"></i> {{details_licence.max_storage_mb}} MB de SSD</li>
+                                                    <li><i class="fas fa-clock" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.support_24_7 %}
+                                                       Soporte 24/7
+                                                    {% else %}
+                                                       No tiene soporte 24/7
+                                                     {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-cloud-upload-alt" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.automatic_backups %}
+                                                    Copias de seguridad diaras automáticas
+                                                    {% else %}
+                                                    No tiene copias de seguridad automáticas
+                                                    {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-lock" style="margin-right: 10px;"></i>
+                                                    {% if details_licence.secure_access %}
+                                                    Acceso seguro
+                                                    {% else %}
+                                                    Acceso no seguro
+                                                    {% endif %}
+                                                    </li>
+                                                    <li><i class="fas fa-layer-group" style="margin-right: 10px;"></i> Peso máximo por archivo: {{details_licence.file_capacity}} MB de SSD</li>
+                                                </ul>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                       </div>
+
+                                     </div>
+                             {% endif %}
+
+
                                                   </div>
                                               </div>
                                           </div>

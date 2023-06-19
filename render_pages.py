@@ -233,16 +233,18 @@ def render_error_reports():
 def render_my_plan():
     if 'user_id' in session or 'google_id' in session:
             id_user = session.get("user_id")
-            last_transaction = db.session.query(paytransaction).filter_by(iduser=id_user).order_by(paytransaction.idlicence.desc()).first()
+            last_transaction = db.session.query(paytransaction).filter_by(iduser=id_user).order_by(paytransaction.idpaytransaction.desc()).first()
             if last_transaction:
                 last_licence_id = last_transaction.idlicence
+                details_licence = db.session.query(licence).filter_by(idlicence=last_licence_id).first()
             else:
                 last_licence_id = 3
+                details_licence = db.session.query(licence).filter_by(idlicence=last_licence_id).first()
 
             title = 'Mi plan'
             role = session.get('user_role')
             new_plan = session.pop("new_plan", None)
-            return render_template('my_plan.html', title=title, role=role, username=session.get('user_username'), newplan=new_plan, last_transaction=last_transaction,last_licence_id=last_licence_id )
+            return render_template('my_plan.html', title=title, role=role, username=session.get('user_username'), newplan=new_plan, details_licence=details_licence,last_licence_id=last_licence_id )
     else:
         return redirect("/login")
 
