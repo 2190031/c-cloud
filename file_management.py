@@ -531,6 +531,23 @@ def download_file():
         print(traceback.format_exc())
         return jsonify({'error': str(e)})
 
+    #url = request.form['url']
+    #username = session.get('user_username')
+    #new_url = url.replace('_username_', str(username))
+    #print(new_url)
+    #response = requests.get(new_url)
+    #if response.status_code == 200:
+    #    content = response.content
+    #        
+    #    filename = os.path.basename(new_url)
+    #    file_path = os.path.join(os.path.expanduser("~/Downloads"), filename)
+    #    with open(file_path, "wb") as file:
+    #        file.write(content)
+    #    print("Archivo descargado correctamente en:", file_path)
+    #    return make_response("Archivo descargado correctamente.", 200)
+    #else:
+    #    print("Error al descargar el archivo.")
+    #    return make_response("Error al descargar el archivo.", 500)
 
 async def move_to_trash_async():
     username = session.get('user_username')
