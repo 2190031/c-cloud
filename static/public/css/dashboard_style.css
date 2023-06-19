@@ -29,6 +29,12 @@ body {
     background-color: #131314;
 }
 
+#data-container {
+    max-height: 80vh;
+    overflow-x: scroll !important;
+    overflow-y: scroll !important;
+}
+
 #files {
     max-height: 70vh;
 }
@@ -53,6 +59,7 @@ div.dropdown .dropdown-menu {
     width: 250px;
 }
 
+
 .swal-overlay {
     background-color: rgba(200, 200, 200, 0);
 }
@@ -61,9 +68,91 @@ div.dropdown .dropdown-menu {
     background-color: #212529;
 }
 
-.swal-text {
+.swal-text, .swal-title {
     color: #fff !important;
 }
+
+.swal-icon.swal-icon--success {
+    background-color: rgba(0,0,0,0) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.swal-icon.swal-icon--success::after {
+    background-color: rgba(0,0,0,0) !important;
+    background-image: none !important;
+}
+
+.swal-icon.swal-icon--success::before {
+    background-color: rgba(0,0,0,0) !important;
+    background-image: none !important;
+}
+
+.swal-icon--success__hide-corners {
+    background-color: rgba(0,0,0,0) !important;
+    background-image: none !important;
+}
+
+
+
+.swal-button--premium {
+    background-color: #39347e;
+}
+
+.swal-button--premium:hover {
+    background-color: #39347e !important;
+}
+
+.swal-button--cancel {
+  background-color: #dd3333; /* Estilo personalizado para el botón "Cancelar" */
+  color: white;
+}
+
+.swal-button--cancel:not([disabled]):hover {
+  background-color: #dd3333 !important;
+  color: white;
+}
+
+.swal-button--neutral {
+  background-color: #999999; /* Estilo personalizado para el botón "Neutral" */
+   color: white;
+}
+
+.swal-button--neutral:not([disabled]):hover {
+  background-color: #999999 !important;
+  color: white;
+}
+
+.swal-button--deny {
+  background-color: #ff8800; /* Estilo personalizado para el botón "Denegar" */
+  color: white;
+}
+
+.swal-button--deny:not([disabled]):hover {
+  background-color: #ff8800 !important;
+  color: white;
+}
+
+#search-file_filter input, select{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+
+}
+
+#search-deleted-file_filter input, select{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+
+}
+#search-report_filter input, select{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+
+}
+
 
 @media only screen and (max-width: 990px) {
     nav img {
@@ -91,3 +180,34 @@ div.dropdown .dropdown-menu {
     color: #fff;
     text-align: center;
 } */
+
+.alert-info {
+    color: #fff;
+    background-color: #17a3b8ad;
+    border-color: #148ea1;
+}
+
+.alert-dismissible {
+    padding-right: 4rem;
+}
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
+}
+
+
+#search-user_filter input, select{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+
+}
+
+select option{
+        color: white;
+        background-color: #000000;
+}

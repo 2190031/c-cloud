@@ -67,7 +67,7 @@ body {
 #bann-btn {
     border-radius: 20px;
     padding-left: 2pc;
-    padding-right: 2pc; 
+    padding-right: 2pc;
     margin-top: 10px;
 }
 
@@ -78,7 +78,7 @@ body {
     /* background-image: linear-gradient(to right, rgba(0,0,0,0) , rgba(58, 58, 83, 0.5)); */
     border-bottom: 1px solid rgba(255,255,255,.2);
     color: whitesmoke !important;
-    
+
 }
 
 .btn {
@@ -115,7 +115,7 @@ body {
 
 footer * {
     color: whitesmoke;
-    overflow: hidden;
+
 }
 
 .align-right {
@@ -158,11 +158,11 @@ footer * {
     --weight3: 600;
 }
 
-.attribution { 
-    font-size: 11px; text-align: center; 
+.attribution {
+    font-size: 11px; text-align: center;
 }
-.attribution a { 
-    color: hsl(228, 45%, 44%); 
+.attribution a {
+    color: hsl(228, 45%, 44%);
 }
 
 .box p {
@@ -178,7 +178,7 @@ footer * {
     border-radius: 5px;
     box-shadow: 0px 30px 20px -20px #9b8d8d55;
     padding: 30px;
-    margin: 20px;  
+    margin: 20px;
     background-color: #282828a0;
     text-align: justify;
 }
@@ -189,14 +189,18 @@ img {
 
 @media (max-width: 450px) {
     .box {
-        height: 200px;
+        height: auto;
+        box-sizing: content-box;
+        margin-bottom: 50px;
     }
+
+
 }
 
 @media (max-width: 1075px) {
-      
+
     .box ul{
-      text-align: left; 
+      text-align: left;
     }
 }
 @media (max-width: 950px) and (min-width: 450px) {
@@ -234,7 +238,7 @@ h2 {
         align-items: center;
         box-sizing:content-box !important;
     }
-    
+
     .row2-container {
         display: flex;
         justify-content: center;
@@ -248,10 +252,10 @@ h2 {
     }
     .box {
         width: 28%;
-     
+
     }
     .header p {
         width: 30%;
     }
-    
+
 }

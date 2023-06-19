@@ -1,3 +1,4 @@
+// elimina permanentemente el archivo
 function confirmDelete(file) {
     swal(
         "Estás seguro de que quieres eliminar este archivo?", {
@@ -28,6 +29,13 @@ function confirmDelete(file) {
                     xhr.send(data);
                 } catch (error) {
                     console.error(error);
+                    swal({
+                        title: 'Ha ocurrido un error',
+                        text: 'Recargue la página y vuelva a intentar nuevamente',
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: false,
+                    });
                 }
                 break;
             case null:
@@ -39,6 +47,7 @@ function confirmDelete(file) {
     })
 }
 
+// restaura el archivo
 function confirmRestore(file) {
     swal(
         "Estás seguro de que quieres restaurar este archivo?", {
@@ -69,6 +78,13 @@ function confirmRestore(file) {
                     xhr.send(data);
                 } catch (error) {
                     console.error(error);
+                    swal({
+                        title: 'Ha ocurrido un error',
+                        text: 'Recargue la página y vuelva a intentar nuevamente',
+                        icon: 'error',
+                        timer: 3000,
+                        buttons: false,
+                    });
                 }
                 break;
             case null:

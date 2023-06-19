@@ -1,104 +1,156 @@
 {% extends 'logged.base.html' %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+<style>
 
-<!--
-    <div class="card-group">
-        {% for file in files %}
-            <div class="card text-bg-dark shadow">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{ file.name }}</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-body-light">{{ file.update_time }}</small>
+    #upload-button {
+    padding: 10px 20px;
+    background-color: #4f32b1;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#upload-button:hover {
+    background-color: #013668;
+
+
+}
+
+</style>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+
+  {% if 'user_id' in session %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-light align-middle" data-bs-toggle="modal" data-bs-target="#report-error">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-octagon" viewBox="0 0 16 16">
+                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                Hacer un reporte
+            </button>
+        </div>
+        <div class="modal fade" id="report-error" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar error</h1>
+                        <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-2 col-10 mx-auto">
+                            <label class="form-label" for="error-topic">Asunto</label>
+                            <input type="text" class="form-control" id="error-topic" placeholder="Lorem ipsum" data-bs-theme="dark">
+                        </div>
+                        <div class="p-2 col-10 mx-auto">
+                            <label for="report">Describa el error:</label>
+                            <textarea name="report" id="report-body" class="form-control" data-bs-theme="dark"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="send-report-btn">Enviar</button>
+                    </div>
                 </div>
             </div>
-        {% endfor %}
-    </div> 
--->
-  {% if 'user_id' in session %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-    <h1 class="h2">Dashboard</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-light">Compartir</button>
-            <button type="button" class="btn btn-sm btn-outline-light">Exportar</button>
         </div>
-        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="feather feather-calendar align-text-bottom" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            Esta semana
-        </button>
     </div>
-</div>
 
-<h2>Librería</h2>
-<div class="table-responsive overflow-y-scroll" id="files">
-    <table class="table table-responsive text-white table-borderless overflow-y-scroll">
-        <thead>
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Fecha de creación</th>
-                <th scope="col">Última modificación</th>
-                <th scope="col">Extensión</th>
-            </tr>
-        </thead>
-        <tbody style="max-height: 30vh; overflow-y: hidden;">
-            {% if not files %}
-            <td colspan="7">No resultados</td>
-            {% else %}
-            {% for file in files %}
-                {% if file.name == "old" or file.name == 'trash' %}
-                {% else %}
-                <tr id="{{ file.name }}">
-                    <td id="file-{{ file.name }}">
-                        <a href="/load_file_blank/{{ file.name }}" target="_blank" rel="noopener noreferrer"
-                            class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-                            {{ file.name }}
-                        </a>
-                    </td>
-                    <td>{{ file.creation_time }}</td>
-                    <td>{{ file.update_time }}</td>
-                    <td id="file-{{ file.name }}-extension">{{ file.extension }}</td>
-                    <td>
-                        <button type="button" class="btn text-white rounded-circle" id="download-file-btn" data-file="{{ file.name }}" onclick="downloadFile(this.dataset.file)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                            </svg>
-                        </button>
-                        <button type="button" class="btn text-white rounded-circle" id="delete-file-{{ loop.index }}-btn" data-file="{{ file.name }}" onclick="moveToTrash(this.dataset.file)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                            </svg>
-                        </button>
-                        {# <button type="button" class="btn text-white rounded-circle" id="option-btn" data-file="{{ file.name }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                <path
-                                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                            </svg>
-                        </button> #}
-                    </td>
+    <h2>Librería</h2>
+    <div class="table-responsive overflow-y-scroll" id="files">
+        <table class="table text-white table-borderless overflow-y-scroll align-middle" id="search-file">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre del archivo</th>
+                    <th scope="col">Fecha de creación</th>
+                    <th scope="col">Última modificación</th>
+                    <th scope="col">Extensión</th>
+                    <th scope="col">Tamaño</th>
+                    <th scope="col">Acciones</th>
                 </tr>
+            </thead>
+            <tbody style="max-height: 35vh; overflow-y: hidden;" class="align-middle">
+                {% if not files %}
+                <td colspan="7" class="align-middle text-center">Todavía no se han creado archivos.</td>
+                {% else %}
+                {% for file in files %}
+                    {% if file.name == "old" or file.name == 'trash' %}
+                    {% else %}
+                    <tr id="{{ file.name }}" class="align-middle">
+                        <td class="align-middle" id="file-{{ file.name }}">
+                            <a href="/load_file_blank/{{ file.name }}" target="_blank" rel="noopener noreferrer"
+                                class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                                {{ file.name }}
+                            </a>
+                        </td>
+                        <td class="align-middle">{{ file.creation_time }}</td>
+                        <td class="align-middle">{{ file.update_time }}</td>
+                        <td class="align-middle" id="file-{{ file.name }}-extension">{{ file.extension }}</td>
+                        <td class="align-middle">{{ file.size }}</td>
+                        <td class="align-middle">
+                            <button type="button" class="btn text-white rounded-circle" id="download-file-btn" data-file="{{ file.name }}" onclick="downloadFile(this.dataset.file)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn text-white rounded-circle" id="delete-file-{{ loop.index }}-btn" data-file="{{ file.name }}" onclick="moveToTrash(this.dataset.file)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
                 {% endif %}
-            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <div>
+            {% set total_space_used_number = total_space_used|float %}
+
+            {% if unit_c == ' KB' %}
+              {% set total_space_used_mb = total_space_used_number / 1024 %}
+              {% set new_unit = ' MB' %}
+            {% else %}
+              {% set total_space_used_mb = total_space_used_number %}
+              {% set new_unit = ' MB' %}
             {% endif %}
-        </tbody>
-    </table>
-</div>
+
+            {% set percentage_used = (total_space_used_mb / max_storage) * 100 %}
+            {% set percentage_used_rounded = percentage_used|round(2) %}
+
+
+            <small><b>({{percentage_used_rounded}}%) full</b> - {{total_space_used_mb | round(2)}}{{new_unit}} de tus {{max_storage}} MB disponibles  </small>
+        <div style="float: right;">
+            <input type="file" id="file-input" style="display: none;">
+        <label for="file-input" id="upload-button">Subir Archivo</label>
+         <small style="display: block; text-align: center;"> <b>{{storage_per_archive_}}MiB</b> por archivo  </small>
+        </div>
+
+    </div>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script>
+            var jq = jQuery.noConflict();
+            jq(document).ready(function () {
+                jq('#search-file').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-MX.json' // Ruta al archivo de traducción en español
+                    }
+                });
+            });
+    </script>
    {% endif %}
 {% endblock %}
 {% block script %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="{{ url_for('static', filename='public/js/dashboard.js') }}"></script>
 {% endblock %}

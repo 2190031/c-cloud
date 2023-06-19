@@ -1,292 +1,259 @@
 <!DOCTYPE html>
 <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="C-Cloud">
+        <meta name="description" content="C-Cloud, es una empresa dedicada a ofrecer servicios digitales orientados a la programación, ofreciendo un editor web y la posiblidad de salvado de archivos.">
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='public/img/icon.png') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/src-min-noconflict/ace.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/css/ace.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-npx0YY4rT6FBwt3aAsoTIqbrzqq4wK+Y1T4gzt88lEeOj2s25dUhxmvgoOnql4VxrO6cYphWI+vvW0VXvPLX3Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
+        <title>{% block title %}{{ title }}{% endblock %}</title>
+        <style>
+            @media (max-width: 768px){
+                .container {
+                    max-width: 850px !important;
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='public/img/icon.png') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/src-min-noconflict/ace.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.15.2/css/ace.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-npx0YY4rT6FBwt3aAsoTIqbrzqq4wK+Y1T4gzt88lEeOj2s25dUhxmvgoOnql4VxrO6cYphWI+vvW0VXvPLX3Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
+                }
+                 img {
+                   float: none !important;
 
-    <title>{% block title %}{{ title }}{% endblock %}</title>
-</head>
+                }
+            }
 
-<body>
-
-    <div class="banner" id="header">
-        <div class="container" id="nav">
-            <ul class="nav justify-content-end">
-                <li class="nav-item rounded-lg">
-                    <a class="nav-link text-light" href="/" id="index">Inicio</a>
-                </li>
-                <li class="nav-item rounded-lg">
-                    <a class="nav-link text-light" href="/licences" id="index">Planes</a>
-                </li>
-                {% if 'user_id' in session or 'google_id' in session %}
-                <li class="nav-item rounded-lg">
-                    <a class="nav-link text-light" href="/dashboard" id="index">Mi Panel</a>
-                </li>
-                {% endif %}
-                <div class="vr" style="margin-right: 20px;"></div>
-                {% if 'user_id' in session or 'google_id' in session %}
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if "google_picture" in session %}
-                        <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
-                        {% else %}
-                        <img alt="" width="32" height="32" class="rounded-circle me-2" id="profile-picture">
-                        {% endif %}
-                        <strong>{{  session['user_name']|title }} </strong>
-                    </a>
-                    <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">                       
-                        <li><a class="dropdown-item text-white" href="/settings">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-gear" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
-                                    <path
-                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
-                                </svg>
-                                Settings
-                            </a></li>
-                        <li><a class="dropdown-item text-white" href="/profile">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-person" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
-                                </svg>
-                                Profile
-                            </a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item text-white" href="/logout">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                        d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-                                    <path fill-rule="evenodd"
-                                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                                </svg>
-                                Cerrar sesión
+        </style>
+    </head>
+    <body>
+        <div class="banner" id="header">
+            <div class="container" id="nav">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item rounded-lg">
+                        <a class="nav-link text-light" href="/" id="index">Inicio</a>
+                    </li>
+                    <li class="nav-item rounded-lg">
+                        <a class="nav-link text-light" href="/licences" id="index">Planes</a>
+                    </li>
+                    {% if 'user_id' in session or 'google_id' in session %}
+                    <li class="nav-item rounded-lg">
+                        <a class="nav-link text-light" href="/dashboard" id="index">Mi Panel</a>
+                    </li>
+                    {% endif %}
+                        <div class="vr" style="margin-right: 20px;"></div>
+                    {% if 'user_id' in session %}
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if "google_picture" in session %}
+                                <img src="{{session['google_picture']}}" alt="" width="32" height="32" class="rounded-circle me-2">
+                                {% else %}
+                                <img alt="" width="32" height="32" class="rounded-circle me-2" id="profile-picture">
+                                {% endif %}
+                                <strong>{{  session['user_name']|title }} </strong>
                             </a>
+                            <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
+                                <li><a class="dropdown-item text-white" href="/profile">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-person" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                                        </svg>
+                                        Profile
+                                    </a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item text-white" href="/logout">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                        </svg>
+                                        Cerrar sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <li class="nav-item rounded-lg">
+                            <a class="nav-link btn btn-outline-light btn-sm" href="/login" id="login">Iniciar sesión</a>
                         </li>
-                    </ul>
-                </div>
-                
-
-                {% else %}
-                <li class="nav-item rounded-lg">
-                    <a class="nav-link btn btn-outline-light btn-sm" href="/login" id="login">Iniciar sesión</a>
-                </li>
-                <li class="nav-item rounded-lg">
-                    <a class="nav-link btn btn-outline-light btn-sm" href="/signup" id="signup">Registrarse</a>
-                </li>
-
-                {% endif %}
-            </ul>
+                        <li class="nav-item rounded-lg">
+                            <a class="nav-link btn btn-outline-light btn-sm" href="/signup" id="signup">Registrarse</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="bann-logo">
+                <h1 class="display-3 shadow-sm">C-cloud</h1>
+                <a class="btn btn-outline-light" href="#intro" id="bann-btn">Ver más</a>
+            </div>
         </div>
-        <div class="bann-logo">
-            <h1 class="display-3 shadow-sm">C-cloud</h1>
-            <a class="btn btn-outline-light" href="#intro" id="bann-btn">Ver más</a>
-        </div>
+        <section class="body">
+            <div class="container">
+                <p class="" id="intro">
+                    C-Cloud, es una empresa dedicada a ofrecer servicios digitales orientados a la programación,
+                    ofreciendo un editor web y la posiblidad de salvado de archivos. A corto plazo,
+                    queremos formar una plataforma que cumpla correctamente con las necesidades
+                    del cliente interesado en el mercado.
+                    A mediano plazo queremos expandirnos a más mercados relacionados y
+                    a largo plazo es llegar a ser reconocidos por nuestros servicios.
+                </p>
+                <br>
 
-    </div>
-
-    <section class="body">
-        <!-- <div class="logo"> -->
-        <div class="container">
-            <p class="" id="intro">
-                 C-Cloud, es una empresa dedicada a ofrecer servicios digitales orientados a la programación, 
-                ofreciendo un editor web y la posiblidad de salvado de archivos. A corto plazo,
-                 queremos formar una plataforma que cumpla correctamente con las necesidades 
-                 del cliente interesado en el mercado.  
-                 A mediano plazo queremos expandirnos a más mercados relacionados y 
-                 a largo plazo es llegar a ser reconocidos por nuestros servicios.
-             
-            </p>
-            <br>
-            <div class="row">
-                <div class="col w-50">
-                    <img src="{{ url_for('static', filename='public/img/icon.png') }}" width="300px"
-                        class="mx-auto d-block" alt="">
-                </div>
-                <div class="col w-50 align-middle">
-                    <p class="align-right ms-auto p-2">
-                        Somos una empresa que nace al darnos cuenta e identificar una necesidad en el 
-                        mercado de alojamiento en la nube. Nos dimos cuenta de que muchos 
-                        ingenieros tanto de sistemas como de software estaban insatisfechos 
-                        con los servicios actuales de alojamiento en la nube y estaban buscando 
-                        un servicio que pudiera satisfacer sus necesidades específicas. 
-                       
-                    </p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 order-md-1">
+                        <p class="text-justify p-2">
+                            Somos una empresa que nace al darnos cuenta e identificar una necesidad en el
+                            mercado de alojamiento en la nube. Nos dimos cuenta de que muchos ingenieros
+                            tanto de sistemas como de software estaban insatisfechos con los servicios
+                            actuales de alojamiento en la nube y estaban buscando un servicio que pudiera
+                            satisfacer sus necesidades específicas.
+                        </p>
+                    </div>
+                    <div class="col-md-6 order-md-0">
+                        <img src="{{ url_for('static', filename='public/img/icon.png') }}" width="300px" class="mx-auto d-block img-fluid" alt="">
+                    </div>
                 </div>
             </div>
             <br>
             <hr>
-            
-            <div class="row">
-                <div class="col w-50 align-middle">
-                    <p class="align-left">
-                        La empresa beneficia principalmente a los programadores y desarrolladores 
-                        de aplicaciones que buscan un servicio de alojamiento en 
-                        la nube de alta calidad y enfocado en sus necesidades específicas. 
-            <br>
-            <br>
-                          Nuestros clientes son mayormente individuos o empresas que crean y alojan
-                          aplicaciones en línea, ya sea para uso personal o para uso comercial.
-                          Además, la empresa también puede beneficiar 
-                          a otras empresas que requieren servicios de alojamiento 
-                          en la nube para sus aplicaciones.
 
-                    </p>
-                </div>
-                <div class="col w-50">
-                    <img src="https://camo.githubusercontent.com/97d0c0c4209208d8ec9573c7e213e05872a9f59b703868647b559b77af601cc6/68747470733a2f2f692e70696e696d672e636f6d2f6f726967696e616c732f65382f66342f35332f65386634353334363961336563393765636433353464663436356437333931332e676966" width="340px"
-                        class="mx-auto d-block" alt="">
+            <div class="row">
+              <div class="col-md-6">
+                <p class="align-left">
+                  La empresa beneficia principalmente a los programadores y desarrolladores
+                  de aplicaciones que buscan un servicio de alojamiento en
+                  la nube de alta calidad y enfocado en sus necesidades específicas.
+                  <br>
+                  <br>
+                  Nuestros clientes son mayormente individuos o empresas que crean y alojan
+                  aplicaciones en línea, ya sea para uso personal o para uso comercial.
+                  Además, la empresa también puede beneficiar
+                  a otras empresas que requieren servicios de alojamiento
+                  en la nube para sus aplicaciones.
+                </p>
+              </div>
+              <div class="col-md-6 order-md-0">
+                  <img src="https://camo.githubusercontent.com/97d0c0c4209208d8ec9573c7e213e05872a9f59b703868647b559b77af601cc6/68747470733a2f2f692e70696e696d672e636f6d2f6f726967696e616c732f65382f66342f35332f65386634353334363961336563393765636433353464663436356437333931332e676966" width="340px" alt="img gituser" style="float: left !important;" class="mx-auto d-block img-fluid">
+
+                    </div>
+
+             </div>
+            </div>
+        </section>
+        <section class="banner" id="banner">
+            <div class="container position-absolute top-50 text-end">
+                <div class="d-flex flex-row-reverse">
+                    <div class="p-2">
+                        <h1 class="text-light display-5">Sobre nosotros</h1>
+                    </div>
+                    <div class="p-2">
+                        <button class="btn btn-outline-light me-3 top-50" id="bann-btn">Ver más</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- </div> -->
-    </section>
-    <section class="banner" id="banner">
-        <div class="container position-absolute top-50 text-end">
-            <div class="d-flex flex-row-reverse">
-                <!-- <div class="d-inline-flex p-2"> -->
-                <div class="p-2">
-                    <h1 class="text-light display-5">Sobre nosotros</h1>
-                </div>
-                <div class="p-2">
-                    <button class="btn btn-outline-light me-3 top-50" id="bann-btn">Ver más</button>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="body" id="b-2">
-    
-        
-        <h2 style="color:#ffffff; font-weight: 400; margin-top: 60px">Descubre el horizonte ilimitado de C-Cloud</h2>
-        <h4 style="color:#ffffff; font-weight: 400;">Tu socio en la nube para desarrolladores creativos</h4>
+        </section>
+        <section class="body" id="b-2">
+            <h2 style="color:#ffffff; font-weight: 400; margin-top: 60px">Descubre el horizonte ilimitado de C-Cloud</h2>
+            <h4 style="color:#ffffff; font-weight: 400;">Tu socio en la nube para desarrolladores creativos</h4>
             <div class="row1-container">
                 <div class="box box-down cyan">
-                  <h2>Visión</h2>
-                  <p>Ser una organización líder en la entrega de servicios y soluciones empresariales
-                    de alta calidad y seguridad,
-                    utilizando la nube como principal tecnología para operar de manera eficiente y rentable.</p>
-                  <img src="https://assets.codepen.io/2301174/icon-supervisor.svg" alt="">
+                    <h2>Visión</h2>
+                    <p>Ser una organización líder en la entrega de servicios y soluciones empresariales
+                        de alta calidad y seguridad,
+                        utilizando la nube como principal tecnología para operar de manera eficiente y rentable.
+                    </p>
+                    <img src="https://assets.codepen.io/2301174/icon-supervisor.svg" alt="">
                 </div>
-            
                 <div class="box red">
-                  <h2>Misión</h2>
-                  <p>Ofrecer un servicio de calidad 
-                    en lo referente a los servidores en la nube enfocado en dedicar el servicio a 
-                    programadores de aplicaciones.</p>
-                  <img src="https://assets.codepen.io/2301174/icon-team-builder.svg" alt="">
+                    <h2>Misión</h2>
+                    <p>Ofrecer un servicio de calidad
+                        en lo referente a los servidores en la nube enfocado en dedicar el servicio a
+                        programadores de aplicaciones.</p>
+                    <img src="https://assets.codepen.io/2301174/icon-team-builder.svg" alt="">
                 </div>
                 <div class="box box-down blue">
-                  <h2>Valores</h2>
-                  <p> 
-                    <ul>
-                        <li style="margin-bottom: 10px;">
-                            Responsabilidad y respeto al cliente
-                        </li>
-                        <li style="margin-bottom: 10px;">
-                            Confianza y confidencialidad
-                        </li>
-                        <li style="margin-bottom: 10px;">
-                            Innovación y creatividad
-                        </li>
-                        <li style="margin-bottom: 10px;">
-                            Seguridad y sostenibilidad
-                        </li>
-                        <li style="margin-bottom: 10px;">
-                            Compromiso y honestidad.
-                        </li>
-                    </ul>   
+                    <h2>Valores</h2>
+                    <p>
+                        <ul>
+                            <li style="margin-bottom: 10px;">
+                                Responsabilidad y respeto al cliente
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Confianza y confidencialidad
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Innovación y creatividad
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Seguridad y sostenibilidad
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Compromiso y honestidad.
+                            </li>
+                        </ul>
                     </p>
-                  <img src="https://assets.codepen.io/2301174/icon-calculator.svg" alt="">
+                    <img src="https://assets.codepen.io/2301174/icon-calculator.svg" alt="">
                 </div>
-              </div>
-              
-              <div class="row2-container">
-                
-              </div>
-           
-      
-        <!-- </div> -->
-    </section>
-    <div class="container-fluid" id="footer">
+            </div>
+            <div class="row2-container"></div>
+        </section>
+            <div class="container-fluid" id="footer" style="text-align: center !important;">
         <footer class="object-fit-fill ">
-            <div class="container">
+          <div class="container">
                 <footer class="pt-5">
                     <div class="row text">
-                        <div class="col-6 col-md-2 mb-3">
-                            <h5>Section</h5>
-                            <ul class="nav flex-column text ligh">
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Home</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Features</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Pricing</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">FAQs</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">About</a></li>
-                            </ul>
+                          <div class="col-md-4 offset-md-2 mb-3">
+                             <img src="/static/public/img/logo-lg.png" height="140px">
                         </div>
-
                         <div class="col-6 col-md-2 mb-3">
-                            <h5>Section</h5>
-                            <ul class="nav flex-column">
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Home</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Features</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Pricing</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">FAQs</a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">About</a></li>
+                            <h5>Enlaces</h5>
+                            <ul class="nav flex-column text ligh">
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Inicio</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Acerca de</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Nuestros planes</a></li>
+
+                                {% if 'user_id' not in session %}
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Iniciar sesión</a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light">Registrarse</a></li>
+                                {% endif %}
+
                             </ul>
                         </div>
 
                         <div class="col-6 col-md-2 mb-3">
                             <h5>Redes sociales</h5>
                             <ul class="nav flex-column">
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></i></a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></i></a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg></a></li>
-                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg></i></a></li>
-                            </ul>                              
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg></a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg></a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path></svg></a></li>
+                                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"></path></svg></a></li>
+                            </ul>
 
                         </div>
 
-                        <div class="col-md-5 offset-md-1 mb-3">
-                            <form>
-                                <h5>Suscríbete a nuestra newsletter</h5>
-                                <p>Compromiso mensual de lo que es nuevo y emocionante de nosotros.</p>
-                                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                                    <label for="newsletter1" class="visually-hidden">Email address</label>
-                                    <input id="newsletter1" type="text" class="form-control"
-                                        placeholder="Email address">
-                                    <button class="btn btn-primary" type="button">Subscribete</button>
-                                </div>
-                            </form>
-                        </div>
+
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
-                        <p>c-cloud© 2022 Company, Inc. All rights reserved.</p>
+                        <p>C-Cloud© 2022 Company, Inc. Todos los derechos reservados.</p>
                         <!-- <button class="sticky-bottom float-end go-top"><img src="https://cdn-icons-png.flaticon.com/512/130/130906.png" alt=""></button> -->
                     </div>
                 </footer>
             </div>
         </footer>
     </div>
-    <script src="{{ url_for('static', filename='public/js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='public/js/profile_pic.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
-</body>
-
+        <script src="{{ url_for('static', filename='public/js/main.js') }}"></script>
+        <script src="{{ url_for('static', filename='public/js/profile_pic.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    </body>
 </html>

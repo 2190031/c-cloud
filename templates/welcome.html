@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex">
+        <meta name="author" content="C-Cloud">
+        <title>Su cuenta ha sido desactivada</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/8e44a9e639.js" crossorigin="anonymous"></script>
+        <style>
+            body {
+                background-color: #eef2f5;
+            }
+
+            .text-bold {
+                font-weight: bold;
+            }
+
+            .no-bullets {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .social-icons {
+                text-align: center;
+            }
+
+            .social-icons li {
+                display: inline-block;
+                margin-right: 10px;
+            }
+
+            .social-icons a {
+                margin: 0 10px;
+                color: #000;
+            }
+
+            .centered-title {
+                text-align: center;
+                font-size: 24px;
+                margin-top: 20px;
+            }
+
+            .image-container {
+                text-align: center;
+                margin-top: 20px;
+                margin-left: auto;
+                margin-right: -60px;
+            }
+
+            .custom-image {
+                max-width: 50%;
+            }
+
+            .card-body {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: justify;
+            }
+
+            .social-icons a {
+                color: #333;
+                font-size: 24px;
+                margin-right: 10px;
+            }
+
+            .card {
+                background-color: #003366;
+                border-radius: 8px;
+                padding: 20px;
+                margin: 20px;
+
+            }
+
+            .company-address {
+                color: #000;
+                font-size: 20px;
+                text-align: left;
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                margin-bottom: 20px;
+            }
+
+            .logo {
+                width: 50px;
+                height: auto;
+                margin-right: 10px;
+            }
+
+            .company-name {
+                color: #000;
+                font-size: 24px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+
+            .container {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+            }
+
+            .button {
+                padding: 12px 24px;
+                font-size: 18px;
+                border-radius: 8px;
+                background-color: #003366;
+                color: #fff;
+                text-decoration: none;
+                margin-left: left;
+                width: 100%;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="image-container">
+                        <img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AFGJ81rQJRCDWYbePvEcNyDWSWfbdZDh6yOXEwkb2goLo9VKGDSesbQoifjkPcXIL9Jzeho5MJgLoeisfyAal-M2KDHAXCTE=w1920-h947" width="150px" alt="C-Cloud Logo" class="img-fluid custom-image">
+                    </div>
+                    <h5 class="card-title centered-title">Bienvenido/a a C-Cloud</h5>
+                    <br>
+                    <p class="card-text">
+                        Estimado/a <strong>{{name}}</strong>,
+                        <br><br><br>
+                        ¡Bienvenido/a a C-Cloud! Nos complace confirmar que tu registro ha sido exitoso y que ahora eres parte de nuestra comunidad en línea. Queremos agradecerte por elegirnos como tu plataforma preferida y estamos emocionados de ofrecerte una experiencia única.
+                        <br><br>
+                        En C-Cloud, encontrarás una amplia gama de funciones y servicios diseñados para satisfacer tus necesidades. Ya sea que estés buscando inspiración, información, oportunidades de aprendizaje o simplemente conectarte con otros usuarios apasionados, estamos aquí para ayudarte.
+                        <hr>
+                        Tu nombre de usuario es: <strong>{{username}}</strong>
+                        <br>
+                        Dirección de correo electrónico: <strong>{{email}}</strong>
+                        <hr>
+                        Para acceder a tu cuenta, simplemente visita nuestro sitio <a href="https://wady01.pythonanywhere.com/" target="_blank">C-Cloud</a> e inicia sesión utilizando tu nombre de usuario y la contraseña que proporcionaste durante el registro.
+                        <br><br>
+                        Si tienes alguna pregunta, problema o simplemente deseas obtener más información sobre cómo aprovechar al máximo nuestra plataforma, no dudes en ponerte en contacto con nuestro equipo de soporte. Estamos aquí para ayudarte en cualquier momento.
+                        <br><br>
+                        ¡Esperamos que disfrutes de tu tiempo en C-Cloud y que encuentres todo lo que estás buscando! Gracias nuevamente por unirte a nosotros.
+                        <br><br>
+                        <div class="container">
+                            <a href="https://wady01.pythonanywhere.com/" class="button" style="color: #fff">Empezar ya</a>
+                        </div>
+                        Saludos cordiales,
+                        <br>
+                        Equipo de C-Cloud
+                    </p>
+                <ul class="no-bullets">
+                    <div class="social-icons">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AFGJ81ookG1BO3bOpzFyKGhtno1QqAwlVvz20_y8-crdSydyMvR83ymP8dHlk1k5-qaBhlaroQTGIKZdGgx8oW6-XeJQtxmB=w1879-h962" width="35px" height="35px" alt=""></a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><img src="https://lh3.google.com/u/0/d/1nsyM3aydIJeIYXy2WP_fnHWeDp1xaRpI=w1920-h947-iv1" width="35px" height="35px" alt=""></a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AFGJ81r_pWzKg4LKI7VOciEPyWMylx2ebGeoz6njuLCC8YT_vjTIjeLZK6gUHMvoCcuKwxh3251-S8xKJWbd_egi_ufbcNTP=w1879-h962" width="35px" height="35px" alt=""></a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 link-light"><img src="https://lh3.google.com/u/0/d/1PWEU8N5ySFu8_jfXVHqVynE32vPKtwj7=w1920-h947-iv1" width="35px" height="35px" alt=""></a></li>
+                    </div>
+                </ul>
+                </div>
+                <br>
+                <div class="card-body">
+                    <div class="logo-container">
+                        <img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AFGJ81rQJRCDWYbePvEcNyDWSWfbdZDh6yOXEwkb2goLo9VKGDSesbQoifjkPcXIL9Jzeho5MJgLoeisfyAal-M2KDHAXCTE=w1920-h947" width="100px" alt="Logo">
+                        <h1 class="company-name">C-Cloud</h1>
+                    </div>
+                    <p class="company-address">
+                        Av Salvador Estrella Sadhalá #8,<br>
+                        Santiago De Los Caballeros 51000, <br>
+                        República Dominicana
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

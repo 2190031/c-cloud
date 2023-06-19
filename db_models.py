@@ -1,6 +1,10 @@
+import sys
+sys.path.append('c-cloud/venv')
+
 from datetime import datetime as dt
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
@@ -13,10 +17,10 @@ class role(db.Model):
 
 	def __init__(self, role):
 		self.role = role
-	
+
 	def __repr__(self):
 		return "<task %r>" % self.idrole
-    
+
 def defaultroles():
 	try:
 		userrole = role(role='user')
@@ -43,12 +47,12 @@ class user(db.Model):
     username = db.Column(db.String(45), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=True)
-    picture = db.Column(db.String(255), nullable=True)    
+    picture = db.Column(db.String(255), nullable=True)
     salt = db.Column(db.String(100), nullable=True, unique=True)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     usertype = db.Column(db.Integer, db.ForeignKey('role.idrole'), nullable=False)
     creationdate = db.Column(db.DateTime, default=dt.utcnow, nullable=False)
-    
+
     def __init__(self, name, surname, username, email, password, salt, picture=None, usertype=1, is_active=True, google_id=None):
         self.name = name
         self.surname = surname
@@ -62,8 +66,8 @@ class user(db.Model):
         self.google_id = google_id
 
     def __repr__(self):
-        return "<task %r>" % self.iduser	
-    
+        return "<task %r>" % self.iduser
+
 class file(db.Model):
 	__tablename__ = 'file'
 	idfile = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -77,8 +81,8 @@ class file(db.Model):
 		self.extension = extension
 
 	def __repr__(self):
-		return "<task %r>" % self.idfile   
-	
+		return "<task %r>" % self.idfile
+
 class detailsfile(db.Model):
     __tablename__ = 'detailsfile'
     idDetailsfile = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -155,21 +159,21 @@ class error(db.Model):
 	__tablename__ = 'error'
 	iderror = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
-	# idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), nullable=False)
+	topic = db.Column(db.String(255), nullable=False)
 	description = db.Column(db.String(255), nullable=False)
 	datereported = db.Column(db.DateTime, default=dt.utcnow)
-	
-	def __init__(self, iduser, 
-            #   idfile, 
-              description, datereported):
+	is_resolved = db.Column(db.Boolean, nullable=False, default=False)
+
+	def __init__(self, iduser, topic, description, datereported, is_resolved):
 		self.iduser = iduser
-		# self.idfile = idfile
+		self.topic = topic
 		self.description = description
 		self.datereported = datereported
+		self.is_resolved = is_resolved
 
 	def __repr__(self):
 		return "<task %r>" % self.iderror
-	
+
 class licence(db.Model):
 	__tablename__ = 'licence'
 	idlicence = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -200,7 +204,7 @@ def defaultlicence():
         db.session.commit()
         print('Plan Premium inserted')
     except Exception as e:
-        print('')
+        print(str(e))
 
     try:
         licence2 = licence(plan='Plan Estandar', price=9.99, max_storage_mb=25600, support_24_7=True, automatic_backups=False, secure_access=True, file_capacity=50)
@@ -208,7 +212,7 @@ def defaultlicence():
         db.session.commit()
         print('Plan Estandar inserted')
     except Exception as e:
-       print('')
+       print(str(e))
 
 
     try:
@@ -217,7 +221,7 @@ def defaultlicence():
         db.session.commit()
         print('Plan Gratuito inserted')
     except Exception as e:
-        print('')
+        print(str(e))
 
 class detailsLicence(db.Model):
     __tablename__ = 'detailslicence'
@@ -234,7 +238,7 @@ class detailsLicence(db.Model):
     def __repr__(self):
         return "<task %r>" % self.idDetailslicence
 
-	
+
 class comment(db.Model):
 	__tablename__ = 'comment'
 	idcomment = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -242,7 +246,7 @@ class comment(db.Model):
 	idfile = db.Column(db.Integer, db.ForeignKey('file.idfile'), nullable=False)
 	line = db.Column(db.Integer, nullable=False)
 	comment = db.Column(db.Text, nullable=False)
-	
+
 	def __init__(self, iduser, idfile, line, comment):
 		self.iduser = iduser
 		self.idfile = idfile
@@ -267,8 +271,8 @@ class preference(db.Model):
 
 	def __init__(self, iduser,  fontsize, profile,
             # autosave, lang,
-            font, 
-            # fontcolor, 
+            font,
+            # fontcolor,
             theme):
 		self.iduser = iduser
 		self.profile_picture = profile
@@ -285,19 +289,23 @@ class paytransaction(db.Model):
 	__tablename__ = 'paytransaction'
 	idpaytransaction = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	iduser = db.Column(db.Integer, db.ForeignKey('user.iduser'), nullable=False)
+	paypal_transaction = db.Column(db.String(255), nullable=True)
 	idlicence = db.Column(db.Integer, db.ForeignKey('licence.idlicence'), nullable=False)
 	amount = db.Column(db.Float, nullable=False)
 	datepaid = db.Column(db.DateTime, default=dt.utcnow)
 
-	def __init__(self, iduser, idlicence, amount, datepaid):
+
+	def __init__(self, iduser, idlicence, amount, datepaid, paypal_transaction=None):
 		self.iduser = iduser
 		self.idlicence = idlicence
 		self.amount = amount
 		self.datepaid = datepaid
+		self.paypal_transaction = paypal_transaction
+
 
 	def __repr__(self):
 		return "<task %r>" % self.idpaytransaction
-	
+
 class sessions(db.Model):
 	__tablename__ = 'sessions'
 	idsession = db.Column(db.Integer, primary_key=True, autoincrement=True)
