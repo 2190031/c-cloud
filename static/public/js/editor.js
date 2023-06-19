@@ -1,7 +1,6 @@
-// Get references to the dropdown menu and button elements
+// id's de las opciones de la barra de herramientas del editor
 const dropdowns = [
     '#file-dropdown',
-    '#edit-dropdown',
     '#preferences-dropdown',
     '#help-dropdown',
 ]
@@ -10,51 +9,49 @@ dropdowns.forEach(dropdown => {
     const dropdownMenu = document.querySelector(`${dropdown}>.dropdown-menu`);
     const dropdownButton = document.querySelector(`${dropdown} button`);
 
+    // funcion de abrir el dropdown del elemento al poner el mouse encima
     function openDropdown() {
         dropdownMenu.classList.add('show');
     }
 
-    // Function to close the dropdown menu
+    // funcion de cerrar el dropdown del elemento al mover el mouse fuera
     function closeDropdown() {
         dropdownMenu.classList.remove('show');
     }
 
-    // Add event listeners to open the dropdown on button click and mouseover
+    // agrega los eventos a los eventos de abrir el dropdown
     dropdownButton.addEventListener('click', openDropdown);
     dropdownButton.addEventListener('mouseover', openDropdown);
 
-    // Add an event listener to close the dropdown when the mouse leaves the menu
+    // agrega el evento de cerrar el dropdown
     dropdownMenu.addEventListener('mouseleave', closeDropdown);
 });
 
-// Function to open the dropdown menu
-
-
 var editor = ace.edit("editor");
 
-// Lista de lenguajes
+// Lista de lenguajes (MIME)
 const languages = [
-    { "type": "text/plain" },  // 0 txt
-    { "type": "text/html" },  // 1 html
-    { "type": "text/javascript" },  // 2 js
-    { "type": "text/css" },  // 3 css
-    { "type": "text/x-python" },  // 4 py
-    { "type": "application/x-httpd-php" },  // 5 php
-    { "type": "text/x-csrc" },  // 6 C
-    { "type": "text/x-c++src" },  // 7 C++
-    { "type": "text/x-java" },  // 8 java
-    { "type": "application/sql" },  // 9 sql
-    { "type": "application/json" },  // 10 json
-    { "type": "application/xml" },  // 11 xml
-    { "type": "text/csv" },  // 12 csv
-    { "type": "text/yaml" },  // 13 yaml
-    { "type": "text/markdown" },  // 14 md, markdown
-    { "type": "text/x-ruby" },  // 15 ruby
-    { "type": "text/x-swift" },  // 16 swift
+    { "type": "text/plain" },              // 0 txt
+    { "type": "text/html" },               // 1 html
+    { "type": "text/javascript" },         // 2 js
+    { "type": "text/css" },                // 3 css
+    { "type": "text/x-python" },           // 4 py
+    { "type": "application/x-httpd-php" }, // 5 php
+    { "type": "text/x-csrc" },             // 6 C
+    { "type": "text/x-c++src" },           // 7 C++
+    { "type": "text/x-java" },             // 8 java
+    { "type": "application/sql" },         // 9 sql
+    { "type": "application/json" },        // 10 json
+    { "type": "application/xml" },         // 11 xml
+    { "type": "text/csv" },                // 12 csv
+    { "type": "text/yaml" },               // 13 yaml
+    { "type": "text/markdown" },           // 14 md, markdown
+    { "type": "text/x-ruby" },             // 15 ruby
+    { "type": "text/x-swift" },            // 16 swift
     { "type": "application/typescript" },  // 17 typescript
-    { "type": "text/x-go" },  // 18 go
-    { "type": "text/x-rustsrc" }, // 19 rust
-    { "type": "application/vnd.dart" } // 20 dart
+    { "type": "text/x-go" },               // 18 go
+    { "type": "text/x-rustsrc" },          // 19 rust
+    { "type": "application/vnd.dart" }     // 20 dart
 ];
 
 // Lista con las posibilidades de temas
@@ -99,17 +96,17 @@ const themes = [
     "xcode"
 ];
 
-// Al cargar la pagina toma y coloca el tema y lenguaje de sus selects 
+// Al cargar la pagina toma y coloca el tema y lenguaje de sus selects
 document.addEventListener("DOMContentLoaded", function () {
     try {
         let ModeSelValue = document.getElementById('select-mode');
         let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
         let ThemeSelValue = document.getElementById('select-theme');
         let theme = ThemeSelValue.options[ThemeSelValue.selectedIndex].value;
-        // let ThemeFontValue = document.getElementById('font-select');
-        // let font = ThemeFontValue.options[ThemeFontValue.selectedIndex].value;
-        // let ThemeSizeValue = document.getElementById('font-select');
-        // let size = ThemeSizeValue.options[ThemeSizeValue.selectedIndex].value;
+        let ThemeFontValue = document.getElementById('font-select');
+        let font = ThemeFontValue.options[ThemeFontValue.selectedIndex].value;
+        let ThemeSizeValue = document.getElementById('font-select');
+        let size = ThemeSizeValue.options[ThemeSizeValue.selectedIndex].value;
 
         if (mode != "") {
             editor.session.setMode("ace/mode/" + mode);
@@ -117,12 +114,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (theme != "") {
             editor.setTheme("ace/theme/" + theme);
         }
-        // if (font != "") {
-        //     editor.setOptions({
-        //         fontFamily: font,
-        //         size: size
-        //     });
-        // }
+        if (font != "") {
+            editor.setOptions({
+                fontFamily: font,
+                fontSize: size
+            });
+        }
     } catch (e) {
         console.log(e.message)
     }
@@ -147,7 +144,7 @@ function saveTheme() {
     console.log(theme);
 }
 
-// Cambia el tema de la pagina al cambiar el select
+// Cambia el tema del editor al cambiar el select
 document.getElementById('select-theme').addEventListener('change', function () {
     try {
         let ThemeSelValue = document.getElementById('select-theme');
@@ -160,19 +157,38 @@ document.getElementById('select-theme').addEventListener('change', function () {
     }
 });
 
-// document.getElementById('select-theme').addEventListener('input', function () {
-//   let ThemeSelValue = document.getElementById('select-theme');
-//   let theme = ThemeSelValue.value;
-//   if (theme != "") {
-//     editor.setTheme("ace/theme/" + theme);
-//   }
-// });
+// Cambia la fuente del editor al cambiar el select
+document.getElementById('font-select').addEventListener('change', function () {
+    try {
+        let ThemeFontValue = document.getElementById('font-select');
+        let font = ThemeFontValue.options[ThemeFontValue.selectedIndex].value;
+        if (font != "") {
+            editor.setOptions({
+                fontFamily: font + ", monospace"
+            });
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+});
 
-// Descarga el documento con su titulo y en su lenguaje correspondiente
+// Cambia el tamaño de la fuente del editor al cambiar el select
+document.getElementById('font-size-select').addEventListener('change', function () {
+    try {
+        let ThemeSizeValue = document.getElementById('font-size-select');
+        let size = ThemeSizeValue.options[ThemeSizeValue.selectedIndex].value;
+        if (size != "") {
+            editor.setOptions({
+                fontSize: size
+            });
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+});
 
+// establece el lenguaje del documento y el modo del editor
 function getFileType(mode) {
-
-    // let mode = ModeSelValue.options[ModeSelValue.selectedIndex].value;
     let ModeSelValue = document.getElementById('select-mode');
     mode = mode || ModeSelValue.options[ModeSelValue.selectedIndex].value;
     console.log(mode);
@@ -274,6 +290,7 @@ function getFileType(mode) {
     }
 }
 
+// salva el archivo
 function createFile() {
     var content = ace.edit("editor").getValue();
     let filename = document.getElementById('filename').value;
@@ -295,14 +312,81 @@ function createFile() {
             xhr.open('POST', '/create_file', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log('Guardado correctamente')
-                    console.log(xhr.responseText);
-                    swal("Guardado correctamente", {
-                        buttons: false,
-                        timer: 3000,
-                        icon: 'success'
-                    });
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        if (xhr.responseText === 'File saved successfully') {
+                            swal("Guardado correctamente", {
+                                buttons: false,
+                                timer: 3000,
+                                icon: 'success'
+                            });
+                        } else if (xhr.responseText === 'File created successfully') {
+                            swal("Archivo creado correctamente", {
+                                buttons: false,
+                                timer: 3000,
+                                icon: 'success'
+                            });
+                        } else if (xhr.responseText === 'Has superado el espacio máximo') {
+                                swal({
+                                    title: "Error de almacenamiento",
+                                    text: "No se pudo guardar el archivo porque se ha excedido el espacio disponible.",
+                                    icon: "error",
+                                    buttons: {
+                                        cerrar: {
+                                            text: "Cerrar",
+                                            className: "swal-button--cancel",
+                                            visible: true,
+                                            closeModal: true,
+                                        },
+                                        premium: {
+                                            text: "C-Cloud Premium",
+                                            className: "swal-button--premium",
+                                            visible: true,
+                                            closeModal: false,
+                                        }
+                                    },
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false,
+                                    dangerMode: true,
+                                });
+                        } else if(xhr.responseText === 'El archivo excede el tamaño máximo permitido'){
+                            swal({
+                                    title: "Error de almacenamiento",
+                                    text: "Este archivo excede el máximo de espacio limitado por archivo según tu cuota",
+                                    icon: "error",
+                                    buttons: {
+                                        cerrar: {
+                                            text: "Cerrar",
+                                            className: "swal-button--cancel",
+                                            visible: true,
+                                            closeModal: true,
+                                        },
+                                        premium: {
+                                            text: "C-Cloud Premium",
+                                            className: "swal-button--premium",
+                                            visible: true,
+                                            closeModal: false,
+                                        }
+                                    },
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false,
+                                    dangerMode: true,
+                                });
+                        } else {
+                            swal("Ha ocurrido un error", {
+                                buttons: false,
+                                timer: 3000,
+                                icon: 'error'
+                            });
+                        }
+                    } else {
+                        swal("Ha ocurrido un error", {
+                            buttons: false,
+                            timer: 3000,
+                            icon: 'error'
+                        });
+                    }
                 }
             };
             var data = JSON.stringify({
@@ -324,9 +408,10 @@ function createFile() {
             );
         }
     }
-
 }
 
+
+// Descarga el documento con su titulo y en su lenguaje correspondiente
 function download() {
     var contenido = ace.edit("editor").getValue();
     let filename = document.getElementById('filename').value;
@@ -341,7 +426,6 @@ function download() {
     } else {
         try {
             [fileType, fileExtension] = getFileType()
-            // var contenido = ace.edit("editor").getValue();
 
             // Crear un objeto Blob con el contenido
             var blob = new Blob([contenido], fileType);
@@ -398,6 +482,7 @@ function aceLangExt(extension) {
     }
 }
 
+// abre el archivo en el editor y establece su modo por extension
 function loadFile(value) {
     var filename = value;
     console.log(filename);
@@ -421,10 +506,12 @@ function loadFile(value) {
     xhr.send('filename=' + filename);
 }
 
+// envia reporte de error
 function sendErrorReport() {
+    let topic = document.getElementById('error-topic').value;
     let report = document.getElementById('report').value;
 
-    if (!report) {
+    if (!report || !topic) {
         swal("Debe proporcionar una descripción del error", {
             buttons: false,
             timer: 3000,
@@ -445,9 +532,18 @@ function sendErrorReport() {
                             timer: 3000
                         }
                     )
+                } else {
+                     swal(
+                    "Ha ocurrido un error",
+                    {
+                        buttons: false,
+                        timer: 3000,
+                        icon: 'error'
+                    });
                 }
             };
             var data = JSON.stringify({
+                topic: topic,
                 report: report
             });
             xhr.send(data);
@@ -466,6 +562,7 @@ function sendErrorReport() {
     }
 }
 
+// guardan las preferencias visuales del usuario
 function savePreference() {
     const font = document.getElementById('font-select').value;
     const size = document.getElementById('font-size-select').value;
@@ -488,6 +585,14 @@ function savePreference() {
                     fontFamily: font
                 });
                 editor.setFontSize(size);
+            } else {
+                 swal(
+                "Ha ocurrido un error",
+                {
+                    buttons: false,
+                    timer: 3000,
+                    icon: 'error'
+                });
             }
         };
         var data = JSON.stringify({
@@ -498,73 +603,60 @@ function savePreference() {
         xhr.send(data);
     } catch (e) {
         console.log(e);
+        swal(
+            "Ha ocurrido un error",
+            "Error: " + e.message,
+            {
+                buttons: false,
+                timer: 3000,
+                icon: 'error'
+            }
+        );
     }
 }
 
-/*
-function loadFileBlank(value) {
-    var filename = "Lorem.txt"; // Change this to the desired filename
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/load_file_blank', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'blob'; // Set the response type to 'blob'
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            var contentType = xhr.getResponseHeader('Content-Type');
-            var blob = new Blob([xhr.response], { type: contentType });
-            var url = URL.createObjectURL(blob);
-
-            // Open the file in a new tab
-            var link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.download = filename;
-            link.click();
-            URL.revokeObjectURL(url);
-        }
-    };
-    xhr.send('filename=' + filename);
-}
-*/
-
-
+// agrega los eventos a sus botones
 document.getElementById('download-btn').addEventListener('click', download);
 document.getElementById('save-btn').addEventListener('click', createFile);
 document.getElementById('send-report-btn').addEventListener('click', sendErrorReport);
 document.getElementById('save-preference-btn').addEventListener('click', savePreference);
 
 document.addEventListener("keydown", function (event) {
-    // Check for Ctrl+S (Save)
+    // detecta Ctrl+S (salvar)
     if (event.ctrlKey && event.key === "s") {
         event.preventDefault(); // Prevent the default behavior of the browser
         createFile();
     }
 
-    // Check for Ctrl+O (Open)
+    // detecta Ctrl+O (abrir)
     if (event.ctrlKey && event.key === "o") {
         event.preventDefault(); // Prevent the default behavior of the browser
         // Trigger the file input click event to open the file dialog
         document.getElementById("open-file-btn").click();
     }
 
+    // detecta Ctrl+L (cambiar lenguaje del documento)
     if (event.ctrlKey && event.key === "l") {
         event.preventDefault(); // Prevent the default behavior of the browser
         // Trigger the file input click event to open the file dialog
         document.getElementById("change-lang-btn").click();
     }
 
+    // detecta Ctrl+D (descargar)
     if (event.ctrlKey && event.key === "d") {
         event.preventDefault(); // Prevent the default behavior of the browser
         // Trigger the file input click event to open the file dialog
         document.getElementById("download-btn").click();
     }
 
+    // detecta Ctrl+P (cambiar tema)
     if (event.ctrlKey && event.key === "p") {
         event.preventDefault(); // Prevent the default behavior of the browser
         // Trigger the file input click event to open the file dialog
         document.getElementById("change-theme-btn").click();
     }
 
+    // detecta Ctrl+H (comandos)
     if (event.ctrlKey && event.key === "h") {
         event.preventDefault(); // Prevent the default behavior of the browser
         // Trigger the file input click event to open the file dialog

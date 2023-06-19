@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="C-Cloud">
+        <meta name="robots" content="noindex">
+        <title>Factura</title>
+        <style>
+           @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+            body {
+                font-family: 'Roboto', sans-serif;
+                line-height: 1.5;
+            }
+            .container {
+                margin: 0 auto;
+                max-width: 530px;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                transition: transform 0.3s;
+            }
+            .container:hover {
+                transform: scale(1.05);
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+                transition: color 0.3s;
+            }
+            .header:hover {
+                color: #ff5500;
+            }
+            .info {
+                margin-bottom: 30px;
+            }
+            .info p {
+                margin: 0;
+            }
+            .details {
+                margin-bottom: 30px;
+                overflow-x: auto;
+            }
+            .details table {
+                width: 100%;
+                border-collapse: collapse;
+                transition: background-color 0.3s;
+            }
+            .details th, .details td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ccc;
+            }
+            .details th {
+                background-color: #f5f5f5;
+            }
+            .details tr:hover {
+                background-color: #f9f9f9;
+            }
+            .total {
+                text-align: right;
+                margin-top: 20px;
+                transition: color 0.3s;
+            }
+            .total p {
+                margin: 0;
+            }
+            .total:hover p {
+                color: #ff5500;
+            }
+            .motivational-message {
+                margin-top: 30px;
+                text-align: center;
+                transition: color 0.3s;
+            }
+            .motivational-message p {
+                font-style: italic;
+                color: #888;
+            }
+            .motivational-message:hover p {
+                color: #ff5500;
+            }
+
+            /* Media Query para 650px de ancho */
+            @media screen and (max-width: 650px) {
+                .info {
+                    flex-direction: column;
+                }
+                .info > div {
+                    width: 100%;
+                }
+    			.info div{
+                    width: 100% !important;
+    			}
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+    		<div class="header" style="text-align: center; align-items: center; ">
+    			<div style="margin: 0; justify-content: center; display: flex;">
+    				<img src="https://lh3.googleusercontent.com/u/0/drive-viewer/AFGJ81rQJRCDWYbePvEcNyDWSWfbdZDh6yOXEwkb2goLo9VKGDSesbQoifjkPcXIL9Jzeho5MJgLoeisfyAal-M2KDHAXCTE=w1920-h947" width="137px" height="97px" alt="" style="display: inline;">
+    				<div style="text-align: center; margin-left: 10px;"> <h4 style="letter-spacing: 6.5px; margin-bottom: 0; font-size: 14.5px;">C-CLOUD</h4> <h1 style="margin: 0; line-height:0.9; font-size: 33px;">Factura</h2> </div>
+    			</div>
+    		</div>
+    		<br>
+    		<p style="color: rgb(0, 0, 0); margin-bottom: 6px;"><b>Transacción #:</b> {{ numero_factura }}</p>
+            <div class="info" style="line-height: 1.8; display: flex; justify-content: space-between;">
+    			<div style="width: 300px;">
+    			    <p style="color: rgb(0, 0, 0); max-width: 179px;"><b>Fecha de la transacción:</b><br> {{ fecha }} </p>
+    				<p style="color: rgb(0, 0, 0);"><b>Facturado/a a:</b> <br> {{ cliente }}</p>
+    			    {% if direc_cliente %}
+    	  			<p style="color: rgb(0, 0, 0);">
+    	  			    <b>Dirección del cliente:</b><br>{{direc_cliente.line1}}, </br> {{direc_cliente.city}}, {{ direc_cliente.postal_code}},</br> {% if direc_cliente.phone %} {{direc_cliente.phone}}, <br> {% endif %}   {{direc_cliente.state}}, {{ pais }}<br>
+    	  			</p>
+    				{% endif %}
+    			</div>
+    			<div style="width: 200px;">
+    				<p style="color: rgb(0, 0, 0);"><b>Facturado por:</b> <br> C-Cloud, SRL</p>
+    				<p style="color: rgb(0, 0, 0);"><b>Dirección de quién factura:</b> <br>  Av. Salvador Estrella Sadhalá, <br> Calle los Pinos 312, <br> Santiago 51000, <br> República Dominicana, <br> +1 (829)-324-2444  </p>
+    			</div>
+    		</div>
+    		<div>
+    			<h2 style="text-align: center; ">Detalles de la compra</h2>
+    		</div>
+            <div class="details">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Cantidad</th>
+                            <th>Precio por unidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ nombre_plan }}</td>
+                            <td>1</td>
+                            <td>USD${{ total }}</td>
+                            <td>USD${{ total }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="total">
+                <p><b>Total:</b> USD${{ total }}</p>
+            </div>
+        </div>
+    </body>
+</html>

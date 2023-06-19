@@ -1,0 +1,142 @@
+{% extends 'logged.base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    {% if 'user_id' in session %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">Lista de reportes de error</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-light align-middle" data-bs-toggle="modal" data-bs-target="#report-error">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-octagon" viewBox="0 0 16 16">
+                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                Hacer un reporte
+            </button>
+        </div>
+        <div class="modal fade" id="report-error" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar error</h1>
+                        <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-2 col-10 mx-auto">
+                            <label class="form-label" for="error-topic">Asunto</label>
+                            <input type="text" class="form-control" id="error-topic" placeholder="Lorem ipsum" data-bs-theme="dark">
+                        </div>
+                        <div class="p-2 col-10 mx-auto">
+                            <label for="report">Describa el error:</label>
+                            <textarea name="report" id="report-body" class="form-control" data-bs-theme="dark"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="send-report-btn">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive overflow-y-scroll" id="files">
+        <table class="table text-white table-borderless overflow-y-scroll align-middle align-middle" id="search-report">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Reportado por</th>
+                    <th scope="col">Asunto</th>
+                    <th scope="col">Contenido</th>
+                    <th scope="col">Reportado el</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody style="max-height: 35vh; overflow-y: hidden;" class="align-middle">
+                {% if not reports %}
+                    <td colspan="8" class="align-middle text-center">No se han hecho reportes hasta el momento.</td>
+                    <td colspan="0"></td>
+                    <td colspan="0"></td>
+                    <td colspan="0"></td>
+                    <td colspan="0"></td>
+                    <td colspan="0"></td>
+                    {% if report.is_resolved == False %}
+                        <td></td>
+                    {% else %}
+                    {% endif %}
+                {% else %}
+                    {% for report in reports %}
+                        <tr id="">
+                            <td class="align-middle">{{ report.iderror }}</td>
+                            <td class="align-middle">{{ report.username }}</td>
+                            <td class="align-middle">{{ report.topic }}</td>
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-outline-light align-middle" id="show-report-btn" data-bs-toggle="modal" data-bs-target="#show-report-{{ report.iderror }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                    </svg>
+                                    Mostrar reporte
+                                </button>
+                            </td>
+                            <td class="align-middle">{{ report.datereported }}</td>
+                            <td class="align-middle">
+                                {% if report.is_resolved == False %}
+                                    Pendiente
+                                {% else %}
+                                    Resuelto
+                                {% endif %}
+                            </td>
+                            {% if report.is_resolved == False %}
+                                <td class="align-middle">
+                                    <button type="button" class="btn text-white rounded-circle" id="mark-as-resolve-btn" title="Marcar como resuelto" data-report="{{ report.iderror }}" onclick="markAsResolved(this.dataset.report)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                                            <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
+                                            <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        </tr>
+                        <div class="modal fade" id="show-report-{{ report.iderror }}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-dark text-light" data-bs-theme="dark">
+                                    <div class="modal-header border-bottom-0">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ report.topic }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ report.description }}
+                                    </div>
+                                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        var jq = jQuery.noConflict();
+        jq(document).ready(function () {
+            jq('#search-report').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-MX.json' // Ruta al archivo de traducción en español
+                }
+            });
+        });
+    </script>
+   {% endif %}
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='public/js/error-reports.js') }}"></script>
+{% endblock %}

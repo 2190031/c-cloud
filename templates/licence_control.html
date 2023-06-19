@@ -1,0 +1,201 @@
+{% extends 'logged.base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+    {% if 'user_id' in session %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">Control de licencias</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-light align-middle" data-bs-toggle="modal" data-bs-target="#report-error">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-octagon" viewBox="0 0 16 16">
+                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                Hacer un reporte
+            </button>
+        </div>
+        <div class="modal fade" id="report-error" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar error</h1>
+                        <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-2 col-10 mx-auto">
+                            <label class="form-label" for="error-topic">Asunto</label>
+                            <input type="text" class="form-control" id="error-topic" placeholder="Temática del reporte" data-bs-theme="dark">
+                        </div>
+                        <div class="p-2 col-10 mx-auto">
+                            <label for="report">Describa el error:</label>
+                            <textarea name="report" id="report-body" class="form-control" placeholder="Aquí vas a detellar el reporte para que nosotros lo tomemos en cuenta"  data-bs-theme="dark"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="send-report-btn">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive overflow-y-scroll" id="files">
+        <table class="table text-white table-borderless overflow-y-scroll align-middle align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Capacidad</th>
+                    <th scope="col">Soporte 24/7</th>
+                    <th scope="col">Backups automáticos</th>
+                    <th scope="col">Secure access</th>
+                    <th scope="col">Tamaño por archivo</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody style="max-height: 35vh; overflow-y: hidden;" class="align-middle">
+                {% if not licences %}
+                <td colspan="9" class="align-middle text-center">No se han encontrado licencias.</td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                {% else %}
+                {% for licence in licences %}
+                    <tr id="">
+                        <td class="align-middle">{{ licence.idlicence }}</td>
+                        <td class="align-middle">{{ licence.plan }}</td>
+                        <td class="align-middle">US$ {{ licence.price }}</td>
+                        <td class="align-middle">{{ licence.max_storage_mb }} MB de SSD</td>
+
+                        <td class="align-middle">
+                            {% if licence.support_24_7 == True %}
+                                 <span class="u-text-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100">
+                                                <path d="M10,50 L40,80 L90,20" fill="none" stroke="white" stroke-width="4" />
+                                            </svg>
+                                        </span>
+                            {% else %}
+                                 <span class="u-text-icon">
+                                     <img src="{{ url_for('static', filename='public/img/icons8-x-96.png') }}" width="50px" height="40px">
+                                        </span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            {% if licence.automatic_backups == True %}
+                                 <span class="u-text-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100">
+                                                <path d="M10,50 L40,80 L90,20" fill="none" stroke="white" stroke-width="4" />
+                                            </svg>
+                                        </span>
+                            {% else %}
+                               <span class="u-text-icon">
+                                          <img src="{{ url_for('static', filename='public/img/icons8-x-96.png') }}" width="50px" height="40px">
+                                        </span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            {% if licence.secure_access == True %}
+                                <span class="u-text-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100">
+                                                <path d="M10,50 L40,80 L90,20" fill="none" stroke="white" stroke-width="4" />
+                                            </svg>
+                                        </span>
+                            {% else %}
+                                <span class="u-text-icon">
+                                           <img src="{{ url_for('static', filename='public/img/icons8-x-96.png') }}" width="50px" height="40px">
+                                        </span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">{{ licence.file_capacity }} MB de SSD</td>
+                        <td class="align-middle">
+                            <button type="button" class="btn text-white rounded-circle" id="delete-file-btn" data-bs-toggle="modal" data-bs-target="#update-licence-{{ licence.idlicence }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    <div class="modal fade" tabindex="-1" role="dialog" id="update-licence-{{ licence.idlicence }}" aria-labelledby="auth" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content rounded-4 shadow bg-dark text-light" data-bs-theme="dark">
+                                <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ licence.plan }}</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-0">
+                                    <div class="row">
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label class="form-label" for="update-price-{{ licence.idlicence }}">Precio (US$)</label>
+                                            <input type="number" class="form-control" id="update-price-{{ licence.idlicence }}" placeholder="000.00" value="{{ licence.price }}" data-bs-theme="dark">
+                                        </div>
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label class="form-label" for="update-max_storage-{{ licence.idlicence }}">Capacidad (MB)</label>
+                                            <input type="number" class="form-control" id="update-max_storage-{{ licence.idlicence }}" placeholder="000" value="{{ licence.max_storage_mb }}" data-bs-theme="dark">
+                                        </div>
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label class="form-label" for="update-support_24_7-{{ licence.idlicence }}">Soporte 24/7</label>
+                                            <select class="form-select" id="update-support_24_7-{{ licence.idlicence }}" data-bs-theme="dark">
+                                                {% if licence.support_24_7 == True %}
+                                                    <option value="1" selected>Sí</option>
+                                                    <option value="0">No</option>
+                                                {% else %}
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Sí</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label class="form-label" for="update-auto_backups-{{ licence.idlicence }}">Respaldos automáticos</label>
+                                            <select class="form-select" id="update-auto_backups-{{ licence.idlicence }}" data-bs-theme="dark">
+                                                {% if licence.automatic_backups == True %}
+                                                    <option value="1" selected>Sí</option>
+                                                    <option value="0">No</option>
+                                                {% else %}
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Sí</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label class="form-label" for="update-secure_access-{{ licence.idlicence }}">Acceso seguro</label>
+                                            <select class="form-select" id="update-secure_access-{{ licence.idlicence }}" data-bs-theme="dark">
+                                                {% if licence.secure_access == True %}
+                                                    <option value="1" selected>Sí</option>
+                                                    <option value="0">No</option>
+                                                {% else %}
+                                                    <option value="0" selected>No</option>
+                                                    <option value="1">Sí</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label class="form-label" for="update-file_capacity-{{ licence.idlicence }}">Tamaño por archivo (MB)</label>
+                                            <input type="number" class="form-control" id="update-file_capacity-{{ licence.idlicence }}" placeholder="000" value="{{ licence.file_capacity }}" data-bs-theme="dark">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                                    <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal" id="confirm-update-btn" data-licence="{{ licence.idlicence }}" onclick="updateLicence(this.dataset.licence)">Guardar</button>
+                                    <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+   {% endif %}
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='public/js/dashboard.js') }}"></script>
+{% endblock %}

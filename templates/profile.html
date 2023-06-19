@@ -2,29 +2,46 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 
+{% if "user_id" in session %}
 <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
-
-    <!-- Main content -->
     <div class="h-screen flex-grow-1 overflow-y-lg-auto">
-        <!-- Header -->
         <header class="bg-surface-primary m-3 pt-6">
             <div class="container-fluid">
                 <div class="mb-npx">
                     <div class="row align-items-center">
                         <div class="col-sm-6 col-12 mb-4 mb-sm-0">
-                            <!-- Title -->
                             <h1 class="h2 mb-0 ls-tight">Ajustes de Perfil</h1>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Main -->
         <main class="py-6 bg-surface-secondary overflow-y-scroll">
             <div class="container-fluid overflow-y-scroll">
-                <div class="row shadow overflow-y-scroll">
+                <div class="row shadow overflow-y-scroll" id="data-container" style="overflow-x: hidden !important;  overflow-y: hidden !important;">
                     <div class="col-xl-10 mx-auto">
-                        <!-- Profile picture -->
+                     {% if "google_picture" in session %}
+                            {% if username_updated %}
+                            <div class="alert alert-info alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: white; opacity: 1;">×</button>
+                                    <h5><i class="fa-solid fa-pen-to-square fa-bounce"></i>¡Nombre de usuario actualizado!</h5>
+                                    Tu nuevo nombre de usuario es: {{ user_info.username|title }}
+                                </div>
+                            {% elif username_in_use %}
+                                <div class="alert alert-danger alert-dismissible" style="background-color: #ff000038; opacity: 1; color: red; border: 1px solid #701919;">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: #b91616; opacity: 0.8;">×</button>
+                                    <h5 style="opacity: 1; color: red; padding-bottom: 7px;">
+                                        <i class="icon fas fa-ban"></i>No se pudo actualizar tu nombre de usuario...</h5>
+                                        El nombre de usuario al que quieres cambiar, actualmente se encuentra en uso. Por favor, intenta con otro
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="color: white; opacity: 1;">×</button>
+                                    <h5><i class="icon fas fa-info"></i> Eres un usuario de Google</h5>
+                                    Solo puedes modificar el nombre de usuario en nuestro sistema.
+                                </div>
+                            {% endif %}
+                        {% endif %}
                         <div class="card shadow-lg border-0 mt-4 mb-10 border-light-subtle text-bg-dark"
                             data-bs-theme="dark">
                             <div class="card-body mb-0">
@@ -32,79 +49,39 @@
                                     <div>
                                         <div class="d-flex align-items-center">
                                             <a href="#" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <!-- <img alt="..." width="90px" class="rounded-pill" id="profile-picture-display"> -->
                                                 {% if "google_picture" in session %}
-                                                <img src="{{session['google_picture']}}" alt="" height="90"
-                                                    class="rounded-pill">
+                                                    <img src="{{session['google_picture']}}" alt="" height="90" class="rounded-pill">
                                                 {% else %}
-                                                <img alt="" width="90" height="90" class="rounded-pill"
-                                                    id="profile-picture-display">
+                                                    <img alt="" width="90" height="90" class="rounded-pill" id="profile-picture-display">
                                                 {% endif %}
-                                                <!-- Enviar la imagen por variable de url desde la carpeta -->
                                             </a>
                                             <div class="ms-4">
-                                                <span class="h4 d-block mb-0">{{ user_info.name }} {{ user_info.surname
-                                                    }}</span>
-                                                <a href="#" class="text-sm font-semibold text-muted">View Profile</a>
+                                                {% if "google_picture" in session %}
+                                                    <span class="h4 d-block mb-0">{{ user_info.name|title }}</span>
+                                                    <a href="#" class="text-sm font-semibold text-muted">{{ user_info.email|title }}</a>
+                                                {% else %}
+                                                    <span class="h4 d-block mb-0">{{ user_info.name|title }} {{ user_info.surname|title }} </span>
+                                                    <a href="#" class="text-sm font-semibold text-muted">View Profile</a>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="ms-auto">
                                         <input type="file" name="profile-picture" id="upload" accept="image/*" hidden>
-                                        <label for="upload" class="btn btn-sm btn-neutral">Choose file</label>
+                                        <label for="upload" class="btn btn-sm btn-neutral">Elegir foto</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Form -->
-                        <div class="mb-3 mt-2">
-                            <h5 class="mb-0">Datos personales</h5>
-                            <small>Se unió el: {{ user_info.creationdate }}</small>
-                        </div>
+                        <div class="mb-3 mt-2"></div>
+                        {% if "google_picture" in session %}
                         <form class="mb-6" data-bs-theme="dark">
                             <div class="row mb-5">
                                 <div class="col-md-6">
                                     <div class="">
-                                        <label class="form-label" for="firstname">Nombre</label>
-                                        <input type="text" class="form-control" id="firstname" name="firstname"
-                                            placeholder="Nombre" value="{{ user_info.name }}" data-bs-theme="dark">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <label class="form-label" for="surname">Apellido</label>
-                                        <input type="text" class="form-control" id="surname" name="surname"
-                                            placeholder="Apellido" value="{{ user_info.surname }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-5">
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <label class="form-label" for="email">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email"
-                                            placeholder="Correo" value="{{ user_info.email }}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <label class="form-label" for="username">Usuario</label>
-                                        <input type="text" class="form-control" id="username" name="username"
-                                            placeholder="Usuario" value="{{ user_info.username }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <label class="form-label" for="new-password">Nueva contraseña</label>
-                                        <input type="password" class="form-control" id="new-password"
-                                            name="new-password" placeholder="Nueva contraseña">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="">
-                                        <label class="form-label" for="repeat-password">Repetir nueva contraseña</label>
-                                        <input type="password" class="form-control" id="repeat-password"
-                                            name="repeat-password" placeholder="Repetir nueva contraseña">
+                                        <label class="form-label" for="usern">Nombre de usuario</label>
+                                        <input type="text" class="form-control" id="usern" name="usern"
+                                            placeholder="Nombre" value="{{ user_info.username }}" data-bs-theme="dark">
                                     </div>
                                 </div>
                             </div>
@@ -112,24 +89,72 @@
                             <div class="text-end">
                                 <button type="button" class="btn btn-sm btn-neutral me-2">Cancelar</button>
                                 <button type="button" class="btn btn-sm btn-primary" id="update-data-btn"
-                                    data-bs-toggle="modal" data-bs-target="#auth-update">Guardar</button>
+                                    data-bs-toggle="modal" data-bs-target="#auth-update-google-user"  onclick="copyValue()">Guardar</button>
+                            </div>
+                            <small>Te uniste el {{ formatted_date }}</small>
+                        </form>
+                        {% else %}
+                         <form class="mb-6" data-bs-theme="dark">
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label class="form-label" for="firstname">Nombre</label>
+                                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Nombre" value="{{ user_info.name }}" data-bs-theme="dark">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label class="form-label" for="surname">Apellido</label>
+                                        <input type="text" class="form-control" id="surname" name="surname" placeholder="Apellido" value="{{ user_info.surname }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-5">
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label class="form-label" for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="Correo" value="{{ user_info.email }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label class="form-label" for="username">Usuario</label>
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" value="{{ user_info.username }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label class="form-label" for="new-password">Nueva contraseña</label>
+                                        <input type="password" class="form-control" id="new-password" name="new-password" placeholder="Nueva contraseña">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label class="form-label" for="repeat-password">Repetir nueva contraseña</label>
+                                        <input type="password" class="form-control" id="repeat-password" name="repeat-password" placeholder="Repetir nueva contraseña">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-sm btn-neutral me-2">Cancelar</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="update-data-btn" data-bs-toggle="modal" data-bs-target="#auth-update">Guardar</button>
                             </div>
                         </form>
-                        <hr class="my-10" />
-                        <!-- Individual switch cards -->
+                        {% endif %}
+                        <hr class="my-10">
                         <div class="row g-6" data-bs-theme="dark">
                             <div class="col-md-12">
                                 <div class="card shadow border-0">
                                     <div class="card-body d-flex align-items-center">
                                         <div>
-                                            <h5 class="text-danger mb-2">Deactivate account</h5>
+                                            <h5 class="text-danger mb-2">Desactivar cuenta</h5>
                                             <p class="text-sm text-muted">
-                                                Once you delete your account, there is no going back. Please be certain.
+                                                Una vez que desactives tu cuenta, no hay vuelta atrás. Por favor, asegúrate de estar seguro/a.
                                             </p>
                                         </div>
                                         <div class="ms-auto">
-                                            <button type="button" class="btn btn-sm btn-danger" id="deact-account-btn"
-                                                data-bs-toggle="modal" data-bs-target="#auth-deactivate">Deactivate</button>
+                                            <button type="button" id="deact-account-btn" data-bs-toggle="modal" data-bs-target="#auth-deactivate" class="btn btn-sm btn-danger">Desactivar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -139,38 +164,6 @@
                 </div>
             </div>
         </main>
-    </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="auth-update" aria-labelledby="auth" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content rounded-4 shadow bg-dark text-light" data-bs-theme="dark">
-            <div class="modal-header border-bottom-0" data-bs-theme="dark">
-                <h1 class="modal-title fs-5">Confirmar cambios</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body py-0">
-                <p>Para confirmar debe escribir su correo electrónico y contraseña actual.</p>
-                <p class="text-warning"><i>* Estos cambios no podrán deshacerse</i></p>
-                <div class="row">
-                    <div class="p-2 col-10 mx-auto">
-                        <label for="ver-email">Correo</label>
-                        <input type="email" name="ver-email" id="ver-email" class="form-control" placeholder="Correo"
-                            required>
-                    </div>
-                    <div class="p-2 col-10 mx-auto">
-                        <label for="ver-password">Contraseña</label>
-                        <input type="password" name="ver-password" id="ver-password" class="form-control"
-                            placeholder="Contraseña" required>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
-                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal"
-                    id="confirm-update-btn">Confirmar</button>
-                <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -187,44 +180,85 @@
                 <div class="row">
                     <div class="p-2 col-10 mx-auto">
                         <label for="ver-deact-email">Correo</label>
-                        <input type="email" name="ver-deact-email" id="ver-deact-email" class="form-control"
-                            placeholder="Correo" required>
+                        <input type="email" name="ver-deact-email" id="ver-deact-email" class="form-control" placeholder="Correo" required>
                     </div>
                     <div class="p-2 col-10 mx-auto">
                         <label for="ver-deact-password">Contraseña</label>
-                        <input type="password" name="ver-deact-password" id="ver-deact-password" class="form-control"
-                            placeholder="Contraseña" required>
+                        <input type="password" name="ver-deact-password" id="ver-deact-password" class="form-control" placeholder="Contraseña" required>
                     </div>
                 </div>
             </div>
             <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
-                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal"
-                    id="confirm-deact-btn">Confirmar</button>
+                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal" id="confirm-deact-btn">Confirmar</button>
                 <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="auth-" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+{% if "google_picture" not in session %}
+<div class="modal fade" tabindex="-1" role="dialog" id="auth-update" aria-labelledby="auth" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-4 shadow bg-dark text-light" data-bs-theme="dark">
+            <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                <h1 class="modal-title fs-5">Confirmar cambios</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-0">
+                <p>Para confirmar debe escribir su correo electrónico y contraseña actual.</p>
+                <p class="text-warning"><i>* Estos cambios no podrán deshacerse</i></p>
+                <div class="row">
+                    <div class="p-2 col-10 mx-auto">
+                        <label for="ver-email">Correo</label>
+                        <input type="email" name="ver-email" id="ver-email" class="form-control" placeholder="Correo" required>
+                    </div>
+                    <div class="p-2 col-10 mx-auto">
+                        <label for="ver-password">Contraseña</label>
+                        <input type="password" name="ver-password" id="ver-password" class="form-control" placeholder="Contraseña" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal" id="confirm-update-btn">Confirmar</button>
+                <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if "google_picture" in session %}
+<div class="modal fade" id="auth-update-google-user" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark text-light">
             <div class="modal-header" data-bs-theme="dark">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar cambio</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar cambio de usuario</h1>
                 <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
+            <div class="col-md-6">
+                <div class="">
+                    <label class="form-label" for="username">Tu usuario actual</label>
+                    <input type="username" class="form-control" id="username" name="username" placeholder="Correo" value="{{ user_info.username }}" data-bs-theme="dark" style="background-color: #212529 !important;" readonly>
+                        </br>
+                        <form action="/update_profile_data_google" method="POST">
+                        {{ form.csrf_token }}
+                        {{ form.newusername.label(class="form-label") }}
+                        {{ form.newusername(class="form-control", id="newusername", placeholder="Correo", data_bs_theme="dark", style="background-color: #212529 !important;") }}
+                </div>
             </div>
-            <div class="modal-footer">
+        </div>
+        <div class="modal-footer">
+            {{ form.submit(class="btn btn-outline-primary") }}
+            </form>
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
-
+{% endif %}
+{% endif %}
 {% endblock %}
 {% block script %}
 <script src="{{ url_for('static', filename='public/js/profile.js') }}"></script>
-<!-- <script src="{{ url_for('static', filename='public/js/profile_pic.js') }}"></script> -->
 {% endblock %}

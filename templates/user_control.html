@@ -1,0 +1,237 @@
+{% extends 'logged.base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+    {% if 'user_id' in session %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2" style="margin-bottom: 30px;">Lista de usuarios</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-light align-middle" data-bs-toggle="modal" data-bs-target="#report-error">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-octagon" viewBox="0 0 16 16">
+                    <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+                Hacer un reporte
+            </button>
+        </div>
+        <div class="modal fade" id="report-error" tabindex="-1" aria-labelledby="Commands" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Reportar error</h1>
+                        <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="p-2 col-10 mx-auto">
+                            <label class="form-label" for="error-topic">Asunto</label>
+                            <input type="text" class="form-control" id="error-topic" placeholder="Lorem ipsum" data-bs-theme="dark">
+                        </div>
+                        <div class="p-2 col-10 mx-auto">
+                            <label for="report">Describa el error:</label>
+                            <textarea name="report" id="report-body" class="form-control" data-bs-theme="dark"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="send-report-btn">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive overflow-y-scroll" id="files">
+        <table class="table {#table-responsive#} text-white table-borderless overflow-y-scroll align-middle" id="search-user">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Fecha suscripción</th>
+                    <th scope="col">Se unió por</th>
+                    <th scope="col">Tipo de usuario</th>
+                </tr>
+            </thead>
+            <tbody style="max-height: 40vh; overflow-y: hidden;" class="align-middle">
+                {% if not users %}
+                <td colspan="9" class="text-center">No se han encontrado usuarios.</td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                <td colspan="0"></td>
+                {% else %}
+                {% for user in users %}
+                    <tr>
+                         {% if user.is_active == 1 %}
+                               <td>
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn text-white rounded-circle" id="download-file-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                    </svg>
+                                </button>
+                            </a>
+                            <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
+                                <li>
+                                    <a class="dropdown-item text-white" id="deactivate-{{ user.iduser }}" data-user="{{ user.iduser }}" onclick="deactivateUser(this.dataset.user)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-slash" viewBox="0 0 16 16">
+                                            <path d="M13.879 10.414a2.501 2.501 0 0 0-3.465 3.465l3.465-3.465Zm.707.707-3.465 3.465a2.501 2.501 0 0 0 3.465-3.465Zm-4.56-1.096a3.5 3.5 0 1 1 4.949 4.95 3.5 3.5 0 0 1-4.95-4.95ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                                        </svg>
+                                        Desactivar
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white" id="update-{{ user.iduser }}" data-bs-toggle="modal" data-bs-target="#update-data-{{ user.iduser }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                        </svg>
+                                        Modificar
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                            {% elif user.is_active == 0 %}
+                                <td>
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn text-white rounded-circle" id="download-file-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                    </svg>
+                                </button>
+                            </a>
+                            <ul class="dropdown-menu text-small shadow text-white" data-bs-theme="dark">
+                                <li>
+                                    <a class="dropdown-item text-white" id="reactivate-{{ user.iduser }}" data-user="{{ user.iduser }}" onclick="reactivateUser(this.dataset.user)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
+                                            <path d="M10.804 8 5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"/>
+                                        </svg>
+                                        Reactivar
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white" id="update-{{ user.iduser }}" data-bs-toggle="modal" data-bs-target="#update-data-{{ user.iduser }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                        </svg>
+                                        Modificar
+                                    </a>
+                                </li>
+                            </ul>
+                        </td>
+                            {% endif %}
+
+                        <td class="align-middle">{{ user.iduser }}</td>
+                        {% if user.google_id %}
+                            <td class="align-middle">{{ user.name }} </td>
+                        {% else %}
+                            <td class="align-middle">{{ user.name }} {{ user.surname }}</td>
+                        {% endif %}
+                        <td class="align-middle">{{ user.username }}</td>
+                        <td class="align-middle">{{ user.email }}</td>
+                        <td class="align-middle">
+                            {% if user.is_active == 1 %}
+                                Activo
+                            {% elif user.is_active == 0 %}
+                                Inactivo
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">{{ user.creationdate }}</td>
+                        <td class="align-middle">
+                            {% if user.google_id %}
+                                Google
+                            {% else %}
+                                Registro
+                            {% endif %}
+                        </td>
+                         <td class="align-middle">
+                            {% if user.usertype == 1 %}
+                                Usuario
+                            {% elif user.usertype == 2 %}
+                                Administrador
+                            {% endif %}
+                        </td>
+                        {# <td class="align-middle">
+                             <button type="button" class="btn text-white rounded-circle" id="option-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                </svg>
+                            </button>
+                        </td>#}
+                    </tr>
+                    <div class="modal fade" tabindex="-1" role="dialog" id="update-data-{{ user.iduser }}" aria-labelledby="auth" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content rounded-4 shadow bg-dark text-light" data-bs-theme="dark">
+                                <div class="modal-header border-bottom-0" data-bs-theme="dark">
+                                    {% if user.google_id %}
+                                        <h1 class="modal-title fs-5">Cliente: {{ user.name }} </h1>
+                                    {% else %}
+                                        <h1 class="modal-title fs-5">Cliente: {{ user.name }} {{ user.surname }}</h1>
+                                    {% endif %}
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-0">
+                                    <div class="row">
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label for="ver-deact-email">Estado</label>
+                                            <select class="form-select" id="update-status-{{ user.iduser }}">
+                                                {% if user.is_active == 1 %}
+                                                    <option value="1" selected>Activo</option>
+                                                    <option value="0">Inactivo</option>
+                                                {% elif user.is_active == 0 %}
+                                                    <option value="0" selected>Inactivo</option>
+                                                    <option value="1">Activo</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                        <div class="p-2 col-10 mx-auto">
+                                            <label for="ver-deact-password">Tipo de usuario</label>
+                                            <select class="form-select" id="update-role-{{ user.iduser }}">
+                                                {% if user.usertype == 1 %}
+                                                    <option value="1" selected>Usuario</option>
+                                                    <option value="2">Administrador</option>
+                                                {% elif user.usertype == 2 %}
+                                                    <option value="2" selected>Administrador</option>
+                                                    <option value="1">Usuario</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                                    <button type="button" class="btn btn-lg btn-primary" data-bs-dismiss="modal" id="confirm-update-btn" data-user="{{ user.iduser }}" onclick="updateUser(this.dataset.user)">Guardar</button>
+                                    <button type="button" class="btn btn-lg btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        var jq = jQuery.noConflict();
+        jq(document).ready(function () {
+            jq('#search-user').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-MX.json' // Ruta al archivo de traducción en español
+                }
+            });
+        });
+    </script>
+   {% endif %}
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='public/js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='public/js/user_control.js') }}"></script>
+{% endblock %}
