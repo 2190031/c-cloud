@@ -139,6 +139,16 @@ function downloadFile(filename) {
         filename: filename,
     });
     xhr.send(data);
+
+    // Generar el nombre del archivo con la fecha actual en JavaScript
+    //var currentDate = new Date();
+    //var formattedDate = currentDate.toISOString().slice(0, 19).replace(/:/g, '_');
+    //var extensionIndex = filename.lastIndexOf('.');
+    //var filenameWithoutExtension = filename.slice(0, extensionIndex);
+    //var fileExtension = filename.slice(extensionIndex);
+    //var filenameWithDate = filenameWithoutExtension + '_' + formattedDate + fileExtension;
+    //var url = 'http://https://wady01.pythonanywhere.com/userFiles/_username_/savedFiles/' + encodeURIComponent(filenameWithDate);
+    //xhr.send('url=' + encodeURIComponent(url));
 }
 
 // elimina permanentemente el archivo
